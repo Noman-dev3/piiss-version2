@@ -1,9 +1,13 @@
+
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, GraduationCap, UserPlus, Calendar, ArrowUp } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { ref, get, query, orderByChild, equalTo } from "firebase/database";
+import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 async function getDashboardData() {
     try {
@@ -35,15 +39,42 @@ const recentActivity = [
     { name: "Jane Smith", description: "New admission application", time: "5 minutes ago" },
 ];
 
-export default async function AdminPage() {
-  const { totalStudents, totalTeachers, pendingAdmissions } = await getDashboardData();
-  
-  const overviewData = [
-      { title: "Total Students", value: totalStudents.toString(), icon: <Users className="h-6 w-6 text-muted-foreground" />, change: "+12%", changeColor: "text-green-500" },
-      { title: "Total Teachers", value: totalTeachers.toString(), icon: <GraduationCap className="h-6 w-6 text-muted-foreground" />, change: "+3%", changeColor: "text-green-500" },
-      { title: "Pending Admissions", value: pendingAdmissions.toString(), icon: <UserPlus className="h-6 w-6 text-muted-foreground" />, description: "Requires attention" },
+export default function AdminPage() {
+    const [data, setData] = useState<{totalStudents: number, totalTeachers: number, pendingAdmissions: number} | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getDashboardData().then(data => {
+            setData(data);
+            setLoading(false);
+        });
+    }, []);
+
+    const overviewData = [
+      { title: "Total Students", value: data?.totalStudents.toString() ?? '0', icon: <Users className="h-6 w-6 text-muted-foreground" />, change: "+12%", changeColor: "text-green-500" },
+      { title: "Total Teachers", value: data?.totalTeachers.toString() ?? '0', icon: <GraduationCap className="h-6 w-6 text-muted-foreground" />, change: "+3%", changeColor: "text-green-500" },
+      { title: "Pending Admissions", value: data?.pendingAdmissions.toString() ?? '0', icon: <UserPlus className="h-6 w-6 text-muted-foreground" />, description: "Requires attention" },
       { title: "Upcoming Events", value: "1", icon: <Calendar className="h-6 w-6 text-muted-foreground" />, description: "Next 30 days" },
-  ];
+    ];
+    
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <div>
+                    <Skeleton className="h-8 w-1/4" />
+                    <Skeleton className="h-4 w-1/2 mt-2" />
+                </div>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32" />)}
+                </div>
+                 <div className="grid gap-6 lg:grid-cols-3">
+                    <Skeleton className="lg:col-span-2 h-48" />
+                    <Skeleton className="h-64" />
+                </div>
+            </div>
+        )
+    }
+
 
   return (
     <div className="space-y-6">
@@ -116,4 +147,3 @@ export default async function AdminPage() {
     </div>
   );
 }
-

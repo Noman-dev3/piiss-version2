@@ -1,3 +1,5 @@
+
+"use client"
 import { db } from '@/lib/firebase';
 import { ref, get } from 'firebase/database';
 import { columns } from './components/columns';
@@ -5,6 +7,8 @@ import { DataTable } from './components/data-table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Admission, admissionSchema } from './data/schema';
 import { z } from 'zod';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 async function getAdmissions(): Promise<Admission[]> {
   const dbRef = ref(db, 'admissionSubmissions');
@@ -46,8 +50,33 @@ async function getAdmissions(): Promise<Admission[]> {
   }
 }
 
-export default async function AdmissionsPage() {
-  const admissions = await getAdmissions();
+export default function AdmissionsPage() {
+  const [admissions, setAdmissions] = useState<Admission[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAdmissions().then(data => {
+      setAdmissions(data);
+      setLoading(false);
+    });
+  }, []);
+  
+  const PageSkeleton = () => (
+    <div className="space-y-4">
+        <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-[250px]" />
+            <Skeleton className="h-8 w-[150px]" />
+        </div>
+        <div className="rounded-md border">
+            <div className="p-4">
+                <Skeleton className="h-8 w-full" />
+            </div>
+            <div className="p-4 space-y-2">
+                {[...Array(10)].map((_,i) => <Skeleton key={i} className="h-10 w-full" />)}
+            </div>
+        </div>
+    </div>
+  )
 
   return (
     <>
@@ -69,7 +98,7 @@ export default async function AdmissionsPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-                <DataTable data={admissions} columns={columns} />
+                {loading ? <PageSkeleton /> : <DataTable data={admissions} columns={columns} />}
             </div>
           </CardContent>
         </Card>
