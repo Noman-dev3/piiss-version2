@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Textarea } from "./ui/textarea";
 
 const formSchema = z.object({
   applicantFullName: z.string().min(2, {
@@ -56,6 +57,7 @@ const formSchema = z.object({
     required_error: "Please select a class.",
   }),
   previousSchool: z.string().optional(),
+  additionalComments: z.string().optional(),
 });
 
 export function AdmissionForm() {
@@ -68,6 +70,7 @@ export function AdmissionForm() {
       parentEmail: "",
       parentPhone: "",
       previousSchool: "",
+      additionalComments: "",
     },
   });
 
@@ -313,6 +316,30 @@ export function AdmissionForm() {
                   )}
                 />
               </div>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold font-headline border-b pb-2">
+                Additional Information
+              </h3>
+              <FormField
+                control={form.control}
+                name="additionalComments"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Additional Comments (optional)</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Please share any other information you think is relevant."
+                        className="bg-background/80"
+                        rows={5}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className="text-center pt-6">
