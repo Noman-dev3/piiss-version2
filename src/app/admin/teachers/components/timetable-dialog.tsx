@@ -20,9 +20,9 @@ interface TimetableDialogProps {
 }
 
 export function TimetableDialog({ teacher, isOpen, onOpenChange }: TimetableDialogProps) {
-  // The timetables object is nested under the teacher's ID. We need to extract it.
-  const timetableForTeacher = teacher.timetables ? teacher.timetables[Object.keys(teacher.timetables)[0]] : {};
-  const days = Object.keys(timetableForTeacher || {});
+  // Use the teacher's ID to access their specific timetable.
+  const timetableForTeacher = teacher.timetables ? teacher.timetables[teacher.id] : undefined;
+  const days = timetableForTeacher ? Object.keys(timetableForTeacher) : [];
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -34,7 +34,7 @@ export function TimetableDialog({ teacher, isOpen, onOpenChange }: TimetableDial
             </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">
-            {days.length > 0 ? (
+            {days.length > 0 && timetableForTeacher ? (
                 <div className="space-y-6">
                     {days.map(day => (
                         <Card key={day}>
@@ -51,9 +51,9 @@ export function TimetableDialog({ teacher, isOpen, onOpenChange }: TimetableDial
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {timetableForTeacher?.[day]?.map((slot, index) => (
+                                        {Object.values(timetableForTeacher[day] || {}).map((slot: any, index) => (
                                             <TableRow key={index}>
-                                                <TableCell>{slot.time}</TableCell>
+                                                <TableCell>{slot.time || slot.period}</TableCell>
                                                 <TableCell>{slot.class}</TableCell>
                                                 <TableCell>{slot.subject}</TableCell>
                                             </TableRow>

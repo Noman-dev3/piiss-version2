@@ -2,12 +2,14 @@
 import { z } from "zod";
 
 const timeSlotSchema = z.object({
-  time: z.string(),
+  time: z.string().optional(),
+  period: z.string().optional(),
   subject: z.string(),
   class: z.string(),
 });
 
-const daySchema = z.array(timeSlotSchema);
+// The values of a day object are time slots, but the keys are numeric strings ("0", "1", etc.)
+const daySchema = z.record(timeSlotSchema);
 
 const timetableSchema = z.record(daySchema);
 
@@ -20,6 +22,7 @@ export const teacherSchema = z.object({
   department: z.string(),
   experience: z.string(),
   imageUrl: z.string().url().optional().or(z.literal("")).nullable(),
+  // Timetables is an object where the key is the teacher's ID
   timetables: z.record(timetableSchema).optional().nullable(),
 });
 
