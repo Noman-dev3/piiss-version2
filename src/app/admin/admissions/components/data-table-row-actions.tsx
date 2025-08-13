@@ -2,7 +2,7 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
-import { Check, X, Trash2, Eye } from 'lucide-react';
+import { Check, X, Trash2 } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ import {
 import { admissionSchema } from "../data/schema"
 import { updateAdmissionStatus, deleteAdmission } from "@/actions/update-admission";
 import { useToast } from "@/hooks/use-toast";
+import { AdmissionDetailsDialog } from "./admission-details-dialog";
 
 
 interface DataTableRowActionsProps<TData> {
@@ -68,9 +69,8 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>
-          <Eye className="mr-2 h-4 w-4" />
-          View Details
+        <DropdownMenuItem asChild>
+          <AdmissionDetailsDialog admission={admission} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleApprove}>
