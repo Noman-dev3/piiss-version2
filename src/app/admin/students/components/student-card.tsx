@@ -109,4 +109,3 @@ export function StudentCard({ student }: StudentCardProps) {
     </>
   );
 }
-
