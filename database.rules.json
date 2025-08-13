@@ -1,6 +1,49 @@
+
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "settings": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "announcements": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "events": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "faqs": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "gallery": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "toppers": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "testimonials": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "admissionSubmissions": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "students": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "teachers": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "results": {
+      ".read": true,
+      ".write": "auth != null"
+    }
   }
 }
