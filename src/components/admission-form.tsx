@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +36,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { ref, push, set } from "firebase/database";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   applicantName: z.string().min(2, {
@@ -64,6 +66,7 @@ const formSchema = z.object({
 
 export function AdmissionForm() {
   const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -87,11 +90,9 @@ export function AdmissionForm() {
         submittedAt: new Date().toISOString(),
       });
 
-      toast({
-        title: "Application Submitted!",
-        description: "We have received your application and will be in touch shortly.",
-      });
-      form.reset();
+      // Redirect to thank you page
+      router.push('/admissions/thank-you');
+
     } catch (error) {
       console.error("Error submitting application:", error);
       toast({
