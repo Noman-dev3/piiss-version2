@@ -10,7 +10,7 @@ import { useState } from "react";
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
   const navLinks = [
-    { label: "Home", href: "/#home" },
+    { label: "Home", href: "/" },
     { label: "About", href: "/#about" },
     { label: "Admissions", href: "/admissions" },
     { label: "Results", href: "/#results" },
@@ -49,19 +49,19 @@ export function Header() {
               </div>
             </Link>
           </div>
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6">
             <NavLinkItems isMobile={false} />
           </nav>
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex relative">
+            <div className="hidden lg:flex relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="search"
                 placeholder="Ask me anything..."
-                className="pl-9 bg-white/10 border-gray-600 rounded-full text-white placeholder:text-gray-400 focus:bg-white/20 focus:border-primary w-48 lg:w-64"
+                className="pl-9 bg-white/10 border-gray-600 rounded-full text-white placeholder:text-gray-400 focus:bg-white/20 focus:border-primary w-48 xl:w-64"
               />
             </div>
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon">
