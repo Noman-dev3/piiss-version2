@@ -1,5 +1,5 @@
 "use client"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,12 +31,12 @@ export default function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary">
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="px-6 lg:px-12">
+      <div className="container mx-auto">
         <h2 className="text-4xl font-bold text-center mb-12 font-headline">Contact Me</h2>
-        <Card>
+        <Card className="bg-secondary">
           <div className="grid lg:grid-cols-3">
-            <div className="lg:col-span-1 bg-gray-100/50 dark:bg-card p-8 rounded-l-lg">
+            <div className="lg:col-span-1 bg-background/50 p-8 rounded-l-lg">
               <h3 className="text-2xl font-bold mb-6 font-headline">Get in Touch</h3>
               <p className="text-muted-foreground mb-8">
                 I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
@@ -44,7 +44,7 @@ export default function ContactSection() {
               <div className="space-y-6">
                 {contactInfo.map((item, index) => (
                   <div key={index} className="flex items-start gap-4">
-                    <div className="p-3 bg-background rounded-full">{item.icon}</div>
+                    <div className="p-3 bg-secondary rounded-full">{item.icon}</div>
                     <div>
                       <h4 className="font-semibold">{item.title}</h4>
                       <p className="text-muted-foreground">{item.value}</p>
@@ -59,20 +59,20 @@ export default function ContactSection() {
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name">Your Name</Label>
-                    <Input id="name" name="name" placeholder="John Doe" required />
+                    <Input id="name" name="name" placeholder="John Doe" required className="bg-background"/>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Your Email</Label>
-                    <Input id="email" name="email" type="email" placeholder="john.doe@example.com" required />
+                    <Input id="email" name="email" type="email" placeholder="john.doe@example.com" required className="bg-background" />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" name="subject" placeholder="Project Inquiry" required />
+                  <Input id="subject" name="subject" placeholder="Project Inquiry" required className="bg-background"/>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
-                  <Textarea id="message" name="message" placeholder="Hi there, I would like to..." rows={5} required />
+                  <Textarea id="message" name="message" placeholder="Hi there, I would like to..." rows={5} required className="bg-background"/>
                 </div>
                 <Button type="submit" size="lg">Send Message</Button>
               </form>

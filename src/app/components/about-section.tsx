@@ -19,13 +19,13 @@ const stats = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-20 lg:py-32 px-6 lg:px-12">
-      <div className="max-w-7xl mx-auto">
+    <section id="about" className="px-6 lg:px-12 bg-secondary">
+      <div className="container mx-auto">
         <h2 className="text-4xl font-bold text-center mb-12 font-headline">About Me</h2>
         <div className="grid lg:grid-cols-3 gap-8 items-start">
-          <div className="lg:col-span-1" data-ai-hint="developer portrait">
+          <div className="lg:col-span-1">
             <Card className="overflow-hidden">
-               <img src="https://placehold.co/400x500.png" alt="A-Z Piss" className="w-full h-auto object-cover" />
+               <img src="https://placehold.co/400x500.png" alt="A-Z Piss" className="w-full h-auto object-cover" data-ai-hint="developer portrait" />
             </Card>
           </div>
           <div className="lg:col-span-2">
@@ -36,7 +36,7 @@ export default function AboutSection() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
                   {stats.map((stat, index) => (
-                    <div key={index} className="flex flex-col items-center text-center p-4 rounded-lg bg-secondary">
+                    <div key={index} className="flex flex-col items-center text-center p-4 rounded-lg bg-background">
                       {stat.icon}
                       <p className="text-3xl font-bold mt-2">{stat.value}</p>
                       <p className="text-sm text-muted-foreground">{stat.label}</p>
