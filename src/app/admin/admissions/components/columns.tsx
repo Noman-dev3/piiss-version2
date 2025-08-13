@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { statuses } from "../data/data"
 import { Admission } from "../data/schema"
 import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 
 export const columns: ColumnDef<Admission>[] = [
