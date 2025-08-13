@@ -55,19 +55,19 @@
     --card-foreground: 210 20% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 210 20% 98%;
-    --primary: 263.4 95.2% 66.1%;
+    --primary: 330 89% 65%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 224.3 19.5% 13.5%;
+    --secondary: 275 89% 20%;
     --secondary-foreground: 210 20% 98%;
-    --muted: 224.3 19.5% 13.5%;
+    --muted: 275 89% 20%;
     --muted-foreground: 215 10.2% 65.1%;
-    --accent: 224.3 19.5% 13.5%;
+    --accent: 275 89% 25%;
     --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-    --border: 224.3 19.5% 13.5%;
-    --input: 224.3 19.5% 13.5%;
-    --ring: 263.4 95.2% 66.1%;
+    --border: 275 89% 25%;
+    --input: 275 89% 25%;
+    --ring: 330 89% 65%;
   }
 }
 
@@ -83,7 +83,7 @@
     @apply py-20 lg:py-32;
   }
   .gradient {
-    background: linear-gradient(135deg, #1e3a8a, #4f46e5, #8b5cf6, #c084fc);
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
   }
