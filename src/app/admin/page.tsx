@@ -59,7 +59,7 @@ export default function AdminPage() {
     
     if (loading) {
         return (
-            <div className="space-y-6">
+            <div className="flex-1 space-y-6 p-8 pt-6">
                 <div>
                     <Skeleton className="h-8 w-1/4" />
                     <Skeleton className="h-4 w-1/2 mt-2" />
@@ -77,7 +77,7 @@ export default function AdminPage() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="flex-1 space-y-6 p-8 pt-6">
       <div>
         <h2 className="text-3xl font-bold font-headline">Dashboard Overview</h2>
         <p className="text-muted-foreground">Monitor your school's key metrics and recent activities.</p>
