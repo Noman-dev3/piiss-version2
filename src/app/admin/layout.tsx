@@ -32,7 +32,7 @@ export default function AdminLayout({
           <SidebarContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard" isActive={true}>
+                <SidebarMenuButton asChild tooltip="Dashboard">
                   <Link href="/admin">
                     <LayoutGrid />
                     <span>Dashboard</span>
@@ -40,8 +40,8 @@ export default function AdminLayout({
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Admissions">
-                  <Link href="#">
+                <SidebarMenuButton asChild tooltip="Admissions"  isActive={true}>
+                  <Link href="/admin/admissions">
                     <UserPlus />
                     <span>Admissions</span>
                   </Link>
@@ -69,7 +69,7 @@ export default function AdminLayout({
                     <FileText />
                     <span>Results</span>
                   </Link>
-                </SidebarMenuButton>
+                </SidebarMenuButton>.
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Events">
