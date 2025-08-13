@@ -1,4 +1,6 @@
 
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,36 +8,56 @@ import { Camera, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { gallerySection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, get, query, limitToLast } from "firebase/database";
+import { ref, query, limitToLast, onValue } from "firebase/database";
 import { GalleryItem, galleryItemSchema } from "@/app/admin/gallery/data/schema";
 import { z } from "zod";
 import Link from "next/link";
+import React from "react";
+import { Skeleton } from "./ui/skeleton";
 
-async function getGalleryItems(): Promise<GalleryItem[]> {
+export default function GallerySection() {
+  const [galleryItems, setGalleryItems] = React.useState<GalleryItem[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
     const dbRef = query(ref(db, 'gallery'), limitToLast(4));
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(galleryItemSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                return parsedItems.data.reverse(); // To show latest first
-            }
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const itemsArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key],
+        }));
+        const parsedItems = z.array(galleryItemSchema).safeParse(itemsArray);
+        if (parsedItems.success) {
+          setGalleryItems(parsedItems.data.reverse()); // To show latest first
+        } else {
+            console.error("Zod validation error for gallery:", parsedItems.error.flatten());
         }
-        return [];
-    } catch (error) {
-        console.error("Error fetching gallery:", error);
-        return [];
-    }
-}
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
+  if(loading) {
+      return (
+          <section id="gallery" className="py-20 lg:py-32 px-6 lg:px-12">
+              <div className="container mx-auto text-center">
+                  <Skeleton className="h-8 w-32 mb-4 mx-auto" />
+                  <Skeleton className="h-10 w-3/4 mb-4 mx-auto" />
+                  <Skeleton className="h-5 w-1/2 mb-12 mx-auto" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <Skeleton className="h-64" />
+                    <Skeleton className="h-64" />
+                    <Skeleton className="h-64" />
+                    <Skeleton className="h-64" />
+                  </div>
+              </div>
+          </section>
+      )
+  }
 
-export default async function GallerySection() {
-  const galleryItems = await getGalleryItems();
   return (
     <section id="gallery" className="py-20 lg:py-32 px-6 lg:px-12">
       <div className="container mx-auto text-center">
@@ -63,7 +85,7 @@ export default async function GallerySection() {
                         alt={item.title}
                         width={600}
                         height={450}
-                        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-auto object-cover aspect-video transition-transform duration-500 group-hover:scale-110"
                         data-ai-hint="gallery image"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
