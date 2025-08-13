@@ -1,63 +1,58 @@
 
 "use client"
 import { db } from '@/lib/firebase';
-import { ref, get, query, orderByChild } from 'firebase/database';
+import { ref, onValue, query, orderByChild } from 'firebase/database';
 import { studentSchema, Student } from './data/schema';
 import { z } from 'zod';
 import { StudentCard } from './components/student-card';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-
-async function getStudents(): Promise<Student[]> {
-  const dbRef = ref(db, 'students');
-  try {
-    // Ordering by a property that exists, like 'Name'
-    const snapshot = await get(query(dbRef, orderByChild('Name')));
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      const studentsArray = Object.keys(data).map(key => ({
-        id: key,
-        ...data[key],
-      }));
-      
-      const parsedStudents = z.array(studentSchema).safeParse(studentsArray);
-      if (parsedStudents.success) {
-        return parsedStudents.data;
-      } else {
-        console.error("Zod validation error:", parsedStudents.error.errors);
-        const validStudents = studentsArray
-          .map(item => {
-            const result = studentSchema.safeParse(item);
-            if (result.success) {
-              return result.data;
-            } else {
-               console.warn("Invalid student data for ID:", item.id, result.error.flatten().fieldErrors);
-               return null;
-            }
-          })
-          .filter((item): item is Student => item !== null);
-        return validStudents;
-      }
-    } else {
-      console.log("No student data available");
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching students:", error);
-    return [];
-  }
-}
-
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getStudents().then(data => {
-      setStudents(data);
+    const dbRef = query(ref(db, 'students'), orderByChild('Name'));
+
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const studentsArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key],
+        }));
+
+        const parsedStudents = z.array(studentSchema).safeParse(studentsArray);
+        if (parsedStudents.success) {
+          setStudents(parsedStudents.data);
+        } else {
+          console.error("Zod validation error:", parsedStudents.error.errors);
+          const validStudents = studentsArray
+            .map(item => {
+              const result = studentSchema.safeParse(item);
+              if (result.success) {
+                return result.data;
+              } else {
+                 console.warn("Invalid student data for ID:", item.id, result.error.flatten().fieldErrors);
+                 return null;
+              }
+            })
+            .filter((item): item is Student => item !== null);
+          setStudents(validStudents);
+        }
+      } else {
+        console.log("No student data available");
+        setStudents([]);
+      }
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching students:", error);
       setLoading(false);
     });
+
+    // Cleanup subscription on component unmount
+    return () => unsubscribe();
   }, []);
 
   if(loading) {
