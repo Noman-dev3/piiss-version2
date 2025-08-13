@@ -1,7 +1,7 @@
 
 "use server";
 
-import { db } from "@/lib/firebase";
+import { adminDb } from "@/lib/firebase-admin";
 import { ref, update, remove } from "firebase/database";
 import { studentSchema } from "@/app/admin/students/data/schema";
 import { revalidatePath } from "next/cache";
@@ -15,7 +15,7 @@ export async function updateStudent(id: string, data: unknown) {
       return { success: false, error: parsedData.error.flatten().fieldErrors };
     }
     
-    const studentRef = ref(db, `students/${id}`);
+    const studentRef = ref(adminDb, `students/${id}`);
     await update(studentRef, parsedData.data);
     
     revalidatePath("/admin/students");
@@ -28,7 +28,7 @@ export async function updateStudent(id: string, data: unknown) {
 
 export async function deleteStudent(id: string) {
     try {
-        const studentRef = ref(db, `students/${id}`);
+        const studentRef = ref(adminDb, `students/${id}`);
         await remove(studentRef);
         revalidatePath("/admin/students");
         return { success: true };

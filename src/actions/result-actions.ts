@@ -1,7 +1,7 @@
 
 "use server";
 
-import { db } from "@/lib/firebase";
+import { adminDb } from "@/lib/firebase-admin";
 import { ref, update, remove, set } from "firebase/database";
 import { resultSchema } from "@/app/admin/results/data/schema";
 import { revalidatePath } from "next/cache";
@@ -15,7 +15,7 @@ export async function updateResult(id: string, data: unknown) {
       return { success: false, error: parsedData.error.flatten().fieldErrors };
     }
     
-    const resultRef = ref(db, `results/${id}`);
+    const resultRef = ref(adminDb, `results/${id}`);
     await update(resultRef, parsedData.data);
     
     revalidatePath("/admin/results");
@@ -28,7 +28,7 @@ export async function updateResult(id: string, data: unknown) {
 
 export async function deleteResult(id: string) {
     try {
-        const resultRef = ref(db, `results/${id}`);
+        const resultRef = ref(adminDb, `results/${id}`);
         await remove(resultRef);
         revalidatePath("/admin/results");
         return { success: true };

@@ -1,6 +1,7 @@
+
 "use server";
 
-import { db } from "@/lib/firebase";
+import { adminDb } from "@/lib/firebase-admin";
 import { ref, update, remove } from "firebase/database";
 import { sendEmail } from "./send-email";
 import { revalidatePath } from "next/cache";
@@ -8,7 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export async function updateAdmissionStatus(id: string, status: 'approved' | 'rejected', email: string, name: string) {
   try {
-    const admissionRef = ref(db, `admissionSubmissions/${id}`);
+    const admissionRef = ref(adminDb, `admissionSubmissions/${id}`);
     await update(admissionRef, { status });
 
     const subject = status === 'approved' 
@@ -37,7 +38,7 @@ export async function updateAdmissionStatus(id: string, status: 'approved' | 're
 
 export async function deleteAdmission(id: string) {
     try {
-        const admissionRef = ref(db, `admissionSubmissions/${id}`);
+        const admissionRef = ref(adminDb, `admissionSubmissions/${id}`);
         await remove(admissionRef);
         revalidatePath("/admin/admissions");
         return { success: true };
