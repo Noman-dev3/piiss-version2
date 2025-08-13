@@ -9,39 +9,86 @@ function ThemeBodyClassUpdater() {
   const { theme } = useTheme();
 
   React.useEffect(() => {
-    // Clear all theme classes
+    // Add the current theme class to the body
     document.body.classList.remove('light', 'dark', 'gradient', 'custom');
-
-    // Add the current theme class
     if (theme) {
-       if (theme === 'gradient' || theme === 'custom') {
-         document.body.classList.add(theme);
-       }
-       // 'light', 'dark' and 'system' are handled by next-themes automatically by setting class on <html>
-       // but we will also add it to body for our gradient logic to work
+      document.body.classList.add(theme);
     }
   }, [theme]);
   
-   React.useEffect(() => {
-    const isGradient = document.body.classList.contains('gradient');
-    const isCustom = document.body.classList.contains('custom');
-    
-    if (theme === 'gradient' && !isGradient) {
-      document.body.classList.add('gradient');
-    } else if (theme !== 'gradient' && isGradient) {
-      document.body.classList.remove('gradient');
-    }
-
-    if (theme === 'custom' && !isCustom) {
-      document.body.classList.add('custom');
-    } else if (theme !== 'custom' && isCustom) {
-      document.body.classList.remove('custom');
-    }
-
-  }, [theme]);
-
-
   return null;
+}
+
+// Helper to convert hex to HSL string components (e.g., "224 71.4% 4.1%")
+function hexToHsl(hex: string): string {
+    let r = 0, g = 0, b = 0;
+    if (hex.length === 4) {
+        r = parseInt(hex[1] + hex[1], 16);
+        g = parseInt(hex[2] + hex[2], 16);
+        b = parseInt(hex[3] + hex[3], 16);
+    } else if (hex.length === 7) {
+        r = parseInt(hex.substring(1, 3), 16);
+        g = parseInt(hex.substring(3, 5), 16);
+        b = parseInt(hex.substring(5, 7), 16);
+    }
+
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+
+    h = Math.round(h * 360);
+    s = Math.round(s * 100);
+    l = Math.round(l * 100);
+
+    return `${h} ${s}% ${l}%`;
+}
+
+
+function CustomThemeStyleUpdater() {
+    const { theme } = useTheme();
+    const [customColors, setCustomColors] = React.useState({
+        primary: "#87ceeb",
+        accent: "#ffdab9",
+        background: "#e6e9ed",
+    });
+
+    React.useEffect(() => {
+        const handleStorageChange = () => {
+             const storedColors = localStorage.getItem('custom-theme-colors');
+             if (storedColors) {
+                 setCustomColors(JSON.parse(storedColors));
+             }
+        }
+        window.addEventListener('storage', handleStorageChange);
+        handleStorageChange(); // Initial load
+        
+        return () => window.removeEventListener('storage', handleStorageChange)
+    }, []);
+
+    React.useEffect(() => {
+        if (theme === 'custom') {
+            document.documentElement.style.setProperty('--custom-primary', hexToHsl(customColors.primary));
+            document.documentElement.style.setProperty('--custom-accent', hexToHsl(customColors.accent));
+            document.documentElement.style.setProperty('--custom-background', hexToHsl(customColors.background));
+        }
+    }, [theme, customColors]);
+
+    return null;
 }
 
 
@@ -49,6 +96,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
       <ThemeBodyClassUpdater />
+      <CustomThemeStyleUpdater />
       {children}
     </NextThemesProvider>
   )

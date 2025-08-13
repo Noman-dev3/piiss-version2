@@ -2,7 +2,7 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun,Palette } from "lucide-react"
+import { Moon, Sun, Palette, Pipette } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
@@ -11,10 +11,46 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel
 } from "@/components/ui/dropdown-menu"
+import { Label } from "./ui/label"
 
 export function ThemeToggle() {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
+  const [colors, setColors] = React.useState(() => {
+      if (typeof window !== 'undefined') {
+        const savedColors = localStorage.getItem('custom-theme-colors');
+        if (savedColors) {
+            return JSON.parse(savedColors);
+        }
+      }
+      return {
+        primary: "#87ceeb", // Default soft sky blue
+        accent: "#ffdab9", // Default gentle peach
+        background: "#e6e9ed", // Default pale blue-gray
+      };
+  });
+  
+  const handleColorChange = (colorName: string, value: string) => {
+      const newColors = { ...colors, [colorName]: value };
+      setColors(newColors);
+      if (typeof window !== 'undefined') {
+          localStorage.setItem('custom-theme-colors', JSON.stringify(newColors));
+          // Dispatch a storage event to sync across tabs/components
+          window.dispatchEvent(new Event('storage'));
+      }
+  };
+  
+  // Set the custom theme if a color is changed
+  React.useEffect(() => {
+    if (theme === 'custom') {
+       const timeout = setTimeout(() => {
+            // Re-apply theme to trigger style updates
+       }, 100);
+       return () => clearTimeout(timeout);
+    }
+  }, [colors, theme]);
 
   return (
     <DropdownMenu>
@@ -39,10 +75,28 @@ export function ThemeToggle() {
           <Palette className="mr-2 h-4 w-4"/>
           Gradient
         </DropdownMenuItem>
-         <DropdownMenuItem onClick={() => setTheme("custom")}>
-          <Palette className="mr-2 h-4 w-4"/>
-          Custom
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => setTheme("custom")}>
+           <Pipette className="mr-2 h-4 w-4"/>
+           Custom
         </DropdownMenuItem>
+        
+        {theme === 'custom' && (
+            <div className="p-2 space-y-2">
+                <div className="flex items-center justify-between">
+                    <Label htmlFor="primary-color" className="text-xs">Primary</Label>
+                    <input id="primary-color" type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} className="w-6 h-6 p-0 border-none rounded cursor-pointer bg-transparent"/>
+                </div>
+                 <div className="flex items-center justify-between">
+                    <Label htmlFor="accent-color" className="text-xs">Accent</Label>
+                    <input id="accent-color" type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} className="w-6 h-6 p-0 border-none rounded cursor-pointer bg-transparent"/>
+                </div>
+                 <div className="flex items-center justify-between">
+                    <Label htmlFor="background-color" className="text-xs">Background</Label>
+                    <input id="background-color" type="color" value={colors.background} onChange={(e) => handleColorChange('background', e.target.value)} className="w-6 h-6 p-0 border-none rounded cursor-pointer bg-transparent"/>
+                </div>
+            </div>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

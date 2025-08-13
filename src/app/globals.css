@@ -49,7 +49,7 @@
     --ring: 197 71% 63%;
   }
 
-  body.gradient, body.custom {
+  body.gradient {
     --background: 240 10% 3.9%;
     --foreground: 210 20% 98%;
     --card: 240 10% 3.9%;
@@ -70,6 +70,28 @@
     --input: 275 89% 25%;
     --ring: 330 89% 65%;
   }
+
+  body.custom {
+    --background: var(--custom-background);
+    --foreground: 224 71.4% 4.1%;
+    --card: var(--custom-background);
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: var(--custom-background);
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: var(--custom-primary);
+    --primary-foreground: 224 71.4% 4.1%;
+    --secondary: 210 20% 98%;
+    --secondary-foreground: 224 71.4% 4.1%;
+    --muted: 210 20% 98%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: var(--custom-accent);
+    --accent-foreground: 224 71.4% 4.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 206 33% 90%;
+    --input: 206 33% 90%;
+    --ring: var(--custom-primary);
+  }
 }
 
 @layer base {
@@ -84,30 +106,30 @@
     @apply py-20 lg:py-32;
   }
   
-  body.gradient, body.custom {
+  body.gradient {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
   }
 
-  body.gradient .bg-background, body.custom .bg-background {
+  body.gradient .bg-background {
     background-color: transparent;
   }
-  body.gradient .bg-card, body.gradient .bg-popover, body.custom .bg-card, body.custom .bg-popover {
+  body.gradient .bg-card, body.gradient .bg-popover {
      background-color: hsl(var(--card) / 0.5);
      @apply backdrop-blur-lg;
   }
-  body.gradient .bg-secondary, body.custom .bg-secondary {
+  body.gradient .bg-secondary {
     background-color: hsl(var(--secondary) / 0.5);
     @apply backdrop-blur-sm;
   }
-  body.gradient .bg-muted, body.custom .bg-muted {
+  body.gradient .bg-muted {
      background-color: hsl(var(--muted) / 0.5);
   }
-  body.gradient .border, body.custom .border {
+  body.gradient .border {
       border-color: hsl(var(--border) / 0.3);
   }
-  body.gradient .ring, body.custom .ring {
+  body.gradient .ring {
       --tw-ring-color: hsl(var(--ring) / 0.5);
   }
 
@@ -137,7 +159,7 @@
     border: 3px solid hsl(var(--background));
   }
 
-  body.gradient ::-webkit-scrollbar-thumb, body.custom ::-webkit-scrollbar-thumb {
+  body.gradient ::-webkit-scrollbar-thumb {
      background-color: hsl(var(--muted-foreground) / 0.8);
      border: 3px solid transparent;
   }
