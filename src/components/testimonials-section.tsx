@@ -1,6 +1,4 @@
 
-"use client";
-
 import * as React from "react";
 import { Star, MessageCircle, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,31 +12,33 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { testimonialsSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { Testimonial, testimonialSchema } from "@/app/admin/testimonials/data/schema";
 import { z } from "zod";
 
-export default function TestimonialsSection() {
-  const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
-
-  React.useEffect(() => {
+async function getTestimonials(): Promise<Testimonial[]> {
     const dbRef = ref(db, 'testimonials');
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const itemsArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key],
-        }));
-        const parsedItems = z.array(testimonialSchema).safeParse(itemsArray);
-        if (parsedItems.success) {
-          setTestimonials(parsedItems.data);
+    try {
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            const itemsArray = Object.keys(data).map(key => ({
+                id: key,
+                ...data[key],
+            }));
+            const parsedItems = z.array(testimonialSchema).safeParse(itemsArray);
+            if (parsedItems.success) {
+                return parsedItems.data;
+            }
         }
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+    } catch (error) {
+        console.error("Error fetching testimonials:", error);
+    }
+    return [];
+}
 
+export default async function TestimonialsSection() {
+  const testimonials = await getTestimonials();
 
   return (
     <section id="testimonials" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary/50">
@@ -77,6 +77,14 @@ export default function TestimonialsSection() {
                               <Star
                                 key={i}
                                 className="w-5 h-5 text-amber-400 fill-amber-400"
+                              />
+                            ))}
+                           {Array(5 - testimonial.rating)
+                            .fill(0)
+                            .map((_, i) => (
+                              <Star
+                                key={i}
+                                className="w-5 h-5 text-muted-foreground/30"
                               />
                             ))}
                         </div>

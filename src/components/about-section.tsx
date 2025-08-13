@@ -1,55 +1,32 @@
 
-"use client"
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { GraduationCap } from "lucide-react";
 import Image from 'next/image';
 import { about } from "@/lib/data";
-import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { Skeleton } from "./ui/skeleton";
 
-export default function AboutSection() {
-  const [content, setContent] = useState({ description: "", imageUrl: about.image.src });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+async function getAboutContent() {
+  try {
     const settingsRef = ref(db, 'settings');
-    const unsubscribe = onValue(settingsRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        setContent({
-          description: data.ourStory || "",
-          imageUrl: data.aboutImageUrl || about.image.src,
-        });
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-
-  if(loading) {
-    return (
-        <section id="about" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary">
-          <div className="container mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <Skeleton className="h-6 w-32 mb-4" />
-                <Skeleton className="h-12 w-3/4 mb-6" />
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-4/5" />
-              </div>
-              <div>
-                <Skeleton className="w-full h-[450px] rounded-xl" />
-              </div>
-            </div>
-          </div>
-        </section>
-    )
+    const snapshot = await get(settingsRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      return {
+        description: data.ourStory || "",
+        imageUrl: data.aboutImageUrl || about.image.src,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching about content:", error);
   }
+  return { description: "", imageUrl: about.image.src };
+}
+
+export default async function AboutSection() {
+  const content = await getAboutContent();
 
   return (
     <section id="about" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary">

@@ -1,5 +1,4 @@
 
-"use client"
 import {
     Accordion,
     AccordionContent,
@@ -10,17 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { HelpCircle } from "lucide-react";
 import { faqSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { FAQ, faqSchema } from "@/app/admin/faq/data/schema";
 import { z } from "zod";
-import { useEffect, useState } from "react";
-  
-export default function FaqSection() {
-    const [faqs, setFaqs] = useState<FAQ[]>([]);
 
-    useEffect(() => {
-        const dbRef = ref(db, 'faqs');
-        const unsubscribe = onValue(dbRef, (snapshot) => {
+async function getFaqs(): Promise<FAQ[]> {
+    const dbRef = ref(db, 'faqs');
+    try {
+        const snapshot = await get(dbRef);
         if (snapshot.exists()) {
             const data = snapshot.val();
             const itemsArray = Object.keys(data).map(key => ({
@@ -29,13 +25,17 @@ export default function FaqSection() {
             }));
             const parsedItems = z.array(faqSchema).safeParse(itemsArray);
             if (parsedItems.success) {
-                setFaqs(parsedItems.data);
+                return parsedItems.data;
             }
         }
-        });
-        return () => unsubscribe();
-    }, []);
-
+    } catch (error) {
+        console.error("Error fetching FAQs:", error);
+    }
+    return [];
+}
+  
+export default async function FaqSection() {
+    const faqs = await getFaqs();
 
     return (
         <section id="faq" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">

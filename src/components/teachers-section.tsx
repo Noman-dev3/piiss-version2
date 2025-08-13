@@ -1,6 +1,4 @@
 
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,12 +6,11 @@ import { Users, BookOpen, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { teachersSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, query, limitToFirst, onValue } from "firebase/database";
+import { ref, query, limitToFirst, get } from "firebase/database";
 import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
 import { z } from "zod";
 import Link from "next/link";
 import React from "react";
-import { Skeleton } from "./ui/skeleton";
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
@@ -60,48 +57,32 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   );
 };
 
-export default function TeachersSection() {
-  const [teachers, setTeachers] = React.useState<Teacher[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  
-  React.useEffect(() => {
+async function getTeachers(): Promise<Teacher[]> {
     const dbRef = query(ref(db, 'teachers'), limitToFirst(3));
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const itemsArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key],
-        }));
-        const parsedItems = z.array(teacherSchema).safeParse(itemsArray);
-        if (parsedItems.success) {
-          setTeachers(parsedItems.data);
-        } else {
-            console.error("Zod validation error for teachers:", parsedItems.error.flatten());
+    try {
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            const itemsArray = Object.keys(data).map(key => ({
+                id: key,
+                ...data[key],
+            }));
+            const parsedItems = z.array(teacherSchema).safeParse(itemsArray);
+            if (parsedItems.success) {
+                return parsedItems.data;
+            } else {
+                console.error("Zod validation error for teachers:", parsedItems.error.flatten());
+            }
         }
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    } catch (error) {
+        console.error("Error fetching teachers:", error);
+    }
+    return [];
+}
 
-  if (loading) {
-      return (
-          <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
-              <div className="container mx-auto text-center">
-                  <Skeleton className="h-8 w-32 mb-4 mx-auto" />
-                  <Skeleton className="h-10 w-3/4 mb-4 mx-auto" />
-                  <Skeleton className="h-5 w-1/2 mb-12 mx-auto" />
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      <Skeleton className="h-96" />
-                      <Skeleton className="h-96" />
-                      <Skeleton className="h-96" />
-                  </div>
-              </div>
-          </section>
-      )
-  }
-
+export default async function TeachersSection() {
+  const teachers = await getTeachers();
+  
   return (
     <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
       <div className="container mx-auto text-center">
