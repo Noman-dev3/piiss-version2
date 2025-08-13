@@ -5,12 +5,14 @@ import { ref, onValue, query, orderByChild } from 'firebase/database';
 import { studentSchema, Student } from './data/schema';
 import { z } from 'zod';
 import { StudentCard } from './components/student-card';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const dbRef = query(ref(db, 'students'), orderByChild('Name'));
@@ -55,6 +57,14 @@ export default function StudentsPage() {
     return () => unsubscribe();
   }, []);
 
+  const filteredStudents = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return students.filter(student => 
+      student.Name.toLowerCase().includes(query) || 
+      student.id.toLowerCase().includes(query)
+    );
+  }, [students, searchQuery]);
+
   if(loading) {
     return (
        <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
@@ -64,6 +74,7 @@ export default function StudentsPage() {
             <Skeleton className="h-4 w-72 mt-2" />
           </div>
         </div>
+         <Skeleton className="h-10 w-full mb-6" />
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {[...Array(10)].map((_, i) => <Skeleton key={i} className="h-64 rounded-xl" />)}
         </div>
@@ -82,9 +93,19 @@ export default function StudentsPage() {
         </div>
       </div>
       
+      <div className="mb-6">
+        <Input 
+          type="search"
+          placeholder="Search by name or roll no..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm bg-background"
+        />
+      </div>
+
       {students.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {students.map((student) => (
+          {filteredStudents.map((student) => (
             <StudentCard key={student.id} student={student} />
           ))}
         </div>
