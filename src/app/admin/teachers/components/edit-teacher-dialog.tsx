@@ -155,7 +155,7 @@ export function EditTeacherDialog({ teacher, isOpen, onOpenChange }: EditTeacher
                                 <FormItem>
                                 <FormLabel>Profile Image URL</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="https://example.com/image.png" {...field} />
+                                    <Input placeholder="https://example.com/image.png" {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
