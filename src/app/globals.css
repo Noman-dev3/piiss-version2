@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
+    --background: 206 33% 97%; /* E6E9ED - pale, de-saturated blue-gray */
     --foreground: 224 71.4% 4.1%;
-    --card: 210 20% 98%;
+    --card: 206 33% 97%;
     --card-foreground: 224 71.4% 4.1%;
-    --popover: 210 20% 98%;
+    --popover: 206 33% 97%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
+    --primary: 197 71% 63%; /* 87CEEB - Soft sky blue */
+    --primary-foreground: 224 71.4% 4.1%;
+    --secondary: 210 20% 98%;
     --secondary-foreground: 224 71.4% 4.1%;
-    --muted: 220 14.3% 95.9%;
+    --muted: 210 20% 98%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
+    --accent: 28 100% 84%; /* FFDAB9 - Gentle peach */
     --accent-foreground: 224 71.4% 4.1%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --border: 206 33% 90%;
+    --input: 206 33% 90%;
+    --ring: 197 71% 63%;
     --radius: 0.5rem;
   }
  
@@ -33,19 +33,19 @@
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    --primary: 263.4 95.2% 66.1%;
-    --primary-foreground: 210 20% 98%;
+    --primary: 197 71% 63%;
+    --primary-foreground: 224 71.4% 4.1%;
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 28 100% 84%;
+    --accent-foreground: 224 71.4% 4.1%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
-    --ring: 263.4 95.2% 66.1%;
+    --ring: 197 71% 63%;
   }
 
   body.gradient {
@@ -151,6 +151,9 @@
   }
   .rotate-y-10 {
     transform: rotateY(10deg);
+  }
+   .rotate-y-4 {
+    transform: rotateY(4deg);
   }
   .bg-dot-pattern {
     background-image: radial-gradient(circle, hsl(var(--foreground) / 0.1) 1px, transparent 1px);

@@ -9,6 +9,9 @@ import { revalidatePath } from "next/cache";
 const updateResultSchema = resultSchema.omit({ id: true, date_created: true });
 
 export async function updateResult(id: string, data: unknown) {
+  if (!adminDb) {
+    return { success: false, error: "Database not initialized." };
+  }
   try {
     const parsedData = updateResultSchema.safeParse(data);
     if (!parsedData.success) {
@@ -27,6 +30,9 @@ export async function updateResult(id: string, data: unknown) {
 }
 
 export async function deleteResult(id: string) {
+    if (!adminDb) {
+      return { success: false, error: "Database not initialized." };
+    }
     try {
         const resultRef = ref(adminDb, `results/${id}`);
         await remove(resultRef);

@@ -1,6 +1,13 @@
 
 import admin from 'firebase-admin';
 
+// Check for the existence of Firebase credentials in environment variables
+const hasFirebaseCreds = !!process.env.FIREBASE_PRIVATE_KEY_ID && !!process.env.FIREBASE_PRIVATE_KEY;
+
+if (!hasFirebaseCreds) {
+    console.warn("Firebase admin credentials are not set. Server-side Firebase features will be disabled.");
+}
+
 const serviceAccount = {
   "type": "service_account",
   "project_id": "piiss-website",
@@ -15,11 +22,16 @@ const serviceAccount = {
   "universe_domain": "googleapis.com"
 };
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://piiss-website-default-rtdb.firebaseio.com"
-  });
+if (!admin.apps.length && hasFirebaseCreds) {
+  try {
+    admin.initializeApp({
+      // @ts-ignore
+      credential: admin.credential.cert(serviceAccount),
+      databaseURL: "https://piiss-website-default-rtdb.firebaseio.com"
+    });
+  } catch (error) {
+     console.error("Firebase admin initialization error:", error);
+  }
 }
 
-export const adminDb = admin.database();
+export const adminDb = hasFirebaseCreds ? admin.database() : null;

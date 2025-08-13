@@ -8,6 +8,9 @@ import { revalidatePath } from "next/cache";
 
 
 export async function updateAdmissionStatus(id: string, status: 'approved' | 'rejected', email: string, name: string) {
+  if (!adminDb) {
+    return { success: false, error: "Database not initialized." };
+  }
   try {
     const admissionRef = ref(adminDb, `admissionSubmissions/${id}`);
     await update(admissionRef, { status });
@@ -37,6 +40,9 @@ export async function updateAdmissionStatus(id: string, status: 'approved' | 're
 }
 
 export async function deleteAdmission(id: string) {
+    if (!adminDb) {
+      return { success: false, error: "Database not initialized." };
+    }
     try {
         const admissionRef = ref(adminDb, `admissionSubmissions/${id}`);
         await remove(admissionRef);
