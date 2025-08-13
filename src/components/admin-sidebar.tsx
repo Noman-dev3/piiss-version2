@@ -6,13 +6,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { 
-  LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut, Settings 
+  LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut, Settings, Database
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
     { href: '/admin', icon: <LayoutGrid className="h-5 w-5" />, label: 'Dashboard' },
+    { href: '/admin/school-data', icon: <Database className="h-5 w-5" />, label: 'School Data' },
     { href: '/admin/admissions', icon: <UserPlus className="h-5 w-5" />, label: 'Admissions' },
     { href: '/admin/students', icon: <GraduationCap className="h-5 w-5" />, label: 'Students' },
     { href: '/admin/teachers', icon: <Users className="h-5 w-5" />, label: 'Teachers' },

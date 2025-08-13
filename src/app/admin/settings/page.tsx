@@ -25,6 +25,7 @@ export default function SettingsPage() {
         officeHours: "",
         aboutImageUrl: "",
         contactImageUrl: "",
+        schoolDataUrl: "",
     });
 
     useEffect(() => {
@@ -128,6 +129,10 @@ export default function SettingsPage() {
                         <div className="space-y-2">
                             <Label htmlFor="contactImageUrl">Contact Section Image URL</Label>
                             <Input id="contactImageUrl" value={settings.contactImageUrl} onChange={handleInputChange} placeholder="https://placehold.co/600x400.png"/>
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="schoolDataUrl">School Data App URL</Label>
+                            <Input id="schoolDataUrl" value={settings.schoolDataUrl} onChange={handleInputChange} placeholder="https://yourotherapp.com"/>
                         </div>
                     </div>
                 </CardContent>
