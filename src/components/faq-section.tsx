@@ -15,7 +15,7 @@ export default function FaqSection() {
                 <div className="text-center mb-12">
                      <Badge
                         variant="outline"
-                        className="mb-4 bg-secondary/80 border-white/20"
+                        className="mb-4 bg-secondary/80"
                         >
                         <HelpCircle className="w-4 h-4 mr-2" />
                         {faqSection.badge}

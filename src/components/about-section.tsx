@@ -12,7 +12,7 @@ export default function AboutSection() {
           <div>
             <Badge
               variant="outline"
-              className="mb-4 bg-background/50 border-white/20"
+              className="mb-4 bg-background/50"
             >
               <GraduationCap className="w-4 h-4 mr-2" />
               {about.badge}

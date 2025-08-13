@@ -19,7 +19,7 @@ export default function TestimonialsSection() {
       <div className="container mx-auto text-center">
         <Badge
           variant="outline"
-          className="mb-4 bg-background/50 border-white/20"
+          className="mb-4 bg-background/50"
         >
           <MessageCircle className="w-4 h-4 mr-2" />
           {testimonialsSection.badge}
@@ -41,7 +41,7 @@ export default function TestimonialsSection() {
             {testimonialsSection.testimonials.map((testimonial, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-4 group">
-                  <Card className="h-full bg-background/60 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-primary/20">
+                  <Card className="h-full bg-background/60 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-primary/20">
                     <CardContent className="p-8 flex flex-col items-start text-left">
                        <div className="flex mb-4">
                         {Array(testimonial.rating)

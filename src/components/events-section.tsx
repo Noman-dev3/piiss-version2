@@ -10,7 +10,7 @@ export default function EventsSection() {
       <div className="container mx-auto text-center">
         <Badge
           variant="outline"
-          className="mb-4 bg-background/50 border-white/20"
+          className="mb-4 bg-background/50"
         >
           <PartyPopper className="w-4 h-4 mr-2" />
           {eventsSection.badge}
@@ -23,7 +23,7 @@ export default function EventsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
           {eventsSection.events.map((event, index) => (
             <div key={index} className="group perspective-1000">
-                <Card className="h-full bg-background/60 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20">
+                <Card className="h-full bg-background/60 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20">
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl">{event.title}</CardTitle>
                     </CardHeader>

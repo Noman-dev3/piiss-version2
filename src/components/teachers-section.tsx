@@ -8,7 +8,7 @@ import { teachersSection } from "@/lib/data";
 const TeacherCard = ({ teacher }: { teacher: (typeof teachersSection.teachers)[0] }) => {
   return (
     <div className="group perspective-1000">
-      <Card className="h-full bg-secondary/50 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:rotate-y-10 group-hover:shadow-2xl group-hover:shadow-primary/20">
+      <Card className="h-full bg-secondary/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:rotate-y-10 group-hover:shadow-2xl group-hover:shadow-primary/20">
         <CardContent className="p-6 flex flex-col items-center text-center">
           <div className="relative mb-4">
             <Image
@@ -29,7 +29,7 @@ const TeacherCard = ({ teacher }: { teacher: (typeof teachersSection.teachers)[0
           <p className="text-muted-foreground text-sm mb-3">{teacher.role}</p>
           <Badge
             variant="outline"
-            className="mb-6 bg-background/50 border-white/20"
+            className="mb-6 bg-background/50"
           >
             <BookOpen className="w-4 h-4 mr-2" />
             {teacher.subject}
@@ -61,7 +61,7 @@ export default function TeachersSection() {
       <div className="container mx-auto text-center">
         <Badge
           variant="outline"
-          className="mb-4 bg-secondary/80 border-white/20"
+          className="mb-4 bg-secondary/80"
         >
           <Users className="w-4 h-4 mr-2" />
           {teachersSection.badge}

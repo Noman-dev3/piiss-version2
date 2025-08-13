@@ -9,10 +9,10 @@ export function Features() {
           {featuresSection.features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 flex items-center gap-4 hover:bg-white/10 transition-colors cursor-pointer"
+              className="bg-card border border-border rounded-lg p-6 flex items-center gap-4 hover:bg-accent transition-colors cursor-pointer"
             >
               {feature.icon}
-              <h3 className="text-lg font-semibold text-white">{feature.title}</h3>
+              <h3 className="text-lg font-semibold text-card-foreground">{feature.title}</h3>
             </div>
           ))}
         </div>

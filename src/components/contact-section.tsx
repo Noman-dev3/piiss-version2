@@ -45,25 +45,25 @@ export default function ContactSection() {
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="first-name">{contactForm.fields.firstName.label} *</Label>
-                  <Input id="first-name" name="first-name" placeholder={contactForm.fields.firstName.placeholder} required className="bg-background/80" />
+                  <Input id="first-name" name="first-name" placeholder={contactForm.fields.firstName.placeholder} required className="bg-background" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="last-name">{contactForm.fields.lastName.label} *</Label>
-                  <Input id="last-name" name="last-name" placeholder={contactForm.fields.lastName.placeholder} required className="bg-background/80" />
+                  <Input id="last-name" name="last-name" placeholder={contactForm.fields.lastName.placeholder} required className="bg-background" />
                 </div>
               </div>
                <div className="space-y-2">
                 <Label htmlFor="email">{contactForm.fields.email.label} *</Label>
-                <Input id="email" name="email" type="email" placeholder={contactForm.fields.email.placeholder} required className="bg-background/80" />
+                <Input id="email" name="email" type="email" placeholder={contactForm.fields.email.placeholder} required className="bg-background" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">{contactForm.fields.phone.label}</Label>
-                <Input id="phone" name="phone" placeholder={contactForm.fields.phone.placeholder} className="bg-background/80" />
+                <Input id="phone" name="phone" placeholder={contactForm.fields.phone.placeholder} className="bg-background" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="subject">{contactForm.fields.subject.label} *</Label>
                 <Select name="subject" required>
-                  <SelectTrigger id="subject" className="bg-background/80">
+                  <SelectTrigger id="subject" className="bg-background">
                     <SelectValue placeholder={contactForm.fields.subject.placeholder} />
                   </SelectTrigger>
                   <SelectContent>
@@ -75,7 +75,7 @@ export default function ContactSection() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="message">{contactForm.fields.message.label} *</Label>
-                <Textarea id="message" name="message" placeholder={contactForm.fields.message.placeholder} rows={5} required className="bg-background/80" />
+                <Textarea id="message" name="message" placeholder={contactForm.fields.message.placeholder} rows={5} required className="bg-background" />
               </div>
               <Button type="submit" size="lg" className="w-full">
                 <Send className="mr-2 h-4 w-4" />
@@ -88,7 +88,7 @@ export default function ContactSection() {
               <div className="space-y-6">
                 {contactInfo.items.map((item, index) => (
                   <div key={index} className="flex items-start gap-4">
-                    <div className="p-3 bg-background/80 rounded-full">{item.icon}</div>
+                    <div className="p-3 bg-background rounded-full">{item.icon}</div>
                     <div>
                       <h4 className="font-semibold">{item.title}</h4>
                       <p className="text-muted-foreground whitespace-pre-line">{item.value}</p>

@@ -11,7 +11,7 @@ export default function GallerySection() {
       <div className="container mx-auto text-center">
         <Badge
           variant="outline"
-          className="mb-4 bg-secondary/80 border-white/20"
+          className="mb-4 bg-secondary/80"
         >
           <Camera className="w-4 h-4 mr-2" />
           {gallerySection.badge}

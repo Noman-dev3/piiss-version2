@@ -52,19 +52,19 @@ export const featuresSection = {
     title: "Why Choose Us?",
     features: [
         {
-            icon: React.createElement(Users, { className: "h-8 w-8 text-white" }),
+            icon: React.createElement(Users, { className: "h-8 w-8 text-primary" }),
             title: "Expert Faculty",
         },
         {
-            icon: React.createElement(GraduationCap, { className: "h-8 w-8 text-white" }),
+            icon: React.createElement(GraduationCap, { className: "h-8 w-8 text-primary" }),
             title: "Holistic Learning",
         },
         {
-            icon: React.createElement(BookOpen, { className: "h-8 w-8 text-white" }),
+            icon: React.createElement(BookOpen, { className: "h-8 w-8 text-primary" }),
             title: "Modern Curriculum",
         },
         {
-            icon: React.createElement(Trophy, { className: "h-8 w-8 text-white" }),
+            icon: React.createElement(Trophy, { className: "h-8 w-8 text-primary" }),
             title: "Top Achievements",
         },
     ]
@@ -339,5 +339,3 @@ export const contactForm = {
     },
     submitButton: "Send Message",
 };
-
-    
