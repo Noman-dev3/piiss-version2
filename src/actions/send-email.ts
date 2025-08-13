@@ -21,7 +21,7 @@ export async function sendEmail(options: EmailOptions) {
 
   try {
     const info = await transporter.sendMail({
-      from: '"PIISS Admissions" <admissions@piiss.edu>',
+      from: '"PIISS Admissions" <noman.dev3@gmail.com>',
       to: options.to,
       subject: options.subject,
       html: options.html,
