@@ -15,7 +15,7 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
-        <Sidebar collapsible="icon" variant="sidebar" side="left" className="fixed">
+        <Sidebar collapsible="icon" variant="sidebar" side="left" className="fixed z-50">
           <SidebarRail />
           <SidebarHeader>
             <div className="flex items-center gap-3 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center">
