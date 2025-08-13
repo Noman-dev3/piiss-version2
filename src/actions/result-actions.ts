@@ -10,6 +10,7 @@ const updateResultSchema = resultSchema.omit({ id: true, date_created: true });
 
 export async function updateResult(id: string, data: unknown) {
   if (!adminDb) {
+    console.error("Firebase Admin SDK not initialized. Check your server environment variables.");
     return { success: false, error: "Database not initialized." };
   }
   try {
@@ -31,6 +32,7 @@ export async function updateResult(id: string, data: unknown) {
 
 export async function deleteResult(id: string) {
     if (!adminDb) {
+      console.error("Firebase Admin SDK not initialized. Check your server environment variables.");
       return { success: false, error: "Database not initialized." };
     }
     try {

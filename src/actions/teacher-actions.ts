@@ -10,6 +10,7 @@ const updateTeacherSchema = teacherSchema.omit({ id: true });
 
 export async function updateTeacher(id: string, data: unknown) {
   if (!adminDb) {
+    console.error("Firebase Admin SDK not initialized. Check your server environment variables.");
     return { success: false, error: "Database not initialized." };
   }
   try {
@@ -31,6 +32,7 @@ export async function updateTeacher(id: string, data: unknown) {
 
 export async function deleteTeacher(id: string) {
     if (!adminDb) {
+      console.error("Firebase Admin SDK not initialized. Check your server environment variables.");
       return { success: false, error: "Database not initialized." };
     }
     try {

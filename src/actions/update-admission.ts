@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export async function updateAdmissionStatus(id: string, status: 'approved' | 'rejected', email: string, name: string) {
   if (!adminDb) {
+    console.error("Firebase Admin SDK not initialized. Check your server environment variables.");
     return { success: false, error: "Database not initialized." };
   }
   try {
@@ -41,6 +42,7 @@ export async function updateAdmissionStatus(id: string, status: 'approved' | 're
 
 export async function deleteAdmission(id: string) {
     if (!adminDb) {
+      console.error("Firebase Admin SDK not initialized. Check your server environment variables.");
       return { success: false, error: "Database not initialized." };
     }
     try {
