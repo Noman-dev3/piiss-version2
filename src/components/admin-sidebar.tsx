@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { 
-  LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut 
+  LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut, Settings 
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,10 @@ const navItems = [
     { href: '/admin/testimonials', icon: <MessageSquare className="h-5 w-5" />, label: 'Testimonials' },
     { href: '/admin/announcements', icon: <Megaphone className="h-5 w-5" />, label: 'Announcements' },
     { href: '/admin/faq', icon: <HelpCircle className="h-5 w-5" />, label: 'FAQ' },
+];
+
+const secondaryNavItems = [
+    { href: '/admin/settings', icon: <Settings className="h-5 w-5" />, label: 'Settings' },
 ];
 
 
@@ -65,7 +69,23 @@ export function AdminSidebar() {
             </nav>
         </div>
         <div className="mt-auto border-t p-4">
-            <Button variant="ghost" className="w-full justify-start" onClick={logout}>
+             <nav className="grid items-start px-0 text-sm font-medium">
+                 {secondaryNavItems.map(item => (
+                     <Link
+                        key={item.label}
+                        href={item.href}
+                        className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                            isActive(item.href) 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        }`}
+                        >
+                        {item.icon}
+                        {item.label}
+                    </Link>
+                ))}
+            </nav>
+            <Button variant="ghost" className="w-full justify-start mt-2" onClick={logout}>
                 <LogOut className="mr-2 h-5 w-5" />
                 Logout
             </Button>
