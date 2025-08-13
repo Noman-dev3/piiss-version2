@@ -10,7 +10,7 @@ export const studentSchema = z.object({
   Gender: z.string(),
   Section: z.string(),
   Address: z.string(),
-  profilePicture: z.string().url().optional().or(z.literal('')), // Assuming this might still be needed from web1
+  profilePicture: z.string().url().optional().or(z.literal('')).nullable(),
 });
 
 export type Student = z.infer<typeof studentSchema>;
