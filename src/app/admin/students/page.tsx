@@ -49,13 +49,8 @@ export default async function StudentsPage() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Students</h2>
           <p className="text-muted-foreground">
-            View and manage all student records in the school.
+            View, edit, or delete student records in the school.
           </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Student
-          </Button>
         </div>
       </div>
       
@@ -72,12 +67,8 @@ export default async function StudentsPage() {
                 No students found
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                You can start by adding a new student record.
+                Student records created from the other application will appear here.
                 </p>
-                <Button className="mt-4">
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Student
-                </Button>
             </div>
         </div>
       )}

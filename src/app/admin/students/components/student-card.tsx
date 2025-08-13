@@ -12,6 +12,21 @@ interface StudentCardProps {
 }
 
 export function StudentCard({ student }: StudentCardProps) {
+  const handleDelete = () => {
+    // Logic to delete the student will be added here
+    console.log("Delete student:", student.id);
+  };
+
+  const handleEdit = () => {
+    // Logic to edit the student will be added here
+    console.log("Edit student:", student.id);
+  };
+
+  const handleView = () => {
+    // Logic to view student details will be added here
+    console.log("View student:", student.id);
+  };
+
   return (
     <div className="group perspective-1000">
         <Card className="h-full transform-style-3d transition-all duration-500 group-hover:rotate-y-4 group-hover:shadow-2xl group-hover:shadow-primary/20 bg-secondary/30 border-border/20">
@@ -35,13 +50,13 @@ export function StudentCard({ student }: StudentCardProps) {
                  </Badge>
             </CardContent>
             <CardFooter className="flex justify-center gap-2 p-4 pt-0">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={handleView}>
                     <User className="mr-2 h-4 w-4" /> View
                 </Button>
-                 <Button variant="ghost" size="icon" className="h-8 w-8">
+                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleEdit}>
                     <Edit className="h-4 w-4 text-blue-500" />
                  </Button>
-                 <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-500 hover:bg-red-500/10">
+                 <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-500 hover:bg-red-500/10" onClick={handleDelete}>
                     <Trash2 className="h-4 w-4" />
                 </Button>
             </CardFooter>
