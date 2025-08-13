@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, BookOpen, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, BookOpen, Star, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 const teachers = [
@@ -112,20 +113,14 @@ export default function TeachersSection() {
             <TeacherCard key={index} teacher={teacher} />
           ))}
         </div>
+        <div className="mt-16 text-center">
+            <Button size="lg" asChild>
+                <a href="#">
+                View All Faculty <ArrowRight className="ml-2 h-5 w-5" />
+                </a>
+            </Button>
+        </div>
       </div>
     </section>
   );
 }
-
-// Add these to your globals.css to enable 3D effects
-/*
-.perspective-1000 {
-  perspective: 1000px;
-}
-.transform-style-3d {
-  transform-style: preserve-3d;
-}
-.rotate-y-10 {
-    transform: rotateY(10deg);
-}
-*/
