@@ -1,0 +1,131 @@
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Users, BookOpen, Star } from "lucide-react";
+import Image from "next/image";
+
+const teachers = [
+  {
+    name: "Sajjad",
+    role: "Teacher",
+    subject: "English",
+    experience: "3 Years",
+    department: "English",
+    qualification: "M.A. English",
+    image: "https://placehold.co/128x128.png",
+    hint: "male teacher portrait",
+    isHead: true,
+  },
+  {
+    name: "Ayesha Khan",
+    role: "Teacher",
+    subject: "Mathematics",
+    experience: "5 Years",
+    department: "Science",
+    qualification: "M.Sc. Mathematics",
+    image: "https://placehold.co/128x128.png",
+    hint: "female teacher portrait",
+    isHead: false,
+  },
+  {
+    name: "Ahmed Ali",
+    role: "Sr. Teacher",
+    subject: "Physics",
+    experience: "8 Years",
+    department: "Science",
+    qualification: "M.Sc. Physics",
+    image: "https://placehold.co/128x128.png",
+    hint: "male teacher portrait",
+    isHead: false,
+  },
+];
+
+const TeacherCard = ({ teacher }: { teacher: (typeof teachers)[0] }) => {
+  return (
+    <div className="group perspective-1000">
+      <Card className="h-full bg-secondary/50 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:rotate-y-10 group-hover:shadow-2xl group-hover:shadow-primary/20">
+        <CardContent className="p-6 flex flex-col items-center text-center">
+          <div className="relative mb-4">
+            <Image
+              src={teacher.image}
+              alt={teacher.name}
+              width={128}
+              height={128}
+              data-ai-hint={teacher.hint}
+              className="rounded-full border-4 border-primary/50 object-cover w-28 h-28 transition-transform duration-500 group-hover:scale-110"
+            />
+            {teacher.isHead && (
+              <div className="absolute top-0 right-0 bg-amber-400 p-1.5 rounded-full text-black">
+                <Star className="w-4 h-4" />
+              </div>
+            )}
+          </div>
+          <h3 className="text-xl font-bold font-headline">{teacher.name}</h3>
+          <p className="text-muted-foreground text-sm mb-3">{teacher.role}</p>
+          <Badge
+            variant="outline"
+            className="mb-6 bg-background/50 border-white/20"
+          >
+            <BookOpen className="w-4 h-4 mr-2" />
+            {teacher.subject}
+          </Badge>
+
+          <div className="w-full text-left space-y-3">
+            <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
+              <span className="text-muted-foreground">Experience</span>
+              <span className="font-semibold">{teacher.experience}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
+              <span className="text-muted-foreground">Department</span>
+              <span className="font-semibold">{teacher.department}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Qualification</span>
+              <span className="font-semibold">{teacher.qualification}</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default function TeachersSection() {
+  return (
+    <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
+      <div className="container mx-auto text-center">
+        <Badge
+          variant="outline"
+          className="mb-4 bg-secondary/80 border-white/20"
+        >
+          <Users className="w-4 h-4 mr-2" />
+          Meet Our Faculty
+        </Badge>
+        <h2 className="text-4xl font-bold mb-4 font-headline">
+          World-Class Educators
+        </h2>
+        <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
+          Our passionate team of expert teachers brings decades of experience
+          and innovative teaching methods to inspire and nurture every student.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {teachers.map((teacher, index) => (
+            <TeacherCard key={index} teacher={teacher} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Add these to your globals.css to enable 3D effects
+/*
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.rotate-y-10 {
+    transform: rotateY(10deg);
+}
+*/

@@ -3,7 +3,7 @@ import ContactSection from "@/components/contact-section";
 import { Features } from "@/components/features";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
-import ServicesSection from "@/components/services-section";
+import TeachersSection from "@/components/teachers-section";
 import ToppersSection from "@/components/toppers-section";
 
 
@@ -16,7 +16,7 @@ export default function Home() {
         <Features />
         <AboutSection />
         <ToppersSection />
-        <ServicesSection />
+        <TeachersSection />
         <ContactSection />
       </main>
     </div>

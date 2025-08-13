@@ -78,3 +78,15 @@
     @apply py-20 lg:py-32;
   }
 }
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  .rotate-y-10 {
+    transform: rotateY(10deg);
+  }
+}
