@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import { 
   LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut 
 } from 'lucide-react';
@@ -15,14 +15,15 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
-        <Sidebar>
+        <Sidebar collapsible="icon" variant="floating" side="left">
+          <SidebarRail />
           <SidebarHeader>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center">
               <Avatar className="h-10 w-10">
                 <AvatarImage src="https://placehold.co/40x40.png" alt="Admin" data-ai-hint="admin user"/>
                 <AvatarFallback>A</AvatarFallback>
               </Avatar>
-              <div>
+              <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                 <p className="font-semibold">Admin</p>
                 <p className="text-xs text-muted-foreground">Dashboard</p>
               </div>
@@ -31,7 +32,7 @@ export default function AdminLayout({
           <SidebarContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard">
+                <SidebarMenuButton asChild tooltip="Dashboard" isActive={true}>
                   <Link href="/admin">
                     <LayoutGrid />
                     <span>Dashboard</span>
@@ -120,7 +121,7 @@ export default function AdminLayout({
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
-          <SidebarHeader className="mt-auto border-t">
+          <SidebarHeader className="mt-auto border-t group-data-[collapsible=icon]:border-none">
              <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Logout">
@@ -136,7 +137,7 @@ export default function AdminLayout({
         <SidebarInset className="flex-1">
           <header className="flex items-center justify-between p-4 border-b bg-background">
             <div className="flex items-center gap-4">
-              <SidebarTrigger className="md:hidden"/>
+              <SidebarTrigger />
               <h1 className="text-xl font-semibold font-headline">Dashboard</h1>
             </div>
             <Button variant="outline" asChild><Link href="/">View Site</Link></Button>
