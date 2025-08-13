@@ -2,6 +2,7 @@ import AboutSection from "@/components/about-section";
 import ContactSection from "@/components/contact-section";
 import EventsSection from "@/components/events-section";
 import { Features } from "@/components/features";
+import GallerySection from "@/components/gallery-section";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import TeachersSection from "@/components/teachers-section";
@@ -19,6 +20,7 @@ export default function Home() {
         <ToppersSection />
         <TeachersSection />
         <EventsSection />
+        <GallerySection />
         <ContactSection />
       </main>
     </div>

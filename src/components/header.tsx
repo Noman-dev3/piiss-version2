@@ -9,7 +9,7 @@ import { useState } from "react";
 
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
-  const navLinks = ["Home", "About", "Admissions", "Results", "FAQ", "Contact"];
+  const navLinks = ["Home", "About", "Admissions", "Results", "Gallery", "FAQ", "Contact"];
 
   const NavLinkItems = ({ isMobile }: { isMobile: boolean }) => (
     <>
