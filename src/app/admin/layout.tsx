@@ -13,7 +13,7 @@ export default function AdminLayout({
       <AuthGuard>
         <div className="flex min-h-screen bg-muted/40">
           <AdminSidebar />
-          <main className="flex-1 flex flex-col">
+          <main className="flex-1 p-4 lg:p-6 overflow-x-hidden">
             {children}
           </main>
         </div>

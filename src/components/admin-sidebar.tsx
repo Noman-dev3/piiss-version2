@@ -137,18 +137,6 @@ export function AdminSidebar() {
              </SidebarMenu>
           </SidebarHeader>
         </Sidebar>
-         <SidebarInset className="flex-1">
-          <header className="flex items-center justify-between p-4 border-b bg-background">
-            <div className="flex items-center gap-4">
-              <SidebarTrigger />
-              <h1 className="text-xl font-semibold font-headline">Dashboard</h1>
-            </div>
-            <Button variant="outline" asChild><Link href="/">View Site</Link></Button>
-          </header>
-          <main className="p-4 lg:p-6 overflow-x-hidden">
-            {/* The page content will be rendered here */}
-          </main>
-        </SidebarInset>
     </SidebarProvider>
   );
 }
