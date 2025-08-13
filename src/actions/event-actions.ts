@@ -1,54 +1,106 @@
+"use client";
 
-'use server';
+import Image from "next/image";
+import { useState } from "react";
+import { Event } from "../data/schema";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Edit, Trash2, Calendar } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { format } from "date-fns";
+import { EditEventDialog } from "./edit-event-dialog";
+import { db } from "@/lib/firebase";
+import { ref, remove } from "firebase/database";
 
-import { db } from '@/lib/firebase';
-import { ref, set, update, remove, push } from 'firebase/database';
-import { revalidatePath } from 'next/cache';
-import { z } from 'zod';
-import { eventSchema } from '@/app/admin/events/data/schema';
-
-const createEventSchema = eventSchema.omit({ id: true });
-const updateEventSchema = eventSchema.omit({ id: true });
-
-export async function createEvent(data: z.infer<typeof createEventSchema>) {
-    try {
-        const validatedData = createEventSchema.parse(data);
-        const eventsRef = ref(db, 'events');
-        const newEventRef = push(eventsRef);
-        await set(newEventRef, validatedData);
-        revalidatePath('/admin/events');
-        return { success: true, message: "Event created successfully." };
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            return { success: false, error: error.flatten().fieldErrors };
-        }
-        return { success: false, error: { _form: [(error as Error).message] } };
-    }
+interface EventCardProps {
+  event: Event;
 }
 
-
-export async function updateEvent(id: string, data: z.infer<typeof updateEventSchema>) {
+export function EventCard({ event }: EventCardProps) {
+  const { toast } = useToast();
+  const [isEditOpen, setEditOpen] = useState(false);
+  
+  const handleDelete = async () => {
     try {
-        const validatedData = updateEventSchema.parse(data);
-        const eventRef = ref(db, `events/${id}`);
-        await update(eventRef, validatedData);
-        revalidatePath('/admin/events');
-        return { success: true, message: "Event updated successfully." };
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            return { success: false, error: error.flatten().fieldErrors };
-        }
-        return { success: false, error: { _form: [(error as Error).message] } };
-    }
-}
-
-export async function deleteEvent(id: string) {
-    try {
-        const eventRef = ref(db, `events/${id}`);
+        const eventRef = ref(db, `events/${event.id}`);
         await remove(eventRef);
-        revalidatePath('/admin/events');
-        return { success: true, message: 'Event deleted successfully.' };
+        toast({
+            title: "Event Deleted",
+            description: `The event "${event.title}" has been removed.`,
+        });
     } catch (error) {
-        return { success: false, error: (error as Error).message };
+        toast({
+            title: "Error",
+            description: (error as Error).message,
+            variant: "destructive",
+        });
     }
+  };
+
+  return (
+    <>
+    <div className="group perspective-1000">
+        <Card className="h-full flex flex-col transform-style-3d transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20 bg-secondary/30 border-border/20">
+            <CardHeader className="p-0">
+                <Image
+                    src={event.imageUrl || "https://placehold.co/600x400.png"}
+                    alt={event.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-48 object-cover rounded-t-lg transition-transform duration-500 group-hover:scale-105"
+                    data-ai-hint="school event"
+                />
+            </CardHeader>
+            <CardContent className="p-6 flex-grow">
+                 <CardTitle className="text-xl font-bold font-headline mb-2">{event.title}</CardTitle>
+                 <div className="flex items-center text-sm text-muted-foreground mb-4">
+                    <Calendar className="mr-2 h-4 w-4" />
+                    <span>{format(new Date(event.date), "PPP")}</span>
+                 </div>
+                 <CardDescription className="line-clamp-3 text-sm">
+                    {event.description}
+                </CardDescription>
+            </CardContent>
+            <CardFooter className="flex justify-end gap-2 p-4 pt-0">
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditOpen(true)}>
+                    <Edit className="h-4 w-4 text-blue-500" />
+                </Button>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-500 hover:bg-red-500/10">
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete the event <strong>{event.title}</strong>.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+            </CardFooter>
+        </Card>
+    </div>
+    <EditEventDialog event={event} isOpen={isEditOpen} onOpenChange={setEditOpen} />
+    </>
+  );
 }

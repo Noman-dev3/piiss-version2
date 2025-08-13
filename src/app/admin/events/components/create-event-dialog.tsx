@@ -17,8 +17,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { createEvent } from "@/actions/event-actions"
 import { Textarea } from "@/components/ui/textarea"
+import { db } from "@/lib/firebase"
+import { ref, set, push } from "firebase/database"
 
 interface CreateEventDialogProps {
   isOpen: boolean;
@@ -41,28 +42,22 @@ export function CreateEventDialog({ isOpen, onOpenChange }: CreateEventDialogPro
     });
 
     async function onSubmit(values: z.infer<typeof createEventSchema>) {
-       const result = await createEvent(values);
-       if (result.success) {
+       try {
+           const eventsRef = ref(db, 'events');
+           const newEventRef = push(eventsRef);
+           await set(newEventRef, values);
            toast({
                title: "Event Created",
                description: "The new event has been successfully added.",
            });
            onOpenChange(false);
            form.reset();
-       } else {
-            if(typeof result.error !== 'string' && result.error?._form) {
-                 toast({
-                    title: "Creation Failed",
-                    description: result.error._form.join(", "),
-                    variant: "destructive"
-                });
-           } else {
-                toast({
-                    title: "Creation Failed",
-                    description: "Please check the form for errors.",
-                    variant: "destructive"
-                });
-           }
+       } catch (error) {
+            toast({
+                title: "Creation Failed",
+                description: (error as Error).message,
+                variant: "destructive"
+            });
        }
     }
   

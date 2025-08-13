@@ -17,8 +17,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { updateEvent } from "@/actions/event-actions"
 import { Textarea } from "@/components/ui/textarea"
+import { db } from "@/lib/firebase"
+import { ref, update } from "firebase/database"
 
 interface EditEventDialogProps {
   event: Event;
@@ -39,27 +40,20 @@ export function EditEventDialog({ event, isOpen, onOpenChange }: EditEventDialog
     });
 
     async function onSubmit(values: z.infer<typeof updateEventSchema>) {
-       const result = await updateEvent(event.id, values);
-       if (result.success) {
-           toast({
-               title: "Event Updated",
-               description: "The event has been successfully updated.",
-           });
-           onOpenChange(false);
-       } else {
-           if(typeof result.error !== 'string' && result.error?._form) {
-                 toast({
-                    title: "Update Failed",
-                    description: result.error._form.join(", "),
-                    variant: "destructive"
-                });
-           } else {
-                toast({
-                    title: "Update Failed",
-                    description: "Please check the form for errors.",
-                    variant: "destructive"
-                });
-           }
+       try {
+            const eventRef = ref(db, `events/${event.id}`);
+            await update(eventRef, values);
+            toast({
+                title: "Event Updated",
+                description: "The event has been successfully updated.",
+            });
+            onOpenChange(false);
+       } catch (error) {
+            toast({
+                title: "Update Failed",
+                description: (error as Error).message,
+                variant: "destructive"
+            });
        }
     }
   

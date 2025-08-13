@@ -8,7 +8,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { deleteEvent } from "@/actions/event-actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { format } from "date-fns";
 import { EditEventDialog } from "./edit-event-dialog";
+import { db } from "@/lib/firebase";
+import { ref, remove } from "firebase/database";
 
 interface EventCardProps {
   event: Event;
@@ -32,18 +33,19 @@ export function EventCard({ event }: EventCardProps) {
   const [isEditOpen, setEditOpen] = useState(false);
   
   const handleDelete = async () => {
-    const res = await deleteEvent(event.id);
-    if (res.success) {
-      toast({
-        title: "Event Deleted",
-        description: `The event "${event.title}" has been removed.`,
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: res.error,
-        variant: "destructive",
-      });
+    try {
+        const eventRef = ref(db, `events/${event.id}`);
+        await remove(eventRef);
+        toast({
+            title: "Event Deleted",
+            description: `The event "${event.title}" has been removed.`,
+        });
+    } catch (error) {
+        toast({
+            title: "Error",
+            description: (error as Error).message,
+            variant: "destructive",
+        });
     }
   };
 
