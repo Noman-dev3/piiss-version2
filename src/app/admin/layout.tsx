@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
-import { Home, Edit, Image, Server, Settings, User } from 'lucide-react';
+import { Home, Edit, Server, Settings, User, BookOpen } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({
   children,
@@ -40,14 +41,6 @@ export default function AdminLayout({
                   <Link href="#">
                     <Edit />
                     <span>Content</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Manage Portfolio">
-                  <Link href="#">
-                    <Image />
-                    <span>Portfolio</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
