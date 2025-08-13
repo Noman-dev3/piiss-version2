@@ -49,7 +49,7 @@ export function CreateAnnouncementDialog({ isOpen, onOpenChange }: CreateAnnounc
            });
            toast({
                title: "Announcement Created",
-               description: "The new announcement has been successfully posted.",
+               description: "The new announcement has been successfully posted.&apos;",
            });
            onOpenChange(false);
            form.reset();

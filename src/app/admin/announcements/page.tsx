@@ -97,11 +97,11 @@ export default function AnnouncementsPage() {
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm mt-8">
             <div className="flex flex-col items-center gap-1 text-center py-20">
                 <h3 className="text-2xl font-bold tracking-tight">
-                No announcements found
+                No announcements found&quot;
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                Click "Create Announcement" to post a new one.
-                </p>
+                Click &quot;Create Announcement&quot; to post a new one.
+                </p>                &quot;
             </div>
         </div>
       )}

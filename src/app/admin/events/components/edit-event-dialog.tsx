@@ -56,14 +56,14 @@ export function EditEventDialog({ event, isOpen, onOpenChange }: EditEventDialog
             });
        }
     }
-  
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Edit Event: {event.title}</DialogTitle>
           <DialogDescription>
-            Update the event details below. Click save when you're done.
+            Update the event details below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

@@ -49,7 +49,7 @@ export function CreateEventDialog({ isOpen, onOpenChange }: CreateEventDialogPro
            toast({
                title: "Event Created",
                description: "The new event has been successfully added.",
-           });
+            });
            onOpenChange(false);
            form.reset();
        } catch (error) {

@@ -61,7 +61,7 @@ export function EditAnnouncementDialog({ announcement, isOpen, onOpenChange }: E
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Edit Announcement: {announcement.title}</DialogTitle>
+ <DialogTitle>Edit Announcement: {announcement.title}</DialogTitle>
           <DialogDescription>
             Update the announcement details below. Click save when you're done.
           </DialogDescription>
