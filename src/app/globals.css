@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -48,7 +49,7 @@
     --ring: 197 71% 63%;
   }
 
-  body.gradient {
+  body.gradient, body.custom {
     --background: 240 10% 3.9%;
     --foreground: 210 20% 98%;
     --card: 240 10% 3.9%;
@@ -83,30 +84,30 @@
     @apply py-20 lg:py-32;
   }
   
-  body.gradient {
+  body.gradient, body.custom {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
   }
 
-  body.gradient .bg-background {
+  body.gradient .bg-background, body.custom .bg-background {
     background-color: transparent;
   }
-  body.gradient .bg-card, body.gradient .bg-popover {
+  body.gradient .bg-card, body.gradient .bg-popover, body.custom .bg-card, body.custom .bg-popover {
      background-color: hsl(var(--card) / 0.5);
      @apply backdrop-blur-lg;
   }
-  body.gradient .bg-secondary {
+  body.gradient .bg-secondary, body.custom .bg-secondary {
     background-color: hsl(var(--secondary) / 0.5);
     @apply backdrop-blur-sm;
   }
-  body.gradient .bg-muted {
+  body.gradient .bg-muted, body.custom .bg-muted {
      background-color: hsl(var(--muted) / 0.5);
   }
-  body.gradient .border {
+  body.gradient .border, body.custom .border {
       border-color: hsl(var(--border) / 0.3);
   }
-  body.gradient .ring {
+  body.gradient .ring, body.custom .ring {
       --tw-ring-color: hsl(var(--ring) / 0.5);
   }
 
@@ -136,7 +137,7 @@
     border: 3px solid hsl(var(--background));
   }
 
-  body.gradient ::-webkit-scrollbar-thumb {
+  body.gradient ::-webkit-scrollbar-thumb, body.custom ::-webkit-scrollbar-thumb {
      background-color: hsl(var(--muted-foreground) / 0.8);
      border: 3px solid transparent;
   }

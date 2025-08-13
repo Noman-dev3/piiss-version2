@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -37,6 +38,10 @@ export function ThemeToggle() {
         <DropdownMenuItem onClick={() => setTheme("gradient")}>
           <Palette className="mr-2 h-4 w-4"/>
           Gradient
+        </DropdownMenuItem>
+         <DropdownMenuItem onClick={() => setTheme("custom")}>
+          <Palette className="mr-2 h-4 w-4"/>
+          Custom
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
