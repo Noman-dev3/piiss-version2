@@ -1,4 +1,5 @@
 import AboutSection from "@/components/about-section";
+import { AdBanner } from "@/components/ad-banner";
 import ContactSection from "@/components/contact-section";
 import EventsSection from "@/components/events-section";
 import FaqSection from "@/components/faq-section";
@@ -18,6 +19,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Features />
+        <AdBanner />
         <AboutSection />
         <ToppersSection />
         <TeachersSection />
