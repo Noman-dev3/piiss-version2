@@ -33,6 +33,8 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Textarea } from "./ui/textarea";
+import { db } from "@/lib/firebase";
+import { ref, push, set } from "firebase/database";
 
 const formSchema = z.object({
   applicantFullName: z.string().min(2, {
@@ -74,13 +76,30 @@ export function AdmissionForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: "Application Submitted!",
-      description: "We have received your application and will be in touch shortly.",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const admissionsRef = ref(db, 'admissions');
+      const newAdmissionRef = push(admissionsRef);
+      await set(newAdmissionRef, {
+        ...values,
+        dateOfBirth: format(values.dateOfBirth, "yyyy-MM-dd"),
+        status: 'pending',
+        submittedAt: new Date().toISOString(),
+      });
+
+      toast({
+        title: "Application Submitted!",
+        description: "We have received your application and will be in touch shortly.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your application. Please try again.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (

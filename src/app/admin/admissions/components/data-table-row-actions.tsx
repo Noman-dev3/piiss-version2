@@ -2,24 +2,18 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
+import { Check, X, Trash2, Eye } from 'lucide-react';
 
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-import { labels } from "../data/data"
-import { taskSchema } from "../data/schema"
+import { admissionSchema } from "../data/schema"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -28,7 +22,22 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original)
+  const admission = admissionSchema.parse(row.original)
+
+  const handleApprove = () => {
+    // Logic to approve admission
+    console.log("Approved:", admission.id);
+  }
+
+  const handleReject = () => {
+    // Logic to reject admission
+    console.log("Rejected:", admission.id);
+  }
+
+  const handleDelete = () => {
+    // Logic to delete admission
+    console.log("Deleted:", admission.id);
+  }
 
   return (
     <DropdownMenu>
@@ -42,24 +51,22 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator />
         <DropdownMenuItem>
+          <Eye className="mr-2 h-4 w-4" />
+          View Details
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleApprove}>
+          <Check className="mr-2 h-4 w-4 text-green-500" />
+          Approve
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleReject}>
+           <X className="mr-2 h-4 w-4 text-red-500" />
+          Reject
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleDelete} className="text-red-600">
+          <Trash2 className="mr-2 h-4 w-4" />
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
