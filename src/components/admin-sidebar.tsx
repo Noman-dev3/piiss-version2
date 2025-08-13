@@ -5,12 +5,26 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import { 
   LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut 
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+
+const navItems = [
+    { href: '/admin', icon: <LayoutGrid className="h-5 w-5" />, label: 'Dashboard' },
+    { href: '/admin/admissions', icon: <UserPlus className="h-5 w-5" />, label: 'Admissions' },
+    { href: '/admin/students', icon: <GraduationCap className="h-5 w-5" />, label: 'Students' },
+    { href: '#', icon: <Users className="h-5 w-5" />, label: 'Teachers' },
+    { href: '#', icon: <FileText className="h-5 w-5" />, label: 'Results' },
+    { href: '#', icon: <Calendar className="h-5 w-5" />, label: 'Events' },
+    { href: '#', icon: <GalleryVertical className="h-5 w-5" />, label: 'Gallery' },
+    { href: '#', icon: <Star className="h-5 w-5" />, label: 'Toppers' },
+    { href: '#', icon: <MessageSquare className="h-5 w-5" />, label: 'Testimonials' },
+    { href: '#', icon: <Megaphone className="h-5 w-5" />, label: 'Announcements' },
+    { href: '#', icon: <HelpCircle className="h-5 w-5" />, label: 'FAQ' },
+];
+
 
 export function AdminSidebar() {
   const { user, logout } = useAuth();
@@ -19,124 +33,44 @@ export function AdminSidebar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <SidebarProvider>
-        <Sidebar collapsible="icon" side="left" className="z-50">
-          <SidebarRail />
-          <SidebarHeader>
-            <div className="flex items-center gap-3 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center">
+    <aside className="hidden w-64 flex-col border-r bg-background sm:flex">
+        <div className="flex flex-col gap-2 border-b p-4">
+            <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage src="https://placehold.co/40x40.png" alt="Admin" data-ai-hint="admin user"/>
                 <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'A'}</AvatarFallback>
               </Avatar>
-              <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                <p className="font-semibold truncate">{user?.email}</p>
+              <div className="flex flex-col">
+                <p className="text-sm font-semibold truncate">{user?.email}</p>
                 <p className="text-xs text-muted-foreground">Administrator</p>
               </div>
             </div>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard" isActive={isActive('/admin')}>
-                  <Link href="/admin">
-                    <LayoutGrid />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Admissions" isActive={isActive('/admin/admissions')}>
-                  <Link href="/admin/admissions">
-                    <UserPlus />
-                    <span>Admissions</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Students" isActive={isActive('/admin/students')}>
-                  <Link href="/admin/students">
-                    <GraduationCap />
-                    <span>Students</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Teachers">
-                  <Link href="#">
-                    <Users />
-                    <span>Teachers</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Results">
-                  <Link href="#">
-                    <FileText />
-                    <span>Results</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Events">
-                  <Link href="#">
-                    <Calendar />
-                    <span>Events</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Gallery">
-                  <Link href="#">
-                    <GalleryVertical />
-                    <span>Gallery</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Toppers">
-                  <Link href="#">
-                    <Star />
-                    <span>Toppers</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Testimonials">
-                  <Link href="#">
-                    <MessageSquare />
-                    <span>Testimonials</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Announcements">
-                  <Link href="#">
-                    <Megaphone />
-                    <span>Announcements</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="FAQ">
-                  <Link href="#">
-                    <HelpCircle />
-                    <span>FAQ</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarContent>
-          <SidebarHeader className="mt-auto border-t group-data-[collapsible=icon]:border-none">
-             <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton onClick={logout} tooltip="Logout">
-                        <LogOut />
-                        <span>Logout</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-             </SidebarMenu>
-          </SidebarHeader>
-        </Sidebar>
-    </SidebarProvider>
+        </div>
+        <div className="flex-1 overflow-auto py-2">
+            <nav className="grid items-start px-4 text-sm font-medium">
+                {navItems.map(item => (
+                     <Link
+                        key={item.label}
+                        href={item.href}
+                        className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                            isActive(item.href) 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        }`}
+                        >
+                        {item.icon}
+                        {item.label}
+                    </Link>
+                ))}
+            </nav>
+        </div>
+        <div className="mt-auto border-t p-4">
+            <Button variant="ghost" className="w-full justify-start" onClick={logout}>
+                <LogOut className="mr-2 h-5 w-5" />
+                Logout
+            </Button>
+        </div>
+    </aside>
   );
 }
+
