@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -33,7 +32,7 @@ export function AdminSidebar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <aside className="hidden w-64 flex-col border-r bg-background sm:flex">
+    <aside className="fixed top-0 left-0 hidden h-full w-64 flex-col border-r bg-background sm:flex">
         <div className="flex flex-col gap-2 border-b p-4">
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10">
