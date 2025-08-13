@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 
 export async function updateAdmissionStatus(id: string, status: 'approved' | 'rejected', email: string, name: string) {
   try {
-    const admissionRef = ref(db, `admissions/${id}`);
+    const admissionRef = ref(db, `admissionSubmissions/${id}`);
     await update(admissionRef, { status });
 
     const subject = status === 'approved' 
@@ -37,7 +37,7 @@ export async function updateAdmissionStatus(id: string, status: 'approved' | 're
 
 export async function deleteAdmission(id: string) {
     try {
-        const admissionRef = ref(db, `admissions/${id}`);
+        const admissionRef = ref(db, `admissionSubmissions/${id}`);
         await remove(admissionRef);
         revalidatePath("/admin/admissions");
         return { success: true };

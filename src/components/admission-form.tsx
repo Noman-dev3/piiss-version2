@@ -37,16 +37,16 @@ import { db } from "@/lib/firebase";
 import { ref, push, set } from "firebase/database";
 
 const formSchema = z.object({
-  applicantFullName: z.string().min(2, {
+  applicantName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  dateOfBirth: z.date({
+  dob: z.date({
     required_error: "A date of birth is required.",
   }),
   gender: z.enum(["male", "female", "other"], {
     required_error: "You need to select a gender.",
   }),
-  parentFullName: z.string().min(2, {
+  parentName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
   parentEmail: z.string().email({
@@ -55,11 +55,11 @@ const formSchema = z.object({
   parentPhone: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
-  applyingForClass: z.string({
+  appliedClass: z.string({
     required_error: "Please select a class.",
   }),
   previousSchool: z.string().optional(),
-  additionalComments: z.string().optional(),
+  comments: z.string().optional(),
 });
 
 export function AdmissionForm() {
@@ -67,22 +67,22 @@ export function AdmissionForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      applicantFullName: "",
-      parentFullName: "",
+      applicantName: "",
+      parentName: "",
       parentEmail: "",
       parentPhone: "",
       previousSchool: "",
-      additionalComments: "",
+      comments: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const admissionsRef = ref(db, 'admissions');
+      const admissionsRef = ref(db, 'admissionSubmissions');
       const newAdmissionRef = push(admissionsRef);
       await set(newAdmissionRef, {
         ...values,
-        dateOfBirth: format(values.dateOfBirth, "yyyy-MM-dd"),
+        dob: format(values.dob, "yyyy-MM-dd"),
         status: 'pending',
         submittedAt: new Date().toISOString(),
       });
@@ -123,7 +123,7 @@ export function AdmissionForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <FormField
                   control={form.control}
-                  name="applicantFullName"
+                  name="applicantName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Full Name *</FormLabel>
@@ -140,7 +140,7 @@ export function AdmissionForm() {
                 />
                 <FormField
                   control={form.control}
-                  name="dateOfBirth"
+                  name="dob"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>Date of Birth *</FormLabel>
@@ -225,7 +225,7 @@ export function AdmissionForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <FormField
                   control={form.control}
-                  name="parentFullName"
+                  name="parentName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Full Name *</FormLabel>
@@ -284,7 +284,7 @@ export function AdmissionForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <FormField
                   control={form.control}
-                  name="applyingForClass"
+                  name="appliedClass"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Applying for Class *</FormLabel>
@@ -343,7 +343,7 @@ export function AdmissionForm() {
               </h3>
               <FormField
                 control={form.control}
-                name="additionalComments"
+                name="comments"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Additional Comments (optional)</FormLabel>

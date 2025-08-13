@@ -29,7 +29,7 @@ export function DataTableRowActions<TData>({
 
 
   const handleApprove = async () => {
-    const result = await updateAdmissionStatus(admission.id, "approved", admission.parentEmail, admission.applicantFullName);
+    const result = await updateAdmissionStatus(admission.id, "approved", admission.parentEmail, admission.applicantName);
     if (result.success) {
       toast({ title: "Admission Approved", description: "An approval email has been sent." });
       // Optionally, trigger a re-fetch of data here
@@ -39,7 +39,7 @@ export function DataTableRowActions<TData>({
   }
 
   const handleReject = async () => {
-    const result = await updateAdmissionStatus(admission.id, "rejected", admission.parentEmail, admission.applicantFullName);
+    const result = await updateAdmissionStatus(admission.id, "rejected", admission.parentEmail, admission.applicantName);
      if (result.success) {
       toast({ title: "Admission Rejected", description: "A rejection email has been sent." });
     } else {

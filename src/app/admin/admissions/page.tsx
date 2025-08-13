@@ -7,7 +7,7 @@ import { Admission, admissionSchema } from './data/schema';
 import { z } from 'zod';
 
 async function getAdmissions(): Promise<Admission[]> {
-  const dbRef = ref(db, 'admissions');
+  const dbRef = ref(db, 'admissionSubmissions');
   try {
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {

@@ -37,7 +37,7 @@ export const columns: ColumnDef<Admission>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "applicantFullName",
+    accessorKey: "applicantName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Applicant" />
     ),
@@ -45,14 +45,14 @@ export const columns: ColumnDef<Admission>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[300px] truncate font-medium">
-            {row.getValue("applicantFullName")}
+            {row.getValue("applicantName")}
           </span>
         </div>
       )
     },
   },
     {
-    accessorKey: "applyingForClass",
+    accessorKey: "appliedClass",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Class" />
     ),
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Admission>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[100px] truncate font-medium capitalize">
-            {row.getValue("applyingForClass")}
+            {row.getValue("appliedClass")}
           </span>
         </div>
       )
