@@ -1,3 +1,5 @@
+
+"use client"
 import {
     Accordion,
     AccordionContent,
@@ -7,8 +9,34 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { HelpCircle } from "lucide-react";
 import { faqSection } from "@/lib/data";
+import { db } from "@/lib/firebase";
+import { ref, onValue } from "firebase/database";
+import { FAQ, faqSchema } from "@/app/admin/faq/data/schema";
+import { z } from "zod";
+import { useEffect, useState } from "react";
   
 export default function FaqSection() {
+    const [faqs, setFaqs] = useState<FAQ[]>([]);
+
+    useEffect(() => {
+        const dbRef = ref(db, 'faqs');
+        const unsubscribe = onValue(dbRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            const itemsArray = Object.keys(data).map(key => ({
+                id: key,
+                ...data[key],
+            }));
+            const parsedItems = z.array(faqSchema).safeParse(itemsArray);
+            if (parsedItems.success) {
+                setFaqs(parsedItems.data);
+            }
+        }
+        });
+        return () => unsubscribe();
+    }, []);
+
+
     return (
         <section id="faq" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
             <div className="container mx-auto">
@@ -25,20 +53,22 @@ export default function FaqSection() {
                         {faqSection.description}
                     </p>
                 </div>
-                <div className="max-w-3xl mx-auto">
-                    <Accordion type="single" collapsible className="w-full">
-                        {faqSection.faqs.map((faq, index) => (
-                        <AccordionItem value={`item-${index}`} key={index}>
-                            <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                            {faq.question}
-                            </AccordionTrigger>
-                            <AccordionContent className="text-muted-foreground text-base">
-                            {faq.answer}
-                            </AccordionContent>
-                        </AccordionItem>
-                        ))}
-                    </Accordion>
-                </div>
+                {faqs.length > 0 && (
+                    <div className="max-w-3xl mx-auto">
+                        <Accordion type="single" collapsible className="w-full">
+                            {faqs.map((faq, index) => (
+                            <AccordionItem value={`item-${index}`} key={index}>
+                                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                                {faq.question}
+                                </AccordionTrigger>
+                                <AccordionContent className="text-muted-foreground text-base">
+                                {faq.answer}
+                                </AccordionContent>
+                            </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                )}
             </div>
         </section>
     );

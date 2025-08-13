@@ -1,4 +1,3 @@
-"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -13,8 +12,36 @@ import {
 } from "@/components/ui/carousel";
 import { Badge } from "./ui/badge";
 import { toppersSection } from "@/lib/data";
+import { db } from "@/lib/firebase";
+import { ref, get } from "firebase/database";
+import { Topper, topperSchema } from "@/app/admin/toppers/data/schema";
+import { z } from "zod";
 
-export default function ToppersSection() {
+async function getToppers(): Promise<Topper[]> {
+  const dbRef = ref(db, 'toppers');
+  try {
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const itemsArray = Object.keys(data).map(key => ({
+        id: key,
+        ...data[key],
+      }));
+      const parsedItems = z.array(topperSchema).safeParse(itemsArray);
+      if (parsedItems.success) {
+        return parsedItems.data;
+      }
+    }
+    return [];
+  } catch (error) {
+    console.error("Error fetching toppers:", error);
+    return [];
+  }
+}
+
+export default async function ToppersSection() {
+  const toppers = await getToppers();
+
   return (
     <section id="results" className="py-20 lg:py-32 px-6 lg:px-12">
       <div className="container mx-auto text-center">
@@ -31,51 +58,53 @@ export default function ToppersSection() {
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
           {toppersSection.description}
         </p>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full max-w-4xl mx-auto"
-        >
-          <CarouselContent>
-            {toppersSection.toppers.map((topper, index) => (
-              <CarouselItem
-                key={index}
-                className="md:basis-1/2 lg:basis-1/3"
-              >
-                <div className="p-1">
-                  <Card className="bg-secondary/50 border-border/50 hover:bg-secondary/80 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
-                    <CardContent className="flex flex-col items-center justify-center p-6 gap-4">
-                      <Image
-                        src={topper.image.src}
-                        alt={topper.name}
-                        width={128}
-                        height={128}
-                        data-ai-hint={topper.image.hint}
-                        className="rounded-full border-4 border-primary/50 object-cover w-32 h-32"
-                      />
-                      <div className="text-center">
-                        <h3 className="text-xl font-bold font-headline">
-                          {topper.name}
-                        </h3>
-                        <p className="text-muted-foreground text-sm">
-                          {topper.grade}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2 text-primary font-bold text-lg bg-primary/10 px-4 py-2 rounded-full">
-                        <Star className="w-5 h-5" />
-                        <span>{topper.score}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex" />
-          <CarouselNext className="hidden sm:flex" />
-        </Carousel>
+        {toppers.length > 0 && (
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full max-w-4xl mx-auto"
+          >
+            <CarouselContent>
+              {toppers.map((topper, index) => (
+                <CarouselItem
+                  key={index}
+                  className="md:basis-1/2 lg:basis-1/3"
+                >
+                  <div className="p-1">
+                    <Card className="bg-secondary/50 border-border/50 hover:bg-secondary/80 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                      <CardContent className="flex flex-col items-center justify-center p-6 gap-4">
+                        <Image
+                          src={topper.imageUrl || "https://placehold.co/128x128.png"}
+                          alt={topper.name}
+                          width={128}
+                          height={128}
+                          data-ai-hint="student portrait"
+                          className="rounded-full border-4 border-primary/50 object-cover w-32 h-32"
+                        />
+                        <div className="text-center">
+                          <h3 className="text-xl font-bold font-headline">
+                            {topper.name}
+                          </h3>
+                          <p className="text-muted-foreground text-sm">
+                            Class {topper.class}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 text-primary font-bold text-lg bg-primary/10 px-4 py-2 rounded-full">
+                          <Star className="w-5 h-5" />
+                          <span>{topper.score}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden sm:flex" />
+            <CarouselNext className="hidden sm:flex" />
+          </Carousel>
+        )}
       </div>
     </section>
   );

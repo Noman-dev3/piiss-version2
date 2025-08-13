@@ -1,52 +1,74 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, BookOpen, Star, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { teachersSection } from "@/lib/data";
+import { db } from "@/lib/firebase";
+import { ref, get, query, limitToFirst } from "firebase/database";
+import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
+import { z } from "zod";
 
-const TeacherCard = ({ teacher }: { teacher: (typeof teachersSection.teachers)[0] }) => {
+async function getTeachers(): Promise<Teacher[]> {
+    const dbRef = query(ref(db, 'teachers'), limitToFirst(3));
+    try {
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            const itemsArray = Object.keys(data).map(key => ({
+                id: key,
+                ...data[key],
+            }));
+            const parsedItems = z.array(teacherSchema).safeParse(itemsArray);
+            if (parsedItems.success) {
+                return parsedItems.data;
+            }
+        }
+        return [];
+    } catch (error) {
+        console.error("Error fetching teachers:", error);
+        return [];
+    }
+}
+
+const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
     <div className="group perspective-1000">
       <Card className="h-full bg-secondary/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:rotate-y-10 group-hover:shadow-2xl group-hover:shadow-primary/20">
         <CardContent className="p-6 flex flex-col items-center text-center">
           <div className="relative mb-4">
             <Image
-              src={teacher.image.src}
+              src={teacher.imageUrl || "https://placehold.co/128x128.png"}
               alt={teacher.name}
               width={128}
               height={128}
-              data-ai-hint={teacher.image.hint}
+              data-ai-hint="teacher portrait"
               className="rounded-full border-4 border-primary/50 object-cover w-28 h-28 transition-transform duration-500 group-hover:scale-110"
             />
-            {teacher.isHead && (
-              <div className="absolute top-0 right-0 bg-amber-400 p-1.5 rounded-full text-black">
-                <Star className="w-4 h-4" />
-              </div>
-            )}
           </div>
           <h3 className="text-xl font-bold font-headline">{teacher.name}</h3>
-          <p className="text-muted-foreground text-sm mb-3">{teacher.role}</p>
+          <p className="text-muted-foreground text-sm mb-3">{teacher.experience}</p>
           <Badge
             variant="outline"
             className="mb-6 bg-background/50"
           >
             <BookOpen className="w-4 h-4 mr-2" />
-            {teacher.subject}
+            {teacher.department}
           </Badge>
 
           <div className="w-full text-left space-y-3">
-            <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
-              <span className="text-muted-foreground">Experience</span>
-              <span className="font-semibold">{teacher.experience}</span>
+             <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
+              <span className="text-muted-foreground">Bio</span>
+              <span className="font-semibold truncate">{teacher.bio}</span>
             </div>
             <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
-              <span className="text-muted-foreground">Department</span>
-              <span className="font-semibold">{teacher.department}</span>
+              <span className="text-muted-foreground">Joined</span>
+              <span className="font-semibold">{teacher.dateJoined}</span>
             </div>
             <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground">Qualification</span>
-              <span className="font-semibold">{teacher.qualification}</span>
+              <span className="text-muted-foreground">Contact</span>
+              <span className="font-semibold">{teacher.contact}</span>
             </div>
           </div>
         </CardContent>
@@ -55,7 +77,8 @@ const TeacherCard = ({ teacher }: { teacher: (typeof teachersSection.teachers)[0
   );
 };
 
-export default function TeachersSection() {
+export default async function TeachersSection() {
+  const teachers = await getTeachers();
   return (
     <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
       <div className="container mx-auto text-center">
@@ -72,11 +95,13 @@ export default function TeachersSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {teachersSection.description}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teachersSection.teachers.map((teacher, index) => (
-            <TeacherCard key={index} teacher={teacher} />
-          ))}
-        </div>
+        {teachers.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teachers.map((teacher, index) => (
+                <TeacherCard key={index} teacher={teacher} />
+            ))}
+            </div>
+        )}
         <div className="mt-16 text-center">
             <Button size="lg" asChild>
                 <a href="#">
