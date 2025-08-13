@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, Globe } from "lucide-react";
+import { Mail, Phone, Globe, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ContactSection() {
@@ -19,27 +19,27 @@ export default function ContactSection() {
     // Mock submission
     toast({
       title: "Message Sent!",
-      description: "Thanks for reaching out. I'll get back to you soon.",
+      description: "Thanks for reaching out. We'll get back to you soon.",
     });
     (event.target as HTMLFormElement).reset();
   }
 
   const contactInfo = [
-    { icon: <Mail className="w-6 h-6 text-primary" />, title: "Email", value: "contact@revived-az.com" },
-    { icon: <Globe className="w-6 h-6 text-primary" />, title: "Website", value: "revived-az.com" },
-    { icon: <Phone className="w-6 h-6 text-primary" />, title: "Phone", value: "+1 234 567 890" },
+    { icon: <Mail className="w-6 h-6 text-primary" />, title: "Email", value: "contact@piiss.edu" },
+    { icon: <Globe className="w-6 h-6 text-primary" />, title: "Website", value: "piiss.edu" },
+    { icon: <Phone className="w-6 h-6 text-primary" />, title: "Phone", value: "+92 123 4567890" },
   ];
 
   return (
-    <section id="contact" className="px-6 lg:px-12">
+    <section id="contact" className="px-6 lg:px-12 bg-secondary">
       <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 font-headline">Contact Me</h2>
-        <Card className="bg-secondary">
+        <h2 className="text-4xl font-bold text-center mb-12 font-headline">Contact Us</h2>
+        <Card>
           <div className="grid lg:grid-cols-3">
             <div className="lg:col-span-1 bg-background/50 p-8 rounded-l-lg">
               <h3 className="text-2xl font-bold mb-6 font-headline">Get in Touch</h3>
               <p className="text-muted-foreground mb-8">
-                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+                We're here to help and answer any question you might have. We look forward to hearing from you.
               </p>
               <div className="space-y-6">
                 {contactInfo.map((item, index) => (
@@ -68,13 +68,16 @@ export default function ContactSection() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" name="subject" placeholder="Project Inquiry" required className="bg-background"/>
+                  <Input id="subject" name="subject" placeholder="General Inquiry" required className="bg-background"/>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
                   <Textarea id="message" name="message" placeholder="Hi there, I would like to..." rows={5} required className="bg-background"/>
                 </div>
-                <Button type="submit" size="lg">Send Message</Button>
+                <Button type="submit" size="lg">
+                    <Send className="mr-2 h-4 w-4"/>
+                    Send Message
+                </Button>
               </form>
             </div>
           </div>

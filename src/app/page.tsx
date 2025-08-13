@@ -4,6 +4,7 @@ import { Features } from "@/components/features";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import ServicesSection from "@/components/services-section";
+import ToppersSection from "@/components/toppers-section";
 
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <Hero />
         <Features />
         <AboutSection />
+        <ToppersSection />
         <ServicesSection />
         <ContactSection />
       </main>
