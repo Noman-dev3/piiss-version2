@@ -2,24 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, ArrowRight, PartyPopper } from "lucide-react";
-
-const events = [
-  {
-    title: "Independence Day",
-    date: "July 14, 2025",
-    description: "14 August Pakistan Born",
-  },
-  {
-    title: "Annual Sports Gala",
-    date: "October 22, 2025",
-    description: "A day of fun, games, and healthy competition.",
-  },
-  {
-    title: "Science Fair",
-    date: "November 15, 2025",
-    description: "Showcasing innovative projects from our bright students.",
-  },
-];
+import { eventsSection } from "@/lib/data";
 
 export default function EventsSection() {
   return (
@@ -30,15 +13,15 @@ export default function EventsSection() {
           className="mb-4 bg-background/50 border-white/20"
         >
           <PartyPopper className="w-4 h-4 mr-2" />
-          Our Events
+          {eventsSection.badge}
         </Badge>
-        <h2 className="text-4xl font-bold mb-4 font-headline">Upcoming Events</h2>
+        <h2 className="text-4xl font-bold mb-4 font-headline">{eventsSection.title}</h2>
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Stay updated with our latest school activities and programs.
+          {eventsSection.description}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-          {events.map((event, index) => (
+          {eventsSection.events.map((event, index) => (
             <div key={index} className="group perspective-1000">
                 <Card className="h-full bg-background/60 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20">
                     <CardHeader>
@@ -58,7 +41,7 @@ export default function EventsSection() {
 
         <div className="mt-16 text-center">
             <Button size="lg" variant="outline">
-                View All Events <ArrowRight className="ml-2 h-5 w-5" />
+                {eventsSection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
         </div>
       </div>

@@ -3,55 +3,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, BookOpen, Star, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { teachersSection } from "@/lib/data";
 
-const teachers = [
-  {
-    name: "Sajjad",
-    role: "Teacher",
-    subject: "English",
-    experience: "3 Years",
-    department: "English",
-    qualification: "M.A. English",
-    image: "https://placehold.co/128x128.png",
-    hint: "male teacher portrait",
-    isHead: true,
-  },
-  {
-    name: "Ayesha Khan",
-    role: "Teacher",
-    subject: "Mathematics",
-    experience: "5 Years",
-    department: "Science",
-    qualification: "M.Sc. Mathematics",
-    image: "https://placehold.co/128x128.png",
-    hint: "female teacher portrait",
-    isHead: false,
-  },
-  {
-    name: "Ahmed Ali",
-    role: "Sr. Teacher",
-    subject: "Physics",
-    experience: "8 Years",
-    department: "Science",
-    qualification: "M.Sc. Physics",
-    image: "https://placehold.co/128x128.png",
-    hint: "male teacher portrait",
-    isHead: false,
-  },
-];
-
-const TeacherCard = ({ teacher }: { teacher: (typeof teachers)[0] }) => {
+const TeacherCard = ({ teacher }: { teacher: (typeof teachersSection.teachers)[0] }) => {
   return (
     <div className="group perspective-1000">
       <Card className="h-full bg-secondary/50 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:rotate-y-10 group-hover:shadow-2xl group-hover:shadow-primary/20">
         <CardContent className="p-6 flex flex-col items-center text-center">
           <div className="relative mb-4">
             <Image
-              src={teacher.image}
+              src={teacher.image.src}
               alt={teacher.name}
               width={128}
               height={128}
-              data-ai-hint={teacher.hint}
+              data-ai-hint={teacher.image.hint}
               className="rounded-full border-4 border-primary/50 object-cover w-28 h-28 transition-transform duration-500 group-hover:scale-110"
             />
             {teacher.isHead && (
@@ -99,24 +64,23 @@ export default function TeachersSection() {
           className="mb-4 bg-secondary/80 border-white/20"
         >
           <Users className="w-4 h-4 mr-2" />
-          Meet Our Faculty
+          {teachersSection.badge}
         </Badge>
         <h2 className="text-4xl font-bold mb-4 font-headline">
-          World-Class Educators
+          {teachersSection.title}
         </h2>
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
-          Our passionate team of expert teachers brings decades of experience
-          and innovative teaching methods to inspire and nurture every student.
+          {teachersSection.description}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teachers.map((teacher, index) => (
+          {teachersSection.teachers.map((teacher, index) => (
             <TeacherCard key={index} teacher={teacher} />
           ))}
         </div>
         <div className="mt-16 text-center">
             <Button size="lg" asChild>
                 <a href="#">
-                View All Faculty <ArrowRight className="ml-2 h-5 w-5" />
+                {teachersSection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
             </Button>
         </div>

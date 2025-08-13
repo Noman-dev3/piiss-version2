@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Star, MessageCircle, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -12,41 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Badge } from "./ui/badge";
-
-const testimonials = [
-  {
-    name: "Jhon Doe",
-    role: "Student",
-    quote: "I love This School! The teachers are so supportive and the learning environment is amazing.",
-    image: "https://placehold.co/80x80.png",
-    hint: "student portrait",
-    rating: 5,
-  },
-  {
-    name: "Jane Smith",
-    role: "Parent",
-    quote: "PIISS has been a wonderful experience for our family. Our children are thriving academically and personally.",
-    image: "https://placehold.co/80x80.png",
-    hint: "parent portrait",
-    rating: 5,
-  },
-  {
-    name: "Ahmed Ali",
-    role: "Alumni",
-    quote: "The foundation I received at PIISS prepared me for university and beyond. I'm forever grateful.",
-    image: "https://placehold.co/80x80.png",
-    hint: "alumni portrait",
-    rating: 5,
-  },
-  {
-    name: "Fatima Khan",
-    role: "Parent",
-    quote: "A fantastic school with a strong focus on both character development and academic excellence.",
-    image: "https://placehold.co/80x80.png",
-    hint: "parent portrait",
-    rating: 5,
-  },
-];
+import { testimonialsSection } from "@/lib/data";
 
 export default function TestimonialsSection() {
   return (
@@ -57,13 +22,13 @@ export default function TestimonialsSection() {
           className="mb-4 bg-background/50 border-white/20"
         >
           <MessageCircle className="w-4 h-4 mr-2" />
-          Testimonials
+          {testimonialsSection.badge}
         </Badge>
         <h2 className="text-4xl font-bold mb-4 font-headline">
-          What Our Community Says
+          {testimonialsSection.title}
         </h2>
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
-          Hear from parents, students, and alumni about their experiences at our school.
+          {testimonialsSection.description}
         </p>
         <Carousel
           opts={{
@@ -73,7 +38,7 @@ export default function TestimonialsSection() {
           className="w-full max-w-5xl mx-auto"
         >
           <CarouselContent>
-            {testimonials.map((testimonial, index) => (
+            {testimonialsSection.testimonials.map((testimonial, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-4 group">
                   <Card className="h-full bg-background/60 border-border/50 rounded-xl shadow-lg transition-all duration-500 transform-style-3d group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-primary/20">

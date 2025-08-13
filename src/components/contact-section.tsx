@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, Mail, MapPin, Phone, Send } from "lucide-react";
 import Image from "next/image";
+import { contactInfo, contactForm } from "@/lib/data";
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -25,6 +26,8 @@ export default function ContactSection() {
     const data = Object.fromEntries(formData.entries());
     console.log("Form submitted:", data);
 
+    // Here you would typically send the form data to your backend
+    // For now, we'll just show a success message.
     toast({
       title: "Message Sent!",
       description: "Thanks for reaching out. We'll get back to you soon.",
@@ -32,66 +35,58 @@ export default function ContactSection() {
     (event.target as HTMLFormElement).reset();
   }
   
-  const contactInfo = [
-    { icon: <MapPin className="w-6 h-6 text-primary" />, title: "Address", value: "123 Education Lane, Knowledge City" },
-    { icon: <Phone className="w-6 h-6 text-primary" />, title: "Phone", value: "03191897942" },
-    { icon: <Mail className="w-6 h-6 text-primary" />, title: "Email", value: "noman.dev3@gmail.com, admissions@piiss.edu" },
-    { icon: <Clock className="w-6 h-6 text-primary" />, title: "Office Hours", value: "Monday - Friday: 8:00 AM - 5:00 PM, Saturday: 9:00 AM - 2:00 PM" },
-  ];
-
   return (
     <section id="contact" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary/50">
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="flex flex-col">
-            <h2 className="text-4xl font-bold mb-6 font-headline">Send us a Message</h2>
+            <h2 className="text-4xl font-bold mb-6 font-headline">{contactForm.title}</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="first-name">First Name *</Label>
-                  <Input id="first-name" name="first-name" placeholder="Enter your first name" required className="bg-background/80" />
+                  <Label htmlFor="first-name">{contactForm.fields.firstName.label} *</Label>
+                  <Input id="first-name" name="first-name" placeholder={contactForm.fields.firstName.placeholder} required className="bg-background/80" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="last-name">Last Name *</Label>
-                  <Input id="last-name" name="last-name" placeholder="Enter your last name" required className="bg-background/80" />
+                  <Label htmlFor="last-name">{contactForm.fields.lastName.label} *</Label>
+                  <Input id="last-name" name="last-name" placeholder={contactForm.fields.lastName.placeholder} required className="bg-background/80" />
                 </div>
               </div>
                <div className="space-y-2">
-                <Label htmlFor="email">Email Address *</Label>
-                <Input id="email" name="email" type="email" placeholder="Enter your email" required className="bg-background/80" />
+                <Label htmlFor="email">{contactForm.fields.email.label} *</Label>
+                <Input id="email" name="email" type="email" placeholder={contactForm.fields.email.placeholder} required className="bg-background/80" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" name="phone" placeholder="Enter your phone number" className="bg-background/80" />
+                <Label htmlFor="phone">{contactForm.fields.phone.label}</Label>
+                <Input id="phone" name="phone" placeholder={contactForm.fields.phone.placeholder} className="bg-background/80" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="subject">Subject *</Label>
+                <Label htmlFor="subject">{contactForm.fields.subject.label} *</Label>
                 <Select name="subject" required>
                   <SelectTrigger id="subject" className="bg-background/80">
-                    <SelectValue placeholder="Select a subject" />
+                    <SelectValue placeholder={contactForm.fields.subject.placeholder} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="admissions">Admissions</SelectItem>
-                    <SelectItem value="general">General Inquiry</SelectItem>
-                    <SelectItem value="feedback">Feedback</SelectItem>
-                    <SelectItem value="careers">Careers</SelectItem>
+                    {contactForm.fields.subject.options.map(option => (
+                      <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="message">Message *</Label>
-                <Textarea id="message" name="message" placeholder="Enter your message" rows={5} required className="bg-background/80" />
+                <Label htmlFor="message">{contactForm.fields.message.label} *</Label>
+                <Textarea id="message" name="message" placeholder={contactForm.fields.message.placeholder} rows={5} required className="bg-background/80" />
               </div>
               <Button type="submit" size="lg" className="w-full">
                 <Send className="mr-2 h-4 w-4" />
-                Send Message
+                {contactForm.submitButton}
               </Button>
             </form>
           </div>
           <div className="flex flex-col">
-             <h2 className="text-4xl font-bold mb-6 font-headline">Contact Information</h2>
+             <h2 className="text-4xl font-bold mb-6 font-headline">{contactInfo.title}</h2>
               <div className="space-y-6">
-                {contactInfo.map((item, index) => (
+                {contactInfo.items.map((item, index) => (
                   <div key={index} className="flex items-start gap-4">
                     <div className="p-3 bg-background/80 rounded-full">{item.icon}</div>
                     <div>
@@ -103,12 +98,12 @@ export default function ContactSection() {
               </div>
              <Card className="overflow-hidden rounded-xl shadow-lg mt-8">
               <Image
-                src="https://placehold.co/600x400.png"
-                alt="PIISS Campus"
+                src={contactInfo.image.src}
+                alt={contactInfo.image.alt}
                 width={600}
                 height={400}
                 className="w-full h-auto object-cover"
-                data-ai-hint="school building"
+                data-ai-hint={contactInfo.image.hint}
               />
             </Card>
           </div>

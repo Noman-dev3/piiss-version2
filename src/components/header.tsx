@@ -8,18 +8,10 @@ import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { navLinks, header } from "@/lib/data";
 
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
-  const navLinks = [
-    { label: "Home", href: "/", icon: <Home className="w-5 h-5" /> },
-    { label: "About", href: "/#about", icon: <Info className="w-5 h-5" /> },
-    { label: "Admissions", href: "/admissions", icon: <FileText className="w-5 h-5" /> },
-    { label: "Results", href: "/#results", icon: <BarChart2 className="w-5 h-5" /> },
-    { label: "Gallery", href: "/#gallery", icon: <GalleryVertical className="w-5 h-5" /> },
-    { label: "FAQ", href: "/#faq", icon: <HelpCircle className="w-5 h-5" /> },
-    { label: "Contact", href: "/#contact", icon: <Phone className="w-5 h-5" /> },
-  ];
 
   const NavLinkItems = ({ isMobile, onLinkClick }: { isMobile: boolean, onLinkClick?: () => void }) => (
     <>
@@ -47,8 +39,8 @@ export function Header() {
                 <GraduationCap className="h-6 w-6 text-blue-900" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white font-headline">PIISS</h1>
-                <p className="text-xs text-gray-300">Excellence in Education</p>
+                <h1 className="text-xl font-bold text-white font-headline">{header.logo.title}</h1>
+                <p className="text-xs text-gray-300">{header.logo.description}</p>
               </div>
             </Link>
           </div>
@@ -68,7 +60,7 @@ export function Header() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="search"
-                placeholder="Ask me anything..."
+                placeholder={header.searchPlaceholder}
                 className="pl-9 bg-white/10 border-gray-600 rounded-full text-white placeholder:text-gray-400 focus:bg-white/20 focus:border-primary w-48 xl:w-64"
               />
             </div>
@@ -83,14 +75,14 @@ export function Header() {
                    <SheetHeader className="p-6 border-b border-border/60 text-left">
                      <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12 border-2 border-primary">
-                          <AvatarImage src="https://placehold.co/80x80.png" alt="Guest User" data-ai-hint="guest user" />
+                          <AvatarImage src={header.mobileMenu.user.avatar.src} alt={header.mobileMenu.user.avatar.alt} data-ai-hint={header.mobileMenu.user.avatar.hint} />
                           <AvatarFallback>
                             <User />
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h2 className="text-lg font-semibold text-white">Guest User</h2>
-                          <p className="text-sm text-muted-foreground">Welcome to PIISS</p>
+                          <h2 className="text-lg font-semibold text-white">{header.mobileMenu.user.name}</h2>
+                          <p className="text-sm text-muted-foreground">{header.mobileMenu.user.welcomeMessage}</p>
                         </div>
                       </div>
                   </SheetHeader>
