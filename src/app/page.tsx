@@ -1,21 +1,19 @@
-import MainNav from "@/app/components/main-nav";
-import HomeSection from "@/app/components/home-section";
-import AboutSection from "@/app/components/about-section";
-import ServicesSection from "@/app/components/services-section";
-import PortfolioSection from "@/app/components/portfolio-section";
-import ContactSection from "@/app/components/contact-section";
+import { Header } from "@/components/header";
+import { Hero } from "@/components/hero";
+import { Features } from "@/components/features";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen w-full">
-      <MainNav />
-      <main className="flex-1 lg:pl-[300px]">
-        <HomeSection />
-        <AboutSection />
-        <ServicesSection />
-        <PortfolioSection />
-        <ContactSection />
-      </main>
+    <div className="relative min-h-screen w-full bg-gradient-to-br from-[#0a183d] to-[#122b62]">
+        <div className="absolute inset-0 bg-[url(/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a183d] via-transparent to-transparent"></div>
+        <div className="relative z-10">
+            <Header />
+            <main className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <Hero />
+                <Features />
+            </main>
+        </div>
     </div>
   );
 }
