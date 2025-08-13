@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { teacherSchema } from '@/app/admin/teachers/data/schema';
 
 // We can omit fields that we don't want to be editable from the update schema
-const updateTeacherSchema = teacherSchema.omit({ id: true, timetables: true });
+const updateTeacherSchema = teacherSchema.omit({ id: true });
 
 
 export async function updateTeacher(id: string, data: z.infer<typeof updateTeacherSchema>) {

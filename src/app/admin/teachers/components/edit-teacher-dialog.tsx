@@ -26,7 +26,7 @@ interface EditTeacherDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const updateTeacherSchema = teacherSchema.omit({ id: true, timetables: true });
+const updateTeacherSchema = teacherSchema.omit({ id: true });
 
 
 export function EditTeacherDialog({ teacher, isOpen, onOpenChange }: EditTeacherDialogProps) {

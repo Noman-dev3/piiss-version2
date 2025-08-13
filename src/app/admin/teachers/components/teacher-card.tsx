@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Teacher } from "../data/schema";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Edit, Trash2, CalendarDays } from "lucide-react";
+import { User, Edit, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { deleteTeacher } from "@/actions/teacher-actions";
@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { TeacherDetailsDialog } from "./teacher-details-dialog";
 import { EditTeacherDialog } from "./edit-teacher-dialog";
-import { TimetableDialog } from "./timetable-dialog";
 
 interface TeacherCardProps {
   teacher: Teacher;
@@ -33,7 +32,6 @@ export function TeacherCard({ teacher }: TeacherCardProps) {
   const { toast } = useToast();
   const [isViewOpen, setViewOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
-  const [isTimetableOpen, setTimetableOpen] = useState(false);
 
   const handleDelete = async () => {
     const result = await deleteTeacher(teacher.id);
@@ -78,9 +76,6 @@ export function TeacherCard({ teacher }: TeacherCardProps) {
                 <Button variant="outline" size="sm" onClick={() => setViewOpen(true)}>
                     <User className="mr-2 h-4 w-4" /> View
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setTimetableOpen(true)}>
-                    <CalendarDays className="mr-2 h-4 w-4" /> Timetable
-                </Button>
                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditOpen(true)}>
                     <Edit className="h-4 w-4 text-blue-500" />
                  </Button>
@@ -110,7 +105,6 @@ export function TeacherCard({ teacher }: TeacherCardProps) {
     </div>
     {isViewOpen && <TeacherDetailsDialog teacher={teacher} isOpen={isViewOpen} onOpenChange={setViewOpen} />}
     {isEditOpen && <EditTeacherDialog teacher={teacher} isOpen={isEditOpen} onOpenChange={setEditOpen} />}
-    {isTimetableOpen && <TimetableDialog teacher={teacher} isOpen={isTimetableOpen} onOpenChange={setTimetableOpen} />}
     </>
   );
 }
