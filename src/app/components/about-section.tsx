@@ -8,7 +8,7 @@ import { about } from "@/lib/data";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AboutSection() {
   const [content, setContent] = useState({ description: "", imageUrl: about.image.src });

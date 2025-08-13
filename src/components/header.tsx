@@ -3,13 +3,13 @@
 
 import Link from "next/link";
 import { GraduationCap, Menu, Search, User } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { navLinks, header } from "@/lib/data";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
 import Image from "next/image";

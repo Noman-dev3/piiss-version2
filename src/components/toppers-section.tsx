@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { toppersSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
 import { ref, get } from "firebase/database";

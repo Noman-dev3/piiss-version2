@@ -11,7 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { testimonialsSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
