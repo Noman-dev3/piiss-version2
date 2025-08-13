@@ -2,15 +2,15 @@ import { z } from "zod";
 
 export const studentSchema = z.object({
   id: z.string(),
-  studentName: z.string(),
-  fatherName: z.string(),
-  rollNumber: z.string(),
-  currentClass: z.string(),
-  gender: z.string(),
-  dob: z.string(),
-  contactNumber: z.string(),
-  address: z.string(),
-  profilePicture: z.string().url().optional().or(z.literal('')),
+  Name: z.string(),
+  Class: z.string(),
+  Contact: z.string(),
+  Date_Added: z.string(),
+  Fee_Slip_Path: z.string().optional().or(z.literal('')),
+  Gender: z.string(),
+  Section: z.string(),
+  Address: z.string(),
+  profilePicture: z.string().url().optional().or(z.literal('')), // Assuming this might still be needed from web1
 });
 
 export type Student = z.infer<typeof studentSchema>;

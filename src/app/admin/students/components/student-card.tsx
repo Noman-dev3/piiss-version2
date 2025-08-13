@@ -34,19 +34,19 @@ export function StudentCard({ student }: StudentCardProps) {
                 <div className="relative">
                     <Image
                         src={student.profilePicture || "https://placehold.co/128x128.png"}
-                        alt={student.studentName}
+                        alt={student.Name}
                         width={100}
                         height={100}
                         className="rounded-full border-4 border-primary/50 object-cover w-24 h-24 transition-transform duration-500 group-hover:scale-110"
                         data-ai-hint="student portrait"
                     />
                 </div>
-                 <CardTitle className="text-lg font-bold font-headline mt-2">{student.studentName}</CardTitle>
-                 <p className="text-xs text-muted-foreground">Roll No: {student.rollNumber}</p>
+                 <CardTitle className="text-lg font-bold font-headline mt-2">{student.Name}</CardTitle>
+                 <p className="text-xs text-muted-foreground">ID: {student.id}</p>
             </CardHeader>
             <CardContent className="p-4 pt-0 text-center">
                  <Badge variant="outline" className="bg-background/80">
-                    Class: {student.currentClass}
+                    Class: {student.Class} ({student.Section})
                  </Badge>
             </CardContent>
             <CardFooter className="flex justify-center gap-2 p-4 pt-0">

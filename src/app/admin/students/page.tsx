@@ -3,13 +3,12 @@ import { ref, get, query, orderByChild } from 'firebase/database';
 import { studentSchema, Student } from './data/schema';
 import { z } from 'zod';
 import { StudentCard } from './components/student-card';
-import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
 
 async function getStudents(): Promise<Student[]> {
   const dbRef = ref(db, 'students');
   try {
-    const snapshot = await get(query(dbRef, orderByChild('rollNumber')));
+    // Ordering by a property that exists, like 'Name'
+    const snapshot = await get(query(dbRef, orderByChild('Name')));
     if (snapshot.exists()) {
       const data = snapshot.val();
       const studentsArray = Object.keys(data).map(key => ({
@@ -25,7 +24,12 @@ async function getStudents(): Promise<Student[]> {
         const validStudents = studentsArray
           .map(item => {
             const result = studentSchema.safeParse(item);
-            return result.success ? result.data : null;
+            if (result.success) {
+              return result.data;
+            } else {
+               console.warn("Invalid student data for ID:", item.id, result.error.flatten().fieldErrors);
+               return null;
+            }
           })
           .filter((item): item is Student => item !== null);
         return validStudents;
