@@ -3,7 +3,6 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
 import { Check, X, Trash2, Eye } from 'lucide-react';
-
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -14,6 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { admissionSchema } from "../data/schema"
+import { updateAdmissionStatus, deleteAdmission } from "@/actions/update-admission";
+import { useToast } from "@/hooks/use-toast";
+
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -23,20 +25,35 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const admission = admissionSchema.parse(row.original)
+  const { toast } = useToast();
 
-  const handleApprove = () => {
-    // Logic to approve admission
-    console.log("Approved:", admission.id);
+
+  const handleApprove = async () => {
+    const result = await updateAdmissionStatus(admission.id, "approved", admission.parentEmail, admission.applicantFullName);
+    if (result.success) {
+      toast({ title: "Admission Approved", description: "An approval email has been sent." });
+      // Optionally, trigger a re-fetch of data here
+    } else {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    }
   }
 
-  const handleReject = () => {
-    // Logic to reject admission
-    console.log("Rejected:", admission.id);
+  const handleReject = async () => {
+    const result = await updateAdmissionStatus(admission.id, "rejected", admission.parentEmail, admission.applicantFullName);
+     if (result.success) {
+      toast({ title: "Admission Rejected", description: "A rejection email has been sent." });
+    } else {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    }
   }
 
-  const handleDelete = () => {
-    // Logic to delete admission
-    console.log("Deleted:", admission.id);
+  const handleDelete = async () => {
+    const result = await deleteAdmission(admission.id);
+     if (result.success) {
+      toast({ title: "Admission Deleted", description: "The application has been removed." });
+    } else {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    }
   }
 
   return (

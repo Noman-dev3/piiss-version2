@@ -1,23 +1,23 @@
 import { db } from '@/lib/firebase';
-import { ref, onValue } from 'firebase/database';
-import { get, child } from 'firebase/database';
+import { ref, onValue, get, child } from 'firebase/database';
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Admission, admissionSchema } from './data/schema';
 import { z } from 'zod';
-import * as React from 'react';
 
 async function getAdmissions(): Promise<Admission[]> {
-  const dbRef = ref(db);
+  const dbRef = ref(db, 'admissions');
   try {
-    const snapshot = await get(child(dbRef, 'admissions'));
+    const snapshot = await get(dbRef);
     if (snapshot.exists()) {
       const data = snapshot.val();
       const admissionsArray = Object.keys(data).map(key => ({
         id: key,
         ...data[key],
       }));
+      // Sort by submission date, newest first
+      admissionsArray.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
       return z.array(admissionSchema).parse(admissionsArray);
     } else {
       console.log("No data available");
