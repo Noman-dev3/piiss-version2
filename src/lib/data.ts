@@ -6,7 +6,7 @@ export const navLinks = [
     { label: "Home", href: "/", icon: React.createElement(Home, { className: "w-5 h-5" }) },
     { label: "About", href: "/#about", icon: React.createElement(Info, { className: "w-5 h-5" }) },
     { label: "Admissions", href: "/admissions", icon: React.createElement(FileText, { className: "w-5 h-5" }) },
-    { label: "Results", href: "/#results", icon: React.createElement(BarChart2, { className: "w-5 h-5" }) },
+    { label: "Results", href: "/results", icon: React.createElement(BarChart2, { className: "w-5 h-5" }) },
     { label: "Gallery", href: "/#gallery", icon: React.createElement(GalleryVertical, { className: "w-5 h-5" }) },
     { label: "FAQ", href: "/#faq", icon: React.createElement(HelpCircle, { className: "w-5 h-5" }) },
     { label: "Contact", href: "/#contact", icon: React.createElement(Phone, { className: "w-5 h-5" }) },
@@ -121,12 +121,6 @@ export const faqSection = {
 
 export const contactInfo = {
     title: "Contact Information",
-    items: [
-        { icon: React.createElement(MapPin, { className: "w-6 h-6 text-primary" }), title: "Address" },
-        { icon: React.createElement(Phone, { className: "w-6 h-6 text-primary" }), title: "Phone" },
-        { icon: React.createElement(Mail, { className: "w-6 h-6 text-primary" }), title: "Email" },
-        { icon: React.createElement(Clock, { className: "w-6 h-6 text-primary" }), title: "Office Hours" },
-    ],
     image: {
         src: "https://placehold.co/600x400.png",
         alt: "PIISS Campus",
