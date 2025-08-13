@@ -73,7 +73,6 @@ export const featuresSection = {
 export const about = {
     badge: "About Our School",
     title: "Our Story",
-    description: "Pakistan Islamic International School System (PIISS) began with a vision: to provide quality education rooted in Islamic values and modern knowledge. At PIISS, learning goes beyond books. We guide our students to think deeply, act kindly, and aim high. Our classrooms inspire curiosity, our teachers nurture confidence, and our community fosters respect. We believe in shaping leaders of tomorrow — young minds ready to excel in academics, contribute to society, and live with faith and integrity.",
     image: {
         src: "https://placehold.co/600x450.png",
         alt: "Students in a classroom at PIISS",
@@ -123,10 +122,10 @@ export const faqSection = {
 export const contactInfo = {
     title: "Contact Information",
     items: [
-        { icon: React.createElement(MapPin, { className: "w-6 h-6 text-primary" }), title: "Address", value: "123 Education Lane, Knowledge City" },
-        { icon: React.createElement(Phone, { className: "w-6 h-6 text-primary" }), title: "Phone", value: "03191897942" },
-        { icon: React.createElement(Mail, { className: "w-6 h-6 text-primary" }), title: "Email", value: "noman.dev3@gmail.com, admissions@piiss.edu" },
-        { icon: React.createElement(Clock, { className: "w-6 h-6 text-primary" }), title: "Office Hours", value: "Monday - Friday: 8:00 AM - 5:00 PM, Saturday: 9:00 AM - 2:00 PM" },
+        { icon: React.createElement(MapPin, { className: "w-6 h-6 text-primary" }), title: "Address" },
+        { icon: React.createElement(Phone, { className: "w-6 h-6 text-primary" }), title: "Phone" },
+        { icon: React.createElement(Mail, { className: "w-6 h-6 text-primary" }), title: "Email" },
+        { icon: React.createElement(Clock, { className: "w-6 h-6 text-primary" }), title: "Office Hours" },
     ],
     image: {
         src: "https://placehold.co/600x400.png",

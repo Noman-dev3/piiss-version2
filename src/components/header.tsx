@@ -6,13 +6,26 @@ import { GraduationCap, Menu, Search, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { navLinks, header } from "@/lib/data";
 import { ThemeToggle } from "./theme-toggle";
+import { db } from "@/lib/firebase";
+import { ref, onValue } from "firebase/database";
+import Image from "next/image";
 
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
+
+  useEffect(() => {
+    const settingsRef = ref(db, 'settings/logoUrl');
+    onValue(settingsRef, (snapshot) => {
+      if(snapshot.exists()) {
+        setLogoUrl(snapshot.val());
+      }
+    });
+  }, []);
 
   const NavLinkItems = ({ isMobile, onLinkClick }: { isMobile: boolean, onLinkClick?: () => void }) => (
     <>
@@ -37,7 +50,11 @@ export function Header() {
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
               <div className="bg-primary p-2 rounded-md">
-                <GraduationCap className="h-6 w-6 text-primary-foreground" />
+                {logoUrl ? (
+                    <Image src={logoUrl} alt="PIISS Logo" width={24} height={24} className="text-primary-foreground" />
+                ) : (
+                    <GraduationCap className="h-6 w-6 text-primary-foreground" />
+                )}
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground font-headline">{header.logo.title}</h1>

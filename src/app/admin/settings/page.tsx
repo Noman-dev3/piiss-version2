@@ -6,16 +6,76 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { ref, get, set } from "firebase/database";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 export default function SettingsPage() {
     const { toast } = useToast();
+    const [loading, setLoading] = useState(true);
+    const [settings, setSettings] = useState({
+        ourStory: "",
+        logoUrl: "",
+        contactPhone: "",
+        contactEmail: "",
+        contactAddress: "",
+        officeHours: "",
+        aboutImageUrl: "",
+        contactImageUrl: "",
+    });
 
-    const handleSaveChanges = () => {
-        toast({
-            title: "Settings Saved",
-            description: "Your changes have been successfully saved.",
-        });
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const settingsRef = ref(db, 'settings');
+            const snapshot = await get(settingsRef);
+            if(snapshot.exists()) {
+                setSettings(snapshot.val());
+            }
+            setLoading(false);
+        }
+        fetchSettings();
+    }, []);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = e.target;
+        setSettings(prev => ({...prev, [id]: value}));
+    }
+
+    const handleSaveChanges = async () => {
+        try {
+            const settingsRef = ref(db, 'settings');
+            await set(settingsRef, settings);
+            toast({
+                title: "Settings Saved",
+                description: "Your changes have been successfully saved.",
+            });
+        } catch (error) {
+             toast({
+                title: "Error Saving Settings",
+                description: (error as Error).message,
+                variant: "destructive",
+            });
+        }
+    }
+
+    if (loading) {
+        return (
+             <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+                <div className="flex items-center justify-between space-y-2">
+                    <div>
+                        <Skeleton className="h-8 w-48" />
+                        <Skeleton className="h-4 w-72 mt-2" />
+                    </div>
+                </div>
+                <div className="grid gap-8">
+                    <Skeleton className="h-96 w-full" />
+                    <Skeleton className="h-80 w-full" />
+                </div>
+            </div>
+        )
     }
 
   return (
@@ -30,32 +90,50 @@ export default function SettingsPage() {
         </div>
 
         <div className="grid gap-8">
-            <Card>
+             <Card>
                 <CardHeader>
-                    <CardTitle>General Information</CardTitle>
-                    <CardDescription>Update your school's public contact information.</CardDescription>
+                    <CardTitle>Website Content</CardTitle>
+                    <CardDescription>Update your website's main content and contact information.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                     <div className="space-y-2">
-                        <Label htmlFor="school-name">School Name</Label>
-                        <Input id="school-name" defaultValue="PIISS" />
+                        <Label htmlFor="ourStory">Our Story</Label>
+                        <Textarea id="ourStory" value={settings.ourStory} onChange={handleInputChange} rows={5} />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="contact-email">Contact Email</Label>
-                        <Input id="contact-email" type="email" defaultValue="noman.dev3@gmail.com" />
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="contact-phone">Contact Phone</Label>
-                        <Input id="contact-phone" type="tel" defaultValue="03191897942" />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="address">Address</Label>
-                        <Input id="address" defaultValue="123 Education Lane, Knowledge City" />
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="logoUrl">Logo URL</Label>
+                            <Input id="logoUrl" value={settings.logoUrl} onChange={handleInputChange} placeholder="https://example.com/logo.png"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="contactPhone">Contact Phone</Label>
+                            <Input id="contactPhone" type="tel" value={settings.contactPhone} onChange={handleInputChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="contactEmail">Contact Email</Label>
+                            <Input id="contactEmail" type="email" value={settings.contactEmail} onChange={handleInputChange} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="contactAddress">Contact Address</Label>
+                            <Input id="contactAddress" value={settings.contactAddress} onChange={handleInputChange} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="officeHours">Office Hours</Label>
+                            <Input id="officeHours" value={settings.officeHours} onChange={handleInputChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="aboutImageUrl">About Section Image URL</Label>
+                            <Input id="aboutImageUrl" value={settings.aboutImageUrl} onChange={handleInputChange} placeholder="https://placehold.co/600x450.png"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="contactImageUrl">Contact Section Image URL</Label>
+                            <Input id="contactImageUrl" value={settings.contactImageUrl} onChange={handleInputChange} placeholder="https://placehold.co/600x400.png"/>
+                        </div>
                     </div>
                 </CardContent>
             </Card>
 
-             <Card>
+            <Card>
                 <CardHeader>
                     <CardTitle>Account</CardTitle>
                     <CardDescription>Manage your administrator account.</CardDescription>
@@ -77,7 +155,7 @@ export default function SettingsPage() {
             </Card>
 
              <div className="flex justify-end">
-                <Button onClick={handleSaveChanges}>Save Changes</Button>
+                <Button onClick={handleSaveChanges}>Save All Changes</Button>
             </div>
         </div>
     </div>
