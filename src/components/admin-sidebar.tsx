@@ -20,7 +20,7 @@ const navItems = [
     { href: '/admin/events', icon: <Calendar className="h-5 w-5" />, label: 'Events' },
     { href: '/admin/gallery', icon: <GalleryVertical className="h-5 w-5" />, label: 'Gallery' },
     { href: '/admin/toppers', icon: <Star className="h-5 w-5" />, label: 'Toppers' },
-    { href: '#', icon: <MessageSquare className="h-5 w-5" />, label: 'Testimonials' },
+    { href: '/admin/testimonials', icon: <MessageSquare className="h-5 w-5" />, label: 'Testimonials' },
     { href: '#', icon: <Megaphone className="h-5 w-5" />, label: 'Announcements' },
     { href: '#', icon: <HelpCircle className="h-5 w-5" />, label: 'FAQ' },
 ];
