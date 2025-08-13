@@ -1,18 +1,16 @@
-
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Users, BookOpen, Star, ArrowRight } from "lucide-react";
-import Image from "next/image";
-import { teachersSection } from "@/lib/data";
+import { Header } from "@/components/header";
 import { db } from "@/lib/firebase";
-import { ref, get, query, limitToFirst } from "firebase/database";
+import { ref, get, query } from "firebase/database";
 import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
 import { z } from "zod";
-import Link from "next/link";
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen } from "lucide-react";
 
-async function getTeachers(): Promise<Teacher[]> {
-    const dbRef = query(ref(db, 'teachers'), limitToFirst(3));
+
+async function getAllTeachers(): Promise<Teacher[]> {
+    const dbRef = query(ref(db, 'teachers'));
     try {
         const snapshot = await get(dbRef);
         if (snapshot.exists()) {
@@ -78,39 +76,32 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   );
 };
 
-export default async function TeachersSection() {
-  const teachers = await getTeachers();
+
+export default async function AllFacultyPage() {
+  const teachers = await getAllTeachers();
   return (
-    <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
-      <div className="container mx-auto text-center">
-        <Badge
-          variant="outline"
-          className="mb-4 bg-secondary/80"
-        >
-          <Users className="w-4 h-4 mr-2" />
-          {teachersSection.badge}
-        </Badge>
-        <h2 className="text-4xl font-bold mb-4 font-headline">
-          {teachersSection.title}
-        </h2>
-        <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
-          {teachersSection.description}
-        </p>
-        {teachers.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teachers.map((teacher, index) => (
-                <TeacherCard key={index} teacher={teacher} />
-            ))}
+    <div className="flex flex-col min-h-screen bg-background">
+      <Header />
+      <main className="flex-1 py-12 md:py-24 lg:py-32">
+        <div className="container mx-auto px-4">
+             <div className="text-center mb-12">
+                <h1 className="text-4xl font-bold font-headline">Our Faculty</h1>
+                <p className="text-muted-foreground mt-2">Meet our dedicated team of educators.</p>
             </div>
-        )}
-        <div className="mt-16 text-center">
-            <Button size="lg" asChild>
-                <Link href="/faculty">
-                    {teachersSection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-            </Button>
+            {teachers.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {teachers.map((teacher, index) => (
+                        <TeacherCard key={index} teacher={teacher} />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-20">
+                    <h3 className="text-2xl font-bold tracking-tight">No faculty found</h3>
+                    <p className="text-sm text-muted-foreground">Teacher information will be updated soon.</p>
+                </div>
+            )}
         </div>
-      </div>
-    </section>
+      </main>
+    </div>
   );
 }

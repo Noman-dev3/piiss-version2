@@ -9,6 +9,7 @@ import { db } from "@/lib/firebase";
 import { ref, get, query, limitToLast } from "firebase/database";
 import { GalleryItem, galleryItemSchema } from "@/app/admin/gallery/data/schema";
 import { z } from "zod";
+import Link from "next/link";
 
 async function getGalleryItems(): Promise<GalleryItem[]> {
     const dbRef = query(ref(db, 'gallery'), limitToLast(4));
@@ -78,8 +79,8 @@ export default async function GallerySection() {
             </div>
         )}
         <div className="mt-16 text-center">
-            <Button size="lg">
-                {gallerySection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" asChild>
+                <Link href="/gallery">{gallerySection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
         </div>
       </div>

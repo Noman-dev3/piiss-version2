@@ -9,6 +9,7 @@ import { ref, get, query, limitToLast } from "firebase/database";
 import { Event, eventSchema } from "@/app/admin/events/data/schema";
 import { z } from "zod";
 import { format } from "date-fns";
+import Link from "next/link";
 
 
 async function getEvents(): Promise<Event[]> {
@@ -73,8 +74,8 @@ export default async function EventsSection() {
         )}
 
         <div className="mt-16 text-center">
-            <Button size="lg" variant="outline">
-                {eventsSection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" variant="outline" asChild>
+                <Link href="/events">{eventsSection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
         </div>
       </div>
