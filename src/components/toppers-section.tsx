@@ -1,4 +1,6 @@
 
+"use client";
+
 import * as React from "react";
 import Image from "next/image";
 import { Star } from "lucide-react";
@@ -11,16 +13,20 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toppersSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, get } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { Topper, topperSchema } from "@/app/admin/toppers/data/schema";
 import { z } from "zod";
 
-async function getToppers(): Promise<Topper[]> {
+export default function ToppersSection() {
+  const [toppers, setToppers] = React.useState<Topper[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
     const dbRef = ref(db, 'toppers');
-    try {
-        const snapshot = await get(dbRef);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             const itemsArray = Object.keys(data).map(key => ({
@@ -29,19 +35,20 @@ async function getToppers(): Promise<Topper[]> {
             }));
             const parsedItems = z.array(topperSchema).safeParse(itemsArray);
             if (parsedItems.success) {
-                return parsedItems.data;
+                setToppers(parsedItems.data);
             } else {
                 console.error("Zod validation error for toppers:", parsedItems.error.flatten());
             }
         }
-    } catch (error) {
+        setLoading(false);
+    }, (error) => {
         console.error("Error fetching toppers:", error);
-    }
-    return [];
-}
+        setLoading(false);
+    });
 
-export default async function ToppersSection() {
-  const toppers = await getToppers();
+    return () => unsubscribe();
+  }, []);
+
 
   return (
     <section id="results" className="py-20 lg:py-32 px-6 lg:px-12">
@@ -59,7 +66,9 @@ export default async function ToppersSection() {
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
           {toppersSection.description}
         </p>
-        {toppers.length > 0 && (
+        {loading ? (
+             <div className="h-80 bg-muted rounded-xl animate-pulse max-w-4xl mx-auto" />
+        ) : toppers.length > 0 && (
           <Carousel
             opts={{
               align: "start",

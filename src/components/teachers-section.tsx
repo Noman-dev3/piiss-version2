@@ -1,16 +1,19 @@
 
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Users, BookOpen, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { teachersSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, query, limitToFirst, get } from "firebase/database";
+import { ref, query, limitToFirst, onValue } from "firebase/database";
 import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
 import { z } from "zod";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
@@ -57,10 +60,14 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   );
 };
 
-async function getTeachers(): Promise<Teacher[]> {
+
+export default function TeachersSection() {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
     const dbRef = query(ref(db, 'teachers'), limitToFirst(3));
-    try {
-        const snapshot = await get(dbRef);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             const itemsArray = Object.keys(data).map(key => ({
@@ -69,19 +76,19 @@ async function getTeachers(): Promise<Teacher[]> {
             }));
             const parsedItems = z.array(teacherSchema).safeParse(itemsArray);
             if (parsedItems.success) {
-                return parsedItems.data;
+                setTeachers(parsedItems.data);
             } else {
                 console.error("Zod validation error for teachers:", parsedItems.error.flatten());
             }
         }
-    } catch (error) {
+        setLoading(false);
+    }, (error) => {
         console.error("Error fetching teachers:", error);
-    }
-    return [];
-}
+        setLoading(false);
+    });
 
-export default async function TeachersSection() {
-  const teachers = await getTeachers();
+    return () => unsubscribe();
+  }, []);
   
   return (
     <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
@@ -99,7 +106,11 @@ export default async function TeachersSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {teachersSection.description}
         </p>
-        {teachers.length > 0 && (
+        {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[...Array(3)].map((_,i) => <Skeleton key={i} className="h-96 w-full" />)}
+            </div>
+        ) : teachers.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teachers.map((teacher, index) => (
                 <TeacherCard key={index} teacher={teacher} />

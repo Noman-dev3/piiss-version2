@@ -1,4 +1,6 @@
 
+"use client";
+
 import * as React from "react";
 import { Star, MessageCircle, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,14 +14,17 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { testimonialsSection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, get } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { Testimonial, testimonialSchema } from "@/app/admin/testimonials/data/schema";
 import { z } from "zod";
 
-async function getTestimonials(): Promise<Testimonial[]> {
+export default function TestimonialsSection() {
+  const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
     const dbRef = ref(db, 'testimonials');
-    try {
-        const snapshot = await get(dbRef);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             const itemsArray = Object.keys(data).map(key => ({
@@ -28,17 +33,17 @@ async function getTestimonials(): Promise<Testimonial[]> {
             }));
             const parsedItems = z.array(testimonialSchema).safeParse(itemsArray);
             if (parsedItems.success) {
-                return parsedItems.data;
+                setTestimonials(parsedItems.data);
             }
         }
-    } catch (error) {
+        setLoading(false);
+    }, (error) => {
         console.error("Error fetching testimonials:", error);
-    }
-    return [];
-}
+        setLoading(false);
+    });
 
-export default async function TestimonialsSection() {
-  const testimonials = await getTestimonials();
+    return () => unsubscribe();
+  }, []);
 
   return (
     <section id="testimonials" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary/50">
@@ -56,7 +61,9 @@ export default async function TestimonialsSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {testimonialsSection.description}
         </p>
-        {testimonials.length > 0 && (
+        {loading ? (
+             <div className="h-64 bg-muted rounded-xl animate-pulse max-w-5xl mx-auto" />
+        ) : testimonials.length > 0 && (
           <Carousel
             opts={{
               align: "start",

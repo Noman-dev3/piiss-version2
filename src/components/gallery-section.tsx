@@ -1,21 +1,27 @@
 
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Camera, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { gallerySection } from "@/lib/data";
 import { db } from "@/lib/firebase";
-import { ref, query, limitToLast, get } from "firebase/database";
+import { ref, query, limitToLast, onValue } from "firebase/database";
 import { GalleryItem, galleryItemSchema } from "@/app/admin/gallery/data/schema";
 import { z } from "zod";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-async function getGalleryItems(): Promise<GalleryItem[]> {
+export default function GallerySection() {
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
     const dbRef = query(ref(db, 'gallery'), limitToLast(4));
-    try {
-        const snapshot = await get(dbRef);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             const itemsArray = Object.keys(data).map(key => ({
@@ -24,19 +30,19 @@ async function getGalleryItems(): Promise<GalleryItem[]> {
             }));
             const parsedItems = z.array(galleryItemSchema).safeParse(itemsArray);
             if (parsedItems.success) {
-                return parsedItems.data.reverse(); // To show latest first
+                setGalleryItems(parsedItems.data.reverse()); // To show latest first
             } else {
                 console.error("Zod validation error for gallery:", parsedItems.error.flatten());
             }
         }
-    } catch (error) {
+        setLoading(false);
+    }, (error) => {
         console.error("Error fetching gallery items:", error);
-    }
-    return [];
-}
+        setLoading(false);
+    });
 
-export default async function GallerySection() {
-  const galleryItems = await getGalleryItems();
+    return () => unsubscribe();
+  }, []);
 
   return (
     <section id="gallery" className="py-20 lg:py-32 px-6 lg:px-12">
@@ -54,7 +60,11 @@ export default async function GallerySection() {
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
           {gallerySection.description}
         </p>
-        {galleryItems.length > 0 && (
+        {loading ? (
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-64 w-full" />)}
+            </div>
+        ) : galleryItems.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {galleryItems.map((item, index) => (
                 <div key={index} className="group perspective-1000">
