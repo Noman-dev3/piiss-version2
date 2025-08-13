@@ -15,7 +15,7 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
-        <Sidebar collapsible="icon" variant="floating" side="left">
+        <Sidebar collapsible="icon" variant="sidebar" side="left" className="fixed">
           <SidebarRail />
           <SidebarHeader>
             <div className="flex items-center gap-3 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center">
@@ -69,7 +69,7 @@ export default function AdminLayout({
                     <FileText />
                     <span>Results</span>
                   </Link>
-                </SidebarMenuButton>.
+                </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Events">
