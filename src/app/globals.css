@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root,
+  .light {
     --background: 210 20% 98%;
     --foreground: 224 71.4% 4.1%;
     --card: 210 20% 98%;
@@ -82,29 +83,31 @@
   section {
     @apply py-20 lg:py-32;
   }
-  .gradient {
+  
+  body.gradient {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
   }
-  .gradient .bg-background {
+
+  body.gradient .bg-background {
     background-color: transparent;
   }
-  .gradient .bg-card, .gradient .bg-popover {
+  body.gradient .bg-card, body.gradient .bg-popover {
      background-color: hsl(var(--card) / 0.5);
      @apply backdrop-blur-lg;
   }
-  .gradient .bg-secondary {
+  body.gradient .bg-secondary {
     background-color: hsl(var(--secondary) / 0.5);
     @apply backdrop-blur-sm;
   }
-  .gradient .bg-muted {
+  body.gradient .bg-muted {
      background-color: hsl(var(--muted) / 0.5);
   }
-  .gradient .border {
+  body.gradient .border {
       border-color: hsl(var(--border) / 0.3);
   }
-  .gradient .ring {
+  body.gradient .ring {
       --tw-ring-color: hsl(var(--ring) / 0.5);
   }
 }
