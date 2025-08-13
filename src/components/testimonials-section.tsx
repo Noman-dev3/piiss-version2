@@ -81,7 +81,7 @@ export default function TestimonialsSection() {
                             ))}
                         </div>
                         <blockquote className="text-lg font-medium text-foreground mb-6">
-                        "{testimonial.quote}"
+                        &quot;{testimonial.quote}&quot;
                         </blockquote>
                         <div className="flex items-center gap-4 mt-auto">
                           <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">

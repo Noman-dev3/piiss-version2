@@ -63,7 +63,7 @@ export function EditGalleryItemDialog({ item, isOpen, onOpenChange }: EditGaller
         <DialogHeader>
           <DialogTitle>Edit Image: {item.title}</DialogTitle>
           <DialogDescription>
-            Update the image details below. Click save when you're done.
+            Update the image details below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

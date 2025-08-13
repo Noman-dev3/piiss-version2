@@ -62,7 +62,7 @@ export function EditTopperDialog({ topper, isOpen, onOpenChange }: EditTopperDia
         <DialogHeader>
           <DialogTitle>Edit Topper: {topper.name}</DialogTitle>
           <DialogDescription>
-            Update the topper's details below. Click save when you're done.
+            Update the topper&apos;s details below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

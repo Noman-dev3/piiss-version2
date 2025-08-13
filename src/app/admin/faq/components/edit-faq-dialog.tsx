@@ -62,7 +62,7 @@ export function EditFaqDialog({ faq, isOpen, onOpenChange }: EditFaqDialogProps)
         <DialogHeader>
           <DialogTitle>Edit FAQ</DialogTitle>
           <DialogDescription>
-            Update the question and answer below. Click save when you're done.
+            Update the question and answer below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

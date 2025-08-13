@@ -40,7 +40,7 @@ export default async function AllEventsPage() {
         <div className="container mx-auto px-4">
              <div className="text-center mb-12">
                 <h1 className="text-4xl font-bold font-headline">School Events</h1>
-                <p className="text-muted-foreground mt-2">Stay up-to-date with all our school's activities.</p>
+                <p className="text-muted-foreground mt-2">Stay up-to-date with all our school&apos;s activities.</p>
             </div>
             {events.length > 0 ? (
                 <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">

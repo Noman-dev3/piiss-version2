@@ -61,7 +61,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
         </CardHeader>
         <CardContent className="p-6 pt-0 flex-grow">
              <blockquote className="text-base text-foreground border-l-4 border-primary pl-4 italic">
-                "{testimonial.quote}"
+                &quot;{testimonial.quote}&quot;
             </blockquote>
         </CardContent>
         <CardFooter className="flex justify-between items-center gap-2 p-6 pt-0">

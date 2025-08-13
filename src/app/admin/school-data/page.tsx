@@ -57,7 +57,7 @@ export default function SchoolDataPage() {
                             No URL Configured
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                            Please set the 'School Data App URL' in the settings page to enable this view.
+                            Please set the &apos;School Data App URL&apos; in the settings page to enable this view.
                         </p>
                     </div>
                 </div>

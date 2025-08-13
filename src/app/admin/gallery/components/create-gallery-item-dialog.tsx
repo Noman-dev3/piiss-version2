@@ -66,7 +66,7 @@ export function CreateGalleryItemDialog({ isOpen, onOpenChange }: CreateGalleryI
         <DialogHeader>
           <DialogTitle>Add New Image to Gallery</DialogTitle>
           <DialogDescription>
-            Provide the image details below. Click add when you're done.
+            Provide the image details below. Click add when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

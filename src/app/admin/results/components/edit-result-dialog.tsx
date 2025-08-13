@@ -88,7 +88,7 @@ export function EditResultDialog({ result, isOpen, onOpenChange }: EditResultDia
         <DialogHeader>
           <DialogTitle>Edit Result: {result.student_name}</DialogTitle>
           <DialogDescription>
-            Update the result details below. Click save when you're done.
+            Update the result details below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

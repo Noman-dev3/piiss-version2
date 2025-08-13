@@ -101,7 +101,7 @@ export default function EventsPage() {
                 No events found
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                Click "Create Event" to add a new event.
+                Click &quot;Create Event&quot; to add a new event.
                 </p>
             </div>
         </div>

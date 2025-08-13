@@ -95,7 +95,7 @@ export default function SettingsPage() {
              <Card>
                 <CardHeader>
                     <CardTitle>Website Content</CardTitle>
-                    <CardDescription>Update your website's main content and contact information.</CardDescription>
+                    <CardDescription>Update your website&apos;s main content and contact information.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="space-y-2">

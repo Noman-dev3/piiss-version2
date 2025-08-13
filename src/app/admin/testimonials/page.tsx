@@ -78,7 +78,7 @@ export default function TestimonialsPage() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Testimonials</h2>
           <p className="text-muted-foreground">
-            Manage your school's testimonials.
+            Manage your school&apos;s testimonials.
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)}>
@@ -99,7 +99,7 @@ export default function TestimonialsPage() {
                 No testimonials found
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                Click "Add Testimonial" to add a new one.
+                Click &quot;Add Testimonial&quot; to add a new one.
                 </p>
             </div>
         </div>

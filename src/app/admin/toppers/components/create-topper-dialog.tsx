@@ -66,7 +66,7 @@ export function CreateTopperDialog({ isOpen, onOpenChange }: CreateTopperDialogP
         <DialogHeader>
           <DialogTitle>Add New Topper</DialogTitle>
           <DialogDescription>
-            Fill in the student's details below. Click add when you're done.
+            Fill in the student&apos;s details below. Click add when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

@@ -76,7 +76,7 @@ export function EditTeacherDialog({ teacher, isOpen, onOpenChange }: EditTeacher
         <DialogHeader>
           <DialogTitle>Edit Teacher: {teacher.name}</DialogTitle>
           <DialogDescription>
-            Update the teacher's information below. Click save when you're done.
+            Update the teacher&apos;s information below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

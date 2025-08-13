@@ -69,7 +69,7 @@ export default async function AllGalleryPage() {
             ) : (
                 <div className="text-center py-20">
                     <h3 className="text-2xl font-bold tracking-tight">Gallery is empty</h3>
-                    <p className="text-sm text-muted-foreground">We'll be adding photos soon. Stay tuned!</p>
+                    <p className="text-sm text-muted-foreground">We&apos;ll be adding photos soon. Stay tuned!</p>
                 </div>
             )}
         </div>

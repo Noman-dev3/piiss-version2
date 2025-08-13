@@ -69,7 +69,7 @@ export function CreateTestimonialDialog({ isOpen, onOpenChange }: CreateTestimon
         <DialogHeader>
           <DialogTitle>Create New Testimonial</DialogTitle>
           <DialogDescription>
-            Fill in the details for the new testimonial. Click create when you're done.
+            Fill in the details for the new testimonial. Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

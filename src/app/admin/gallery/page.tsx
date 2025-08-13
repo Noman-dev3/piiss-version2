@@ -78,7 +78,7 @@ export default function GalleryPage() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Gallery</h2>
           <p className="text-muted-foreground">
-            Manage your school's public image gallery.
+            Manage your school&apos;s public image gallery.
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)}>
@@ -99,7 +99,7 @@ export default function GalleryPage() {
                 No images found
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                Click "Add Image" to upload an image to the gallery.
+                Click &quot;Add Image&quot; to upload an image to the gallery.
                 </p>
             </div>
         </div>

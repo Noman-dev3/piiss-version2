@@ -78,7 +78,7 @@ export default function ToppersPage() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Toppers Management</h2>
           <p className="text-muted-foreground">
-            Manage the list of your school's top performing students.
+            Manage the list of your school&apos;s top performing students.
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)}>
@@ -99,7 +99,7 @@ export default function ToppersPage() {
                 No toppers found
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                Click "Add Topper" to feature a student.
+                Click &quot;Add Topper&quot; to feature a student.
                 </p>
             </div>
         </div>

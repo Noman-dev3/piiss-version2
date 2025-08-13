@@ -101,7 +101,7 @@ export default function FaqPage() {
                   No FAQs found
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                  Click "Add FAQ" to create a new one.
+                  Click &quot;Add FAQ&quot; to create a new one.
                   </p>
               </div>
           </div>

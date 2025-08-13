@@ -64,7 +64,7 @@ export function CreateFaqDialog({ isOpen, onOpenChange }: CreateFaqDialogProps) 
         <DialogHeader>
           <DialogTitle>Create New FAQ</DialogTitle>
           <DialogDescription>
-            Fill in the question and answer. Click create when you're done.
+            Fill in the question and answer. Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

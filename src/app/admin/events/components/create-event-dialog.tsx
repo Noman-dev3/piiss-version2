@@ -67,7 +67,7 @@ export function CreateEventDialog({ isOpen, onOpenChange }: CreateEventDialogPro
         <DialogHeader>
           <DialogTitle>Create New Event</DialogTitle>
           <DialogDescription>
-            Fill in the details for the new event. Click create when you're done.
+            Fill in the details for the new event. Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

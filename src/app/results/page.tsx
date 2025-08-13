@@ -108,7 +108,7 @@ export default function ResultsPage() {
                         <CardHeader className="text-center">
                             <CardTitle className="text-4xl font-bold font-headline">Find Student Result</CardTitle>
                             <CardDescription className="text-muted-foreground">
-                                Enter any details to find a student's academic result.
+                                Enter any details to find a student&apos;s academic result.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>

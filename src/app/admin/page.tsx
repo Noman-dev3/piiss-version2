@@ -80,7 +80,7 @@ export default function AdminPage() {
     <div className="flex-1 space-y-6 p-8 pt-6">
       <div>
         <h2 className="text-3xl font-bold font-headline">Dashboard Overview</h2>
-        <p className="text-muted-foreground">Monitor your school's key metrics and recent activities.</p>
+        <p className="text-muted-foreground">Monitor your school&apos;s key metrics and recent activities.</p>
       </div>
       
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

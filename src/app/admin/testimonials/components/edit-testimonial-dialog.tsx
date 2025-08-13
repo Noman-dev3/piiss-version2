@@ -65,7 +65,7 @@ export function EditTestimonialDialog({ testimonial, isOpen, onOpenChange }: Edi
         <DialogHeader>
           <DialogTitle>Edit Testimonial by {testimonial.name}</DialogTitle>
           <DialogDescription>
-            Update the testimonial details below. Click save when you're done.
+            Update the testimonial details below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">
