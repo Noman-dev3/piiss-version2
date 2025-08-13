@@ -6,6 +6,7 @@ import GallerySection from "@/components/gallery-section";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import TeachersSection from "@/components/teachers-section";
+import TestimonialsSection from "@/components/testimonials-section";
 import ToppersSection from "@/components/toppers-section";
 
 
@@ -21,6 +22,7 @@ export default function Home() {
         <TeachersSection />
         <EventsSection />
         <GallerySection />
+        <TestimonialsSection />
         <ContactSection />
       </main>
     </div>
