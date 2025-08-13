@@ -1,6 +1,7 @@
 import AboutSection from "@/components/about-section";
 import ContactSection from "@/components/contact-section";
 import EventsSection from "@/components/events-section";
+import FaqSection from "@/components/faq-section";
 import { Features } from "@/components/features";
 import GallerySection from "@/components/gallery-section";
 import { Header } from "@/components/header";
@@ -23,6 +24,7 @@ export default function Home() {
         <EventsSection />
         <GallerySection />
         <TestimonialsSection />
+        <FaqSection />
         <ContactSection />
       </main>
     </div>
