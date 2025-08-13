@@ -77,25 +77,19 @@ export default function ResultsPage() {
         }, 500);
     };
 
-    const handlePositionSearch = async () => {
+    const handlePositionSearch = () => {
         if (!positionClass) return;
         setIsFetchingPositions(true);
-        const classResultsQuery = query(ref(db, 'results'), orderByChild('class'), equalTo(positionClass));
-        const snapshot = await get(classResultsQuery);
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(resultSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                const sorted = parsedItems.data.sort((a, b) => b.percentage - a.percentage);
-                setPositionHolders(sorted.slice(0, 3));
-            }
+        
+        const classResults = allResults.filter(r => r.class === positionClass);
+
+        if (classResults.length > 0) {
+            const sorted = classResults.sort((a, b) => b.percentage - a.percentage);
+            setPositionHolders(sorted.slice(0, 3));
         } else {
             setPositionHolders([]);
         }
+        
         setIsFetchingPositions(false);
     };
 
