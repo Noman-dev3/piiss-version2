@@ -1,0 +1,126 @@
+
+"use client"
+import { db } from '@/lib/firebase';
+import { ref, onValue, query, orderByChild } from 'firebase/database';
+import { resultSchema, Result } from './data/schema';
+import { z } from 'zod';
+import { ResultCard } from './components/result-card';
+import { useEffect, useState, useMemo } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
+
+export default function ResultsPage() {
+  const [results, setResults] = useState<Result[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const dbRef = query(ref(db, 'results'), orderByChild('student_name'));
+
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const resultsArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key],
+        }));
+
+        const parsedResults = z.array(resultSchema).safeParse(resultsArray);
+        if (parsedResults.success) {
+          setResults(parsedResults.data);
+        } else {
+          console.error("Zod validation error:", parsedResults.error.flatten());
+          const validResults = resultsArray
+            .map(item => {
+              const result = resultSchema.safeParse(item);
+              if (result.success) {
+                return result.data;
+              } else {
+                 console.warn("Invalid result data for ID:", item.id, result.error.flatten().fieldErrors);
+                 return null;
+              }
+            })
+            .filter((item): item is Result => item !== null);
+          setResults(validResults);
+        }
+      } else {
+        console.log("No result data available");
+        setResults([]);
+      }
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching results:", error);
+      setLoading(false);
+    });
+
+    // Cleanup subscription on component unmount
+    return () => unsubscribe();
+  }, []);
+
+  const filteredResults = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return results.filter(result => 
+      result.student_name.toLowerCase().includes(query) || 
+      result.roll_number.toLowerCase().includes(query)
+    );
+  }, [results, searchQuery]);
+
+  if(loading) {
+    return (
+       <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+        <div className="flex items-center justify-between space-y-2">
+          <div>
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-72 mt-2" />
+          </div>
+        </div>
+         <Skeleton className="h-10 w-full mb-6" />
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {[...Array(10)].map((_, i) => <Skeleton key={i} className="h-72 rounded-xl" />)}
+        </div>
+       </div>
+    )
+  }
+
+  return (
+    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+      <div className="flex items-center justify-between space-y-2">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Results</h2>
+          <p className="text-muted-foreground">
+            View, edit, or delete student results.
+          </p>
+        </div>
+      </div>
+      
+      <div className="mb-6">
+        <Input 
+          type="search"
+          placeholder="Search by name or roll no..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm bg-background"
+        />
+      </div>
+
+      {filteredResults.length > 0 ? (
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {filteredResults.map((result) => (
+            <ResultCard key={result.id} result={result} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm mt-8">
+            <div className="flex flex-col items-center gap-1 text-center py-20">
+                <h3 className="text-2xl font-bold tracking-tight">
+                No results found
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                Results will appear here once they are added to the database.
+                </p>
+            </div>
+        </div>
+      )}
+    </div>
+  );
+}
