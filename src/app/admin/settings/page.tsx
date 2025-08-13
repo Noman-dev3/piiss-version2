@@ -17,7 +17,7 @@ export default function SettingsPage() {
     const { toast } = useToast();
     const [loading, setLoading] = useState(true);
     const [settings, setSettings] = useState({
-        ourStory: "",
+        ourStory: "Founded in 2015 with a pioneering spirit, the Pakistan Islamic International School System (PIISS) embarked on a mission to redefine education. We began with a simple yet powerful vision: to create a nurturing environment that blends academic rigor with timeless Islamic values. Our journey started in a modest campus with a handful of students and a team of dedicated educators who believed in fostering not just scholars, but compassionate and well-rounded individuals. Over the years, as our community grew, so did our commitment to excellence. We have since expanded our facilities, embraced innovative teaching methodologies, and consistently produced students who excel both in their studies and in their character. Today, PIISS stands as a beacon of quality education, proud of its rich history and excited for a future of continued growth and success.",
         logoUrl: "",
         contactPhone: "",
         contactEmail: "",
@@ -33,7 +33,8 @@ export default function SettingsPage() {
             const settingsRef = ref(db, 'settings');
             const snapshot = await get(settingsRef);
             if(snapshot.exists()) {
-                setSettings(snapshot.val());
+                // Merge fetched settings with default values to avoid breaking if new settings are added
+                setSettings(prev => ({...prev, ...snapshot.val()}));
             }
             setLoading(false);
         }
