@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "./ui/button";
 
 export function Hero() {
@@ -17,11 +18,11 @@ export function Hero() {
             Excellence in Education
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-black font-bold text-base rounded-full px-8">
-              Explore Programs
+            <Button size="lg" asChild className="bg-amber-500 hover:bg-amber-600 text-black font-bold text-base rounded-full px-8">
+              <Link href="/#about">Explore Programs</Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white/50 hover:bg-white/10 hover:text-white font-bold text-base rounded-full px-8">
-              Contact Us
+            <Button size="lg" variant="outline" asChild className="text-white border-white/50 hover:bg-white/10 hover:text-white font-bold text-base rounded-full px-8">
+              <Link href="/#contact">Contact Us</Link>
             </Button>
           </div>
         </div>

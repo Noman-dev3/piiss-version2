@@ -9,18 +9,26 @@ import { useState } from "react";
 
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
-  const navLinks = ["Home", "About", "Admissions", "Results", "Gallery", "FAQ", "Contact"];
+  const navLinks = [
+    { label: "Home", href: "/#home" },
+    { label: "About", href: "/#about" },
+    { label: "Admissions", href: "/admissions" },
+    { label: "Results", href: "/#results" },
+    { label: "Gallery", href: "/#gallery" },
+    { label: "FAQ", href: "/#faq" },
+    { label: "Contact", href: "/#contact" },
+  ];
 
   const NavLinkItems = ({ isMobile }: { isMobile: boolean }) => (
     <>
       {navLinks.map((link) => (
         <Link
-          key={link}
-          href={`#${link.toLowerCase()}`}
+          key={link.label}
+          href={link.href}
           onClick={() => isMobile && setSheetOpen(false)}
           className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
         >
-          {link}
+          {link.label}
         </Link>
       ))}
     </>
