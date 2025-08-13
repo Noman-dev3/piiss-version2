@@ -162,7 +162,7 @@ export function EditTeacherDialog({ teacher, isOpen, onOpenChange }: EditTeacher
                                 <FormItem className="md:col-span-2">
                                 <FormLabel>Bio</FormLabel>
                                 <FormControl>
-                                    <Textarea placeholder="A short biography of the teacher." {...field} />
+                                    <Textarea placeholder="A short biography of the teacher." {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
