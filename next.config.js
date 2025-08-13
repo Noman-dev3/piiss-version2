@@ -5,11 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'placehold.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'media.istockphoto.com',
+        hostname: '**',
       },
     ],
   },
