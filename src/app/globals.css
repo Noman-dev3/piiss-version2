@@ -109,6 +109,37 @@
   body.gradient .ring {
       --tw-ring-color: hsl(var(--ring) / 0.5);
   }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+    border-radius: 10px;
+    border: 3px solid hsl(var(--background));
+  }
+  
+  .dark ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+    border-radius: 10px;
+    border: 3px solid hsl(var(--background));
+  }
+
+  body.gradient ::-webkit-scrollbar-thumb {
+     background-color: hsl(var(--muted-foreground) / 0.8);
+     border: 3px solid transparent;
+  }
 }
 
 @layer utilities {

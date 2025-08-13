@@ -15,7 +15,7 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
-        <Sidebar collapsible="icon" variant="sidebar" side="left" className="fixed z-50">
+        <Sidebar collapsible="icon" side="left" className="fixed z-50">
           <SidebarRail />
           <SidebarHeader>
             <div className="flex items-center gap-3 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center">
@@ -142,7 +142,7 @@ export default function AdminLayout({
             </div>
             <Button variant="outline" asChild><Link href="/">View Site</Link></Button>
           </header>
-          <main className="p-4 lg:p-6">
+          <main className="p-4 lg:p-6 overflow-x-hidden">
             {children}
           </main>
         </SidebarInset>

@@ -51,7 +51,9 @@ export default async function AdmissionsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <DataTable data={admissions} columns={columns} />
+            <div className="overflow-x-auto">
+                <DataTable data={admissions} columns={columns} />
+            </div>
           </CardContent>
         </Card>
       </div>
