@@ -130,7 +130,7 @@ export default function ContactSection() {
               </div>
              <Card className="overflow-hidden rounded-xl shadow-lg mt-8">
               <Image
-                src={info.imageUrl}
+                src={info.imageUrl || "https://placehold.co/600x400.png"}
                 alt={contactInfo.image.alt}
                 width={600}
                 height={400}
