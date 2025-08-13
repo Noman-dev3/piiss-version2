@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { ref, onValue, get, child } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,10 +15,27 @@ async function getAdmissions(): Promise<Admission[]> {
       const admissionsArray = Object.keys(data).map(key => ({
         id: key,
         ...data[key],
+        // Ensure status is always present
+        status: data[key].status || 'pending', 
       }));
       // Sort by submission date, newest first
       admissionsArray.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
-      return z.array(admissionSchema).parse(admissionsArray);
+      
+      const parsedAdmissions = z.array(admissionSchema).safeParse(admissionsArray);
+      if (parsedAdmissions.success) {
+        return parsedAdmissions.data;
+      } else {
+        console.error("Zod validation error:", parsedAdmissions.error.errors);
+        // Attempt to return partially valid data if needed, or handle error
+        // For now, we filter out invalid entries
+        const validAdmissions = admissionsArray
+          .map(item => {
+            const result = admissionSchema.safeParse(item);
+            return result.success ? result.data : null;
+          })
+          .filter((item): item is Admission => item !== null);
+        return validAdmissions;
+      }
     } else {
       console.log("No data available");
       return [];

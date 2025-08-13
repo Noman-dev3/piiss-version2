@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { GraduationCap, Menu, Search, Home, Info, FileText, BarChart2, GalleryVertical, HelpCircle, Phone, User } from "lucide-react";
+import { GraduationCap, Menu, Search, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";

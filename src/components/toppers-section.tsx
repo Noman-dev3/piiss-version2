@@ -20,7 +20,7 @@ export default function ToppersSection() {
       <div className="container mx-auto text-center">
         <Badge
           variant="outline"
-          className="mb-4 bg-background/50 border-white/20"
+          className="mb-4 bg-background/50"
         >
           <Star className="w-4 h-4 mr-2" />
           {toppersSection.badge}

@@ -13,7 +13,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import Image from "next/image";
 import { contactInfo, contactForm } from "@/lib/data";
 

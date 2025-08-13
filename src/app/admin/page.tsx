@@ -2,13 +2,32 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, GraduationCap, UserPlus, Calendar, ArrowUp } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { ref, get, query, orderByChild, equalTo } from "firebase/database";
 
-const overviewData = [
-  { title: "Total Students", value: "2", icon: <Users className="h-6 w-6 text-muted-foreground" />, change: "+12%", changeColor: "text-green-500" },
-  { title: "Total Teachers", value: "1", icon: <GraduationCap className="h-6 w-6 text-muted-foreground" />, change: "+3%", changeColor: "text-green-500" },
-  { title: "Pending Admissions", value: "6", icon: <UserPlus className="h-6 w-6 text-muted-foreground" />, description: "Requires attention" },
-  { title: "Upcoming Events", value: "1", icon: <Calendar className="h-6 w-6 text-muted-foreground" />, description: "Next 30 days" },
-];
+async function getDashboardData() {
+    try {
+        const studentsRef = ref(db, 'students');
+        const teachersRef = ref(db, 'teachers');
+        const admissionsRef = ref(db, 'admissionSubmissions');
+
+        const studentsSnapshot = await get(studentsRef);
+        const teachersSnapshot = await get(teachersRef);
+        
+        const pendingAdmissionsQuery = query(admissionsRef, orderByChild('status'), equalTo('pending'));
+        const pendingAdmissionsSnapshot = await get(pendingAdmissionsQuery);
+
+        const totalStudents = studentsSnapshot.exists() ? Object.keys(studentsSnapshot.val()).length : 0;
+        const totalTeachers = teachersSnapshot.exists() ? Object.keys(teachersSnapshot.val()).length : 0;
+        const pendingAdmissions = pendingAdmissionsSnapshot.exists() ? Object.keys(pendingAdmissionsSnapshot.val()).length : 0;
+
+        return { totalStudents, totalTeachers, pendingAdmissions };
+
+    } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        return { totalStudents: 0, totalTeachers: 0, pendingAdmissions: 0 };
+    }
+}
 
 const recentActivity = [
     { name: "Noman Khan", description: "New admission application", time: "2 minutes ago" },
@@ -16,7 +35,16 @@ const recentActivity = [
     { name: "Jane Smith", description: "New admission application", time: "5 minutes ago" },
 ];
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const { totalStudents, totalTeachers, pendingAdmissions } = await getDashboardData();
+  
+  const overviewData = [
+      { title: "Total Students", value: totalStudents.toString(), icon: <Users className="h-6 w-6 text-muted-foreground" />, change: "+12%", changeColor: "text-green-500" },
+      { title: "Total Teachers", value: totalTeachers.toString(), icon: <GraduationCap className="h-6 w-6 text-muted-foreground" />, change: "+3%", changeColor: "text-green-500" },
+      { title: "Pending Admissions", value: pendingAdmissions.toString(), icon: <UserPlus className="h-6 w-6 text-muted-foreground" />, description: "Requires attention" },
+      { title: "Upcoming Events", value: "1", icon: <Calendar className="h-6 w-6 text-muted-foreground" />, description: "Next 30 days" },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
@@ -88,3 +116,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
