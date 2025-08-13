@@ -16,7 +16,7 @@ export function AdBanner() {
                 </div>
             </div>
             <Button asChild>
-                <Link href="/#contact">Become a Sponsor</Link>
+                <Link href="/#contact">Contact For Details</Link>
             </Button>
         </Card>
       </div>
