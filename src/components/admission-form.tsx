@@ -112,7 +112,7 @@ export function AdmissionForm() {
                         <Input
                           placeholder="e.g., John Doe"
                           {...field}
-                          className="bg-background/80"
+                          className="bg-background"
                         />
                       </FormControl>
                       <FormMessage />
@@ -131,7 +131,7 @@ export function AdmissionForm() {
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-full justify-start text-left font-normal bg-background/80",
+                                "w-full justify-start text-left font-normal bg-background",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -214,7 +214,7 @@ export function AdmissionForm() {
                         <Input
                           placeholder="e.g., Jane Doe"
                           {...field}
-                          className="bg-background/80"
+                          className="bg-background"
                         />
                       </FormControl>
                       <FormMessage />
@@ -231,7 +231,7 @@ export function AdmissionForm() {
                         <Input
                           placeholder="e.g., jane.doe@email.com"
                           {...field}
-                          className="bg-background/80"
+                          className="bg-background"
                         />
                       </FormControl>
                       <FormMessage />
@@ -249,7 +249,7 @@ export function AdmissionForm() {
                       <Input
                         placeholder="e.g., +1 555 123 4567"
                         {...field}
-                        className="bg-background/80"
+                        className="bg-background"
                       />
                     </FormControl>
                     <FormMessage />
@@ -274,7 +274,7 @@ export function AdmissionForm() {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="bg-background/80">
+                          <SelectTrigger className="bg-background">
                             <SelectValue placeholder="Select a class" />
                           </SelectTrigger>
                         </FormControl>
@@ -308,7 +308,7 @@ export function AdmissionForm() {
                         <Input
                           placeholder="e.g., ABC School"
                           {...field}
-                          className="bg-background/80"
+                          className="bg-background"
                         />
                       </FormControl>
                       <FormMessage />
@@ -331,7 +331,7 @@ export function AdmissionForm() {
                     <FormControl>
                       <Textarea
                         placeholder="Please share any other information you think is relevant."
-                        className="bg-background/80"
+                        className="bg-background"
                         rows={5}
                         {...field}
                       />
