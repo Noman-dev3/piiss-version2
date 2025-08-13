@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AdminSidebar } from '@/components/admin-sidebar';
 
 interface AuthContextType {
   user: User | null;
@@ -64,9 +65,9 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user, loading, router, pathname]);
 
-  if (loading || (!user && pathname !== '/admin/login')) {
+  if (loading) {
      return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex items-center justify-center h-screen w-full">
             <div className="w-full max-w-md p-8 space-y-4">
                 <Skeleton className="h-12 w-full" />
                 <Skeleton className="h-12 w-full" />
@@ -76,13 +77,27 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
      );
   }
   
-  if (user && pathname === '/admin/login') {
+  if (!user && pathname !== '/admin/login') {
+    // This state will be brief before the redirect kicks in.
     return (
-       <div className="flex items-center justify-center h-screen">
-         <p>Redirecting to dashboard...</p>
+       <div className="flex items-center justify-center h-screen w-full">
+         <p>Redirecting to login...</p>
        </div>
     );
   }
+  
+  if (pathname === '/admin/login') {
+     if (user) {
+        return (
+             <div className="flex items-center justify-center h-screen w-full">
+                <p>Redirecting to dashboard...</p>
+            </div>
+        )
+     }
+     // Render the login page itself, which is the child here.
+     return <>{children}</>;
+  }
 
+  // If we are logged in and not on the login page, render the protected content.
   return <>{children}</>;
 };

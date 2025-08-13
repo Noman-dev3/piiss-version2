@@ -10,14 +10,14 @@ export default function AdminLayout({
 }) {
   return (
     <AuthProvider>
-      <AuthGuard>
-        <div className="flex min-h-screen bg-muted/40">
+      <div className="flex min-h-screen bg-muted/40">
+        <AuthGuard>
           <AdminSidebar />
-          <main className="flex-1 p-4 lg:p-6 overflow-auto">
+          <main className="flex-1 flex flex-col">
             {children}
           </main>
-        </div>
-      </AuthGuard>
+        </AuthGuard>
+      </div>
     </AuthProvider>
   );
 }
