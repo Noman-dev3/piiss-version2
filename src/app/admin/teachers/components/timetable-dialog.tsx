@@ -20,8 +20,9 @@ interface TimetableDialogProps {
 }
 
 export function TimetableDialog({ teacher, isOpen, onOpenChange }: TimetableDialogProps) {
-  const timetable = teacher.timetables || {};
-  const days = Object.keys(timetable);
+  // The timetables object is nested under the teacher's ID. We need to extract it.
+  const timetableForTeacher = teacher.timetables ? teacher.timetables[Object.keys(teacher.timetables)[0]] : {};
+  const days = Object.keys(timetableForTeacher || {});
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -50,7 +51,7 @@ export function TimetableDialog({ teacher, isOpen, onOpenChange }: TimetableDial
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {timetable[day]?.map((slot, index) => (
+                                        {timetableForTeacher?.[day]?.map((slot, index) => (
                                             <TableRow key={index}>
                                                 <TableCell>{slot.time}</TableCell>
                                                 <TableCell>{slot.class}</TableCell>
