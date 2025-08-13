@@ -33,7 +33,7 @@ export default function ContactSection() {
 
   useEffect(() => {
     const settingsRef = ref(db, 'settings');
-    onValue(settingsRef, (snapshot) => {
+    const unsubscribe = onValue(settingsRef, (snapshot) => {
       if(snapshot.exists()) {
         const data = snapshot.val();
         setInfo({
@@ -45,6 +45,7 @@ export default function ContactSection() {
         });
       }
     });
+    return () => unsubscribe();
   }, []);
 
   const currentContactInfo = [
