@@ -10,8 +10,6 @@ export const teacherSchema = z.object({
   department: z.string(),
   experience: z.string(),
   imageUrl: z.string().url().optional().or(z.literal("")).nullable(),
-  // The timetables field is no longer needed.
-  // timetables: z.record(timetableSchema).optional().nullable(),
 });
 
 export type Teacher = z.infer<typeof teacherSchema>;
