@@ -17,8 +17,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { updateTeacher } from "@/actions/teacher-actions"
 import { Textarea } from "@/components/ui/textarea"
+import { db } from "@/lib/firebase"
+import { ref, update } from "firebase/database"
 
 interface EditTeacherDialogProps {
   teacher: Teacher;
@@ -45,27 +46,20 @@ export function EditTeacherDialog({ teacher, isOpen, onOpenChange }: EditTeacher
     });
 
     async function onSubmit(values: z.infer<typeof updateTeacherSchema>) {
-       const result = await updateTeacher(teacher.id, values);
-       if (result.success) {
-           toast({
+       try {
+            const teacherRef = ref(db, `teachers/${teacher.id}`);
+            await update(teacherRef, values);
+            toast({
                title: "Teacher Updated",
                description: "The teacher's details have been successfully updated.",
-           });
-           onOpenChange(false);
-       } else {
-           if(typeof result.error === 'string') {
-                toast({
-                    title: "Update Failed",
-                    description: result.error,
-                    variant: "destructive"
-                });
-           } else {
-                toast({
-                    title: "Update Failed",
-                    description: "Please check the form for errors.",
-                    variant: "destructive"
-                });
-           }
+            });
+            onOpenChange(false);
+       } catch (error) {
+            toast({
+                title: "Update Failed",
+                description: (error as Error).message,
+                variant: "destructive"
+            });
        }
     }
   

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { User, Edit, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { deleteStudent } from "@/actions/student-actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +22,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { StudentDetailsDialog } from "./student-details-dialog";
 import { EditStudentDialog } from "./edit-student-dialog";
+import { db } from "@/lib/firebase";
+import { ref, remove } from "firebase/database";
 
 
 interface StudentCardProps {
@@ -35,16 +36,17 @@ export function StudentCard({ student }: StudentCardProps) {
   const [isEditOpen, setEditOpen] = useState(false);
   
   const handleDelete = async () => {
-    const result = await deleteStudent(student.id);
-    if (result.success) {
+    try {
+      const studentRef = ref(db, `students/${student.id}`);
+      await remove(studentRef);
       toast({
         title: "Student Deleted",
         description: `Student ${student.Name} has been removed.`,
       });
-    } else {
+    } catch (error) {
       toast({
         title: "Error",
-        description: result.error,
+        description: (error as Error).message,
         variant: "destructive",
       });
     }

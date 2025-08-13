@@ -13,9 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { admissionSchema } from "../data/schema"
-import { updateAdmissionStatus, deleteAdmission } from "@/actions/update-admission";
 import { useToast } from "@/hooks/use-toast";
 import { AdmissionDetailsDialog } from "./admission-details-dialog";
+import { db } from "@/lib/firebase";
+import { ref, update, remove } from "firebase/database";
+import { sendEmail } from "@/actions/send-email";
+import { revalidatePath } from "next/cache";
 
 
 interface DataTableRowActionsProps<TData> {
@@ -28,32 +31,40 @@ export function DataTableRowActions<TData>({
   const admission = admissionSchema.parse(row.original)
   const { toast } = useToast();
 
+  const handleStatusUpdate = async (status: 'approved' | 'rejected') => {
+    try {
+      const admissionRef = ref(db, `admissionSubmissions/${admission.id}`);
+      await update(admissionRef, { status });
 
-  const handleApprove = async () => {
-    const result = await updateAdmissionStatus(admission.id, "approved", admission.parentEmail, admission.applicantName);
-    if (result.success) {
-      toast({ title: "Admission Approved", description: "An approval email has been sent." });
-      // Optionally, trigger a re-fetch of data here
-    } else {
-      toast({ title: "Error", description: result.error, variant: "destructive" });
+      const subject = status === 'approved' 
+        ? "Congratulations! Your Admission to PIISS is Approved" 
+        : "Update on Your Admission Application to PIISS";
+        
+      const body = status === 'approved'
+        ? `<p>Dear ${admission.applicantName},</p><p>We are delighted to inform you that your admission to Pakistan Islamic International School System (PIISS) has been approved. Welcome to our community!</p><p>Further details regarding orientation and class commencement will be shared with you shortly.</p><p>Best regards,<br/>PIISS Admissions Office</p>`
+        : `<p>Dear ${admission.applicantName},</p><p>Thank you for your interest in Pakistan Islamic International School System (PIISS). After careful consideration, we regret to inform you that we are unable to offer you a place at this time.</p><p>We wish you the best in your academic future.</p><p>Sincerely,<br/>PIISS Admissions Office</p>`;
+
+      await sendEmail({ to: admission.parentEmail, subject, html: body });
+
+      toast({ 
+        title: `Admission ${status.charAt(0).toUpperCase() + status.slice(1)}`, 
+        description: `An email has been sent to ${admission.parentEmail}.` 
+      });
+
+    } catch (error) {
+      console.error("Error updating admission status:", error);
+      toast({ title: "Error", description: (error as Error).message, variant: "destructive" });
     }
   }
 
-  const handleReject = async () => {
-    const result = await updateAdmissionStatus(admission.id, "rejected", admission.parentEmail, admission.applicantName);
-     if (result.success) {
-      toast({ title: "Admission Rejected", description: "A rejection email has been sent." });
-    } else {
-      toast({ title: "Error", description: result.error, variant: "destructive" });
-    }
-  }
 
   const handleDelete = async () => {
-    const result = await deleteAdmission(admission.id);
-     if (result.success) {
-      toast({ title: "Admission Deleted", description: "The application has been removed." });
-    } else {
-      toast({ title: "Error", description: result.error, variant: "destructive" });
+    try {
+        const admissionRef = ref(db, `admissionSubmissions/${admission.id}`);
+        await remove(admissionRef);
+        toast({ title: "Admission Deleted", description: "The application has been removed." });
+    } catch (error) {
+        toast({ title: "Error", description: (error as Error).message, variant: "destructive" });
     }
   }
 
@@ -73,11 +84,11 @@ export function DataTableRowActions<TData>({
           <AdmissionDetailsDialog admission={admission} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleApprove}>
+        <DropdownMenuItem onClick={() => handleStatusUpdate('approved')}>
           <Check className="mr-2 h-4 w-4 text-green-500" />
           Approve
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleReject}>
+        <DropdownMenuItem onClick={() => handleStatusUpdate('rejected')}>
            <X className="mr-2 h-4 w-4 text-red-500" />
           Reject
         </DropdownMenuItem>

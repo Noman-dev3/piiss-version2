@@ -17,8 +17,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { updateResult } from "@/actions/result-actions"
 import { Trash2, PlusCircle } from "lucide-react"
+import { db } from "@/lib/firebase"
+import { ref, update } from "firebase/database"
 
 interface EditResultDialogProps {
   result: Result;
@@ -27,19 +28,20 @@ interface EditResultDialogProps {
 }
 
 const updateResultSchema = resultSchema.omit({ id: true, date_created: true }).extend({
-    // To handle the dynamic subjects form, we'll represent subjects as an array of objects
     subjectEntries: z.array(z.object({
         name: z.string().min(1, "Subject name cannot be empty"),
         marks: z.coerce.number().min(0, "Marks must be a positive number"),
     })).min(1, "At least one subject is required"),
 });
 
-type FormValues = Omit<z.infer<typeof updateResultSchema>, "subjects">;
+type FormValues = Omit<z.infer<typeof updateResultSchema>, "subjects"> & {
+    subjectEntries: { name: string; marks: number }[];
+};
+
 
 export function EditResultDialog({ result, isOpen, onOpenChange }: EditResultDialogProps) {
     const { toast } = useToast();
     
-    // Convert subjects object to array format for the form
     const subjectEntries = Object.entries(result.subjects).map(([name, marks]) => ({ name, marks }));
 
     const form = useForm<FormValues>({
@@ -56,27 +58,27 @@ export function EditResultDialog({ result, isOpen, onOpenChange }: EditResultDia
     });
 
     async function onSubmit(values: FormValues) {
-       // Convert subjectEntries array back to the subjects object format
        const subjects = values.subjectEntries.reduce((acc, entry) => {
            acc[entry.name] = entry.marks;
            return acc;
        }, {} as Record<string, number>);
 
        const finalValues = { ...values, subjects };
-       // @ts-ignore - We are removing subjectEntries before sending to server
+       // @ts-ignore
        delete finalValues.subjectEntries;
        
-       const res = await updateResult(result.id, finalValues);
-       if (res.success) {
-           toast({
+       try {
+            const resultRef = ref(db, `results/${result.id}`);
+            await update(resultRef, finalValues);
+            toast({
                title: "Result Updated",
                description: "The result has been successfully updated.",
-           });
-           onOpenChange(false);
-       } else {
+            });
+            onOpenChange(false);
+       } catch (error) {
             toast({
                 title: "Update Failed",
-                description: "Please check the form for errors.",
+                description: (error as Error).message,
                 variant: "destructive"
             });
        }

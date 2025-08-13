@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { User, Edit, Trash2, Trophy, Percent } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { deleteResult } from "@/actions/result-actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ResultDetailsDialog } from "./result-details-dialog";
 import { EditResultDialog } from "./edit-result-dialog";
+import { db } from "@/lib/firebase";
+import { ref, remove } from "firebase/database";
 
 
 interface ResultCardProps {
@@ -34,16 +35,17 @@ export function ResultCard({ result }: ResultCardProps) {
   const [isEditOpen, setEditOpen] = useState(false);
   
   const handleDelete = async () => {
-    const res = await deleteResult(result.id);
-    if (res.success) {
-      toast({
-        title: "Result Deleted",
-        description: `Result for ${result.student_name} has been removed.`,
-      });
-    } else {
+    try {
+        const resultRef = ref(db, `results/${result.id}`);
+        await remove(resultRef);
+        toast({
+            title: "Result Deleted",
+            description: `Result for ${result.student_name} has been removed.`,
+        });
+    } catch(error) {
       toast({
         title: "Error",
-        description: res.error,
+        description: (error as Error).message,
         variant: "destructive",
       });
     }

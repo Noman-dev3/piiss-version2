@@ -17,8 +17,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { updateStudent } from "@/actions/student-actions"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { db } from "@/lib/firebase"
+import { ref, update } from "firebase/database"
 
 
 interface EditStudentDialogProps {
@@ -46,28 +47,20 @@ export function EditStudentDialog({ student, isOpen, onOpenChange }: EditStudent
     });
 
     async function onSubmit(values: z.infer<typeof updateStudentSchema>) {
-       const result = await updateStudent(student.id, values);
-       if (result.success) {
-           toast({
+       try {
+            const studentRef = ref(db, `students/${student.id}`);
+            await update(studentRef, values);
+            toast({
                title: "Student Updated",
                description: "The student's details have been successfully updated.",
-           });
-           onOpenChange(false);
-       } else {
-           if(typeof result.error === 'string') {
-                toast({
-                    title: "Update Failed",
-                    description: result.error,
-                    variant: "destructive"
-                });
-           } else {
-               // Handle Zod error object if needed, for now just show a generic message
-                toast({
-                    title: "Update Failed",
-                    description: "Please check the form for errors.",
-                    variant: "destructive"
-                });
-           }
+            });
+            onOpenChange(false);
+       } catch (error) {
+            toast({
+                title: "Update Failed",
+                description: (error as Error).message,
+                variant: "destructive"
+            });
        }
     }
   
