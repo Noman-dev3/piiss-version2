@@ -78,7 +78,7 @@ export default function BoardStudentsPage() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Board Students Management</h2>
           <p className="text-muted-foreground">
-            Manage the list of your school's students with board exam results.
+            Manage the list of your school&apos;s students with board exam results.
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)}>
@@ -99,7 +99,7 @@ export default function BoardStudentsPage() {
                 No board students found
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                Click "Add Board Student" to feature a student's board results.
+                Click &quot;Add Board Student&quot; to feature a student&apos;s board results.
                 </p>
             </div>
         </div>

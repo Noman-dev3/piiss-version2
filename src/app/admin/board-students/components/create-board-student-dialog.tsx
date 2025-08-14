@@ -68,7 +68,7 @@ export function CreateBoardStudentDialog({ isOpen, onOpenChange }: CreateBoardSt
         <DialogHeader>
           <DialogTitle>Add New Board Student</DialogTitle>
           <DialogDescription>
-            Fill in the student's board result details below. Click add when you're done.
+            Fill in the student&apos;s board result details below. Click add when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

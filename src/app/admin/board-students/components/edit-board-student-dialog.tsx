@@ -62,7 +62,7 @@ export function EditBoardStudentDialog({ student, isOpen, onOpenChange }: EditBo
         <DialogHeader>
           <DialogTitle>Edit Board Student: {student.name}</DialogTitle>
           <DialogDescription>
-            Update the student's board result details below. Click save when you're done.
+            Update the student&apos;s board result details below. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto pr-4">

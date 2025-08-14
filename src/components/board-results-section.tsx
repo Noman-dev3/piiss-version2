@@ -38,7 +38,7 @@ export default function BoardResultsSection({ boardStudents }: BoardResultsSecti
           Excellence in Board Examinations
         </h2>
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
-          We commend our students for their exceptional performance in the official board examinations, a testament to their diligence and our faculty's guidance.
+          We commend our students for their exceptional performance in the official board examinations, a testament to their diligence and our faculty&apos;s guidance.
         </p>
           <Carousel
             opts={{
