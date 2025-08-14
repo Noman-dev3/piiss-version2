@@ -5,33 +5,11 @@ import { GalleryItem, galleryItemSchema } from "@/app/admin/gallery/data/schema"
 import { z } from "zod";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-
-
-async function getAllGalleryItems(): Promise<GalleryItem[]> {
-    const dbRef = query(ref(db, 'gallery'));
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(galleryItemSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                return parsedItems.data.reverse();
-            }
-        }
-        return [];
-    } catch (error) {
-        console.error("Error fetching gallery:", error);
-        return [];
-    }
-}
+import { getGalleryItems } from "@/lib/data-fetching";
 
 
 export default async function AllGalleryPage() {
-  const galleryItems = await getAllGalleryItems();
+  const galleryItems = await getGalleryItems();
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />

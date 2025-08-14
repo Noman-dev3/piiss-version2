@@ -11,20 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { HelpCircle } from "lucide-react";
 import { faqSection } from "@/lib/data";
 import { FAQ } from "@/app/admin/data-schemas";
-import { useState, useEffect } from "react";
-import { subscribeToFaqs } from "@/lib/data-fetching";
+import React from "react";
   
-export default function FaqSection() {
-    const [faqs, setFaqs] = useState<FAQ[]>([]);
+interface FaqSectionProps {
+  faqs: FAQ[];
+}
 
-    useEffect(() => {
-        const unsubscribe = subscribeToFaqs((data) => {
-            setFaqs(data);
-        });
-        if (unsubscribe) {
-          return () => unsubscribe();
-        }
-    }, []);
+export default function FaqSection({ faqs }: FaqSectionProps) {
 
     return (
         <section id="faq" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
@@ -42,7 +35,7 @@ export default function FaqSection() {
                         {faqSection.description}
                     </p>
                 </div>
-                {faqs.length > 0 ? (
+                {faqs && faqs.length > 0 ? (
                     <div className="max-w-3xl mx-auto">
                         <Accordion type="single" collapsible className="w-full">
                             {faqs.map((faq, index) => (

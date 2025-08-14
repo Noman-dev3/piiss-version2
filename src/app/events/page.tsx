@@ -7,32 +7,11 @@ import Image from "next/image";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
-
-async function getAllEvents(): Promise<Event[]> {
-    const dbRef = query(ref(db, 'events'));
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            })).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            const parsedItems = z.array(eventSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                return parsedItems.data;
-            }
-        }
-        return [];
-    } catch (error) {
-        console.error("Error fetching events:", error);
-        return [];
-    }
-}
+import { getEvents } from "@/lib/data-fetching";
 
 
 export default async function AllEventsPage() {
-  const events = await getAllEvents();
+  const events = await getEvents();
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />

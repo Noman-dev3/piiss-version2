@@ -9,8 +9,11 @@ import Image from "next/image";
 import { teachersSection } from "@/lib/data";
 import { Teacher } from "@/app/admin/data-schemas";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { subscribeToTeachers } from "@/lib/data-fetching";
+import React from "react";
+
+interface TeachersSectionProps {
+  teachers: Teacher[];
+}
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
@@ -58,16 +61,7 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
 };
 
 
-export default function TeachersSection() {
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
-  
-  useEffect(() => {
-    const unsubscribe = subscribeToTeachers((data) => {
-        setTeachers(data);
-    });
-    return () => unsubscribe();
-  }, []);
-  
+export default function TeachersSection({ teachers }: TeachersSectionProps) {
   return (
     <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
       <div className="container mx-auto text-center">
@@ -84,7 +78,7 @@ export default function TeachersSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {teachersSection.description}
         </p>
-        {teachers.length > 0 ? (
+        {teachers && teachers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teachers.map((teacher, index) => (
                 <TeacherCard key={index} teacher={teacher} />

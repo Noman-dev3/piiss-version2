@@ -1,8 +1,5 @@
-
-"use client";
-
 import { db } from "@/lib/firebase";
-import { ref, onValue, query, limitToLast, limitToFirst, get, Unsubscribe } from "firebase/database";
+import { get, query, ref } from "firebase/database";
 import { z } from "zod";
 import {
   topperSchema, Topper,
@@ -14,61 +11,45 @@ import {
   boardStudentSchema, BoardStudent
 } from "@/app/admin/data-schemas";
 
-function createDataSubscriber<T>(
-    schema: z.ZodType<T[], any>, 
-    dbPath: string, 
-    limit?: number, 
-    order: 'asc' | 'desc' = 'desc'
-): (callback: (data: T[]) => void) => Unsubscribe {
-  return (callback: (data: T[]) => void): Unsubscribe => {
-    let dbQuery;
-    if (limit) {
-        dbQuery = query(ref(db, dbPath), order === 'desc' ? limitToLast(limit) : limitToFirst(limit));
-    } else {
-        dbQuery = ref(db, dbPath);
-    }
-    
-    const unsubscribe = onValue(dbQuery, (snapshot) => {
-      let items: T[] = [];
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const itemsArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key],
-        }));
-        
-        const parsedItems = schema.safeParse(itemsArray);
-        if (parsedItems.success) {
-          items = parsedItems.data;
-          if (items.length > 0 && 'date' in items[0] && typeof (items[0] as any).date === 'string') {
-              // @ts-ignore
-              items.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-          }
-           if (limit && order === 'desc' && !('date' in items[0])) {
-             items = items.reverse();
-           }
-        } else {
-          console.error(`Zod validation error for ${dbPath}:`, parsedItems.error.flatten());
+// A generic function to fetch data once from Firebase
+async function fetchData<T>(dbPath: string, schema: z.ZodType<T[]>): Promise<T[]> {
+  try {
+    const dataRef = ref(db, dbPath);
+    const snapshot = await get(dataRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const dataArray = Object.keys(data).map(key => ({
+        id: key,
+        ...data[key],
+      }));
+      
+      const parsedData = schema.safeParse(dataArray);
+      if (parsedData.success) {
+        // Generic date sorting for schemas that have it
+        if (parsedData.data.length > 0 && 'date' in parsedData.data[0]) {
+          return (parsedData.data as any[]).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         }
+        return parsedData.data.reverse(); // Show newest first by default
+      } else {
+        console.error(`Zod validation error for ${dbPath}:`, parsedData.error.flatten());
+        return [];
       }
-      callback(items);
-    }, (error) => {
-      console.error(`Error fetching ${dbPath}:`, error);
-      callback([]);
-    });
-
-    return unsubscribe;
-  };
+    }
+    return [];
+  } catch (error) {
+    console.error(`Error fetching data from ${dbPath}:`, error);
+    return [];
+  }
 }
 
-export const subscribeToToppers = createDataSubscriber(z.array(topperSchema), 'toppers');
-export const subscribeToTeachers = createDataSubscriber(z.array(teacherSchema), 'teachers', 3, 'asc');
-export const subscribeToEvents = createDataSubscriber(z.array(eventSchema), 'events', 3, 'desc');
-export const subscribeToGallery = createDataSubscriber(z.array(galleryItemSchema), 'gallery', 4, 'desc');
-export const subscribeToTestimonials = createDataSubscriber(z.array(testimonialSchema), 'testimonials');
-export const subscribeToFaqs = createDataSubscriber(z.array(faqSchema), 'faqs');
-export const subscribeToBoardStudents = createDataSubscriber(z.array(boardStudentSchema), 'boardStudents');
 
+export const getToppers = () => fetchData<Topper>('toppers', z.array(topperSchema));
+export const getTeachers = () => fetchData<Teacher>('teachers', z.array(teacherSchema));
+export const getEvents = () => fetchData<Event>('events', z.array(eventSchema));
+export const getGalleryItems = () => fetchData<GalleryItem>('gallery', z.array(galleryItemSchema));
+export const getTestimonials = () => fetchData<Testimonial>('testimonials', z.array(testimonialSchema));
+export const getFaqs = () => fetchData<FAQ>('faqs', z.array(faqSchema));
+export const getBoardStudents = () => fetchData<BoardStudent>('boardStudents', z.array(boardStudentSchema));
 
 export async function getSettings() {
     try {

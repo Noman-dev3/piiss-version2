@@ -17,42 +17,25 @@ import { useToast } from "@/hooks/use-toast";
 import { Send, Clock, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { contactInfo, contactForm } from "@/lib/data";
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
 
-export default function ContactSection() {
+interface ContactSectionProps {
+    content: {
+        address: string;
+        phone: string;
+        email: string;
+        officeHours: string;
+        imageUrl: string;
+    };
+}
+
+export default function ContactSection({ content }: ContactSectionProps) {
   const { toast } = useToast();
-  const [info, setInfo] = useState({
-    address: "",
-    phone: "",
-    email: "",
-    officeHours: "",
-    imageUrl: contactInfo.image.src,
-  });
-
-  useEffect(() => {
-    const settingsRef = ref(db, 'settings');
-    const unsubscribe = onValue(settingsRef, (snapshot) => {
-      if(snapshot.exists()) {
-        const data = snapshot.val();
-        setInfo({
-          address: data.contactAddress || "",
-          phone: data.contactPhone || "",
-          email: data.contactEmail || "",
-          officeHours: data.officeHours || "",
-          imageUrl: data.contactImageUrl || contactInfo.image.src
-        });
-      }
-    });
-    return () => unsubscribe();
-  }, []);
 
   const currentContactInfo = [
-      { icon: <MapPin className="w-6 h-6 text-primary" />, title: "Address", value: info.address },
-      { icon: <Phone className="w-6 h-6 text-primary" />, title: "Phone", value: info.phone },
-      { icon: <Mail className="w-6 h-6 text-primary" />, title: "Email", value: info.email },
-      { icon: <Clock className="w-6 h-6 text-primary" />, title: "Office Hours", value: info.officeHours },
+      { icon: <MapPin className="w-6 h-6 text-primary" />, title: "Address", value: content.address },
+      { icon: <Phone className="w-6 h-6 text-primary" />, title: "Phone", value: content.phone },
+      { icon: <Mail className="w-6 h-6 text-primary" />, title: "Email", value: content.email },
+      { icon: <Clock className="w-6 h-6 text-primary" />, title: "Office Hours", value: content.officeHours },
   ];
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -133,7 +116,7 @@ export default function ContactSection() {
               </div>
              <Card className="overflow-hidden rounded-xl shadow-lg mt-8">
               <Image
-                src={info.imageUrl}
+                src={content.imageUrl}
                 alt={contactInfo.image.alt}
                 width={600}
                 height={400}

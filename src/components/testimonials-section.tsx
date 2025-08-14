@@ -14,17 +14,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { testimonialsSection } from "@/lib/data";
 import { Testimonial } from "@/app/admin/data-schemas";
-import { subscribeToTestimonials } from "@/lib/data-fetching";
 
-export default function TestimonialsSection() {
-  const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
+interface TestimonialsSectionProps {
+  testimonials: Testimonial[];
+}
 
-  React.useEffect(() => {
-    const unsubscribe = subscribeToTestimonials((data) => {
-        setTestimonials(data);
-    });
-    return () => unsubscribe();
-  }, []);
+export default function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
 
   return (
     <section id="testimonials" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary/50">
@@ -42,7 +37,7 @@ export default function TestimonialsSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {testimonialsSection.description}
         </p>
-        {testimonials.length > 0 ? (
+        {testimonials && testimonials.length > 0 ? (
           <Carousel
             opts={{
               align: "start",

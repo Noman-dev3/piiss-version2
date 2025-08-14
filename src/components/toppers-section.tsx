@@ -15,18 +15,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toppersSection } from "@/lib/data";
 import { Topper } from "@/app/admin/data-schemas";
-import { subscribeToToppers } from "@/lib/data-fetching";
 
-export default function ToppersSection() {
-  const [toppers, setToppers] = React.useState<Topper[]>([]);
+interface ToppersSectionProps {
+  toppers: Topper[];
+}
 
-  React.useEffect(() => {
-    const unsubscribe = subscribeToToppers((data) => {
-      setToppers(data);
-    });
-    return () => unsubscribe();
-  }, []);
-
+export default function ToppersSection({ toppers }: ToppersSectionProps) {
 
   return (
     <section id="results" className="py-20 lg:py-32 px-6 lg:px-12">
@@ -44,7 +38,7 @@ export default function ToppersSection() {
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
           {toppersSection.description}
         </p>
-        {toppers.length > 0 ? (
+        {toppers && toppers.length > 0 ? (
           <Carousel
             opts={{
               align: "start",

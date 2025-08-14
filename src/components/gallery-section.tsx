@@ -9,19 +9,13 @@ import Image from "next/image";
 import { gallerySection } from "@/lib/data";
 import { GalleryItem } from "@/app/admin/data-schemas";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { subscribeToGallery } from "@/lib/data-fetching";
+import React from "react";
 
-export default function GallerySection() {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+interface GallerySectionProps {
+  galleryItems: GalleryItem[];
+}
 
-  useEffect(() => {
-    const unsubscribe = subscribeToGallery((data) => {
-      setGalleryItems(data);
-    });
-    return () => unsubscribe();
-  }, []);
-
+export default function GallerySection({ galleryItems }: GallerySectionProps) {
   return (
     <section id="gallery" className="py-20 lg:py-32 px-6 lg:px-12">
       <div className="container mx-auto text-center">
@@ -38,7 +32,7 @@ export default function GallerySection() {
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
           {gallerySection.description}
         </p>
-        {galleryItems.length > 0 ? (
+        {galleryItems && galleryItems.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {galleryItems.map((item, index) => (
                 <div key={index} className="group perspective-1000">

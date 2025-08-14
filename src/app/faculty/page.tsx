@@ -1,35 +1,11 @@
 import { Header } from "@/components/header";
-import { db } from "@/lib/firebase";
-import { ref, get, query } from "firebase/database";
 import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
-import { z } from "zod";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen } from "lucide-react";
+import { getTeachers } from "@/lib/data-fetching";
 
-
-async function getAllTeachers(): Promise<Teacher[]> {
-    const dbRef = query(ref(db, 'teachers'));
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(teacherSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                return parsedItems.data;
-            }
-        }
-        return [];
-    } catch (error) {
-        console.error("Error fetching teachers:", error);
-        return [];
-    }
-}
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
@@ -78,7 +54,7 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
 
 
 export default async function AllFacultyPage() {
-  const teachers = await getAllTeachers();
+  const teachers = await getTeachers();
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />

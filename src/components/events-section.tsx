@@ -9,18 +9,13 @@ import { eventsSection } from "@/lib/data";
 import { Event } from "@/app/admin/data-schemas";
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { subscribeToEvents } from "@/lib/data-fetching";
+import React from "react";
 
-export default function EventsSection() {
-  const [events, setEvents] = useState<Event[]>([]);
+interface EventsSectionProps {
+  events: Event[];
+}
 
-  useEffect(() => {
-    const unsubscribe = subscribeToEvents((data) => {
-      setEvents(data);
-    });
-    return () => unsubscribe();
-  }, []);
+export default function EventsSection({ events }: EventsSectionProps) {
 
   return (
     <section id="events" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary/50">
@@ -37,7 +32,7 @@ export default function EventsSection() {
           {eventsSection.description}
         </p>
 
-        {events.length > 0 ? (
+        {events && events.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
             {events.map((event, index) => (
                 <div key={index} className="group perspective-1000">

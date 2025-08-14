@@ -11,9 +11,44 @@ import { Hero } from "@/components/hero";
 import TeachersSection from "@/components/teachers-section";
 import TestimonialsSection from "@/components/testimonials-section";
 import ToppersSection from "@/components/toppers-section";
+import { getBoardStudents, getEvents, getFaqs, getGalleryItems, getSettings, getTeachers, getTestimonials, getToppers } from "@/lib/data-fetching";
 
 
-export default function Home() {
+export default async function Home() {
+  // Fetch all data on the server in parallel
+  const [
+    settings,
+    toppers,
+    boardStudents,
+    teachers,
+    events,
+    galleryItems,
+    testimonials,
+    faqs
+  ] = await Promise.all([
+    getSettings(),
+    getToppers(),
+    getBoardStudents(),
+    getTeachers(),
+    getEvents(),
+    getGalleryItems(),
+    getTestimonials(),
+    getFaqs()
+  ]);
+
+  const aboutContent = {
+    description: settings.ourStory || "",
+    imageUrl: settings.aboutImageUrl || "https://placehold.co/600x450.png",
+  };
+
+  const contactContent = {
+    address: settings.contactAddress || "",
+    phone: settings.contactPhone || "",
+    email: settings.contactEmail || "",
+    officeHours: settings.officeHours || "",
+    imageUrl: settings.contactImageUrl || "https://placehold.co/600x400.png",
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -21,15 +56,15 @@ export default function Home() {
         <Hero />
         <Features />
         <AdBanner />
-        <AboutSection />
-        <ToppersSection />
-        <BoardResultsSection />
-        <TeachersSection />
-        <EventsSection />
-        <GallerySection />
-        <TestimonialsSection />
-        <FaqSection />
-        <ContactSection />
+        <AboutSection content={aboutContent} />
+        <ToppersSection toppers={toppers} />
+        <BoardResultsSection boardStudents={boardStudents} />
+        <TeachersSection teachers={teachers.slice(0, 3)} />
+        <EventsSection events={events.slice(0, 3)} />
+        <GallerySection galleryItems={galleryItems.slice(0, 4)} />
+        <TestimonialsSection testimonials={testimonials} />
+        <FaqSection faqs={faqs} />
+        <ContactSection content={contactContent} />
       </main>
     </div>
   );

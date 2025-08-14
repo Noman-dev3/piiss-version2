@@ -14,19 +14,13 @@ import {
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
 import { BoardStudent } from "@/app/admin/data-schemas";
-import { subscribeToBoardStudents } from "@/lib/data-fetching";
 
-export default function BoardResultsSection() {
-  const [boardStudents, setBoardStudents] = React.useState<BoardStudent[]>([]);
-  
-  React.useEffect(() => {
-    const unsubscribe = subscribeToBoardStudents((data) => {
-      setBoardStudents(data);
-    });
-    return () => unsubscribe();
-  }, []);
+interface BoardResultsSectionProps {
+  boardStudents: BoardStudent[];
+}
 
-  if (boardStudents.length === 0) {
+export default function BoardResultsSection({ boardStudents }: BoardResultsSectionProps) {
+  if (!boardStudents || boardStudents.length === 0) {
     return null;
   }
 
