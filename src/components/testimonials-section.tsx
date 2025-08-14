@@ -87,8 +87,8 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex" />
-            <CarouselNext className="hidden sm:flex" />
+            <CarouselPrevious className="hidden sm:flex -left-4" />
+            <CarouselNext className="hidden sm:flex -right-4" />
           </Carousel>
         ): (
           <p className="text-center text-muted-foreground">No testimonials yet. Be the first to share your experience!</p>

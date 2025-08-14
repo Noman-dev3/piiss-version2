@@ -81,8 +81,8 @@ export default function ToppersSection({ toppers }: ToppersSectionProps) {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex" />
-            <CarouselNext className="hidden sm:flex" />
+            <CarouselPrevious className="hidden sm:flex -left-4" />
+            <CarouselNext className="hidden sm:flex -right-4" />
           </Carousel>
         ) : (
             <p className="text-center text-muted-foreground">Our top performers will be announced soon!</p>
