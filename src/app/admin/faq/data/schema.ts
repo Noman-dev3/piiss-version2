@@ -1,10 +1,7 @@
 
 import { z } from "zod";
+import { faqSchema as baseFaqSchema } from "@/app/admin/data-schemas";
 
-export const faqSchema = z.object({
-  id: z.string(),
-  question: z.string().min(10, "Question must be at least 10 characters long."),
-  answer: z.string().min(10, "Answer must be at least 10 characters long."),
-});
+export const faqSchema = baseFaqSchema;
 
 export type FAQ = z.infer<typeof faqSchema>;

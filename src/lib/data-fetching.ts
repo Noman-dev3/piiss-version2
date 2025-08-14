@@ -33,9 +33,6 @@ async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, 
            sortedData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         } else if (sortedData.length > 0 && sortedData[0].submittedAt) {
             sortedData.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
-        } else {
-          // Fallback to reverse chronological order for other data
-          sortedData.reverse();
         }
         return sortedData;
       } else {
