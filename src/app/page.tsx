@@ -1,6 +1,8 @@
 
+
 import AboutSection from "@/components/about-section";
 import { AdBanner } from "@/components/ad-banner";
+import { BackToTopButton } from "@/components/back-to-top-button";
 import BoardResultsSection from "@/components/board-results-section";
 import ContactSection from "@/components/contact-section";
 import EventsSection from "@/components/events-section";
@@ -80,7 +82,7 @@ export default async function Home() {
         <ContactSection content={contactContent} />
       </main>
       <Footer content={footerContent} />
+      <BackToTopButton />
     </div>
   );
 }
-

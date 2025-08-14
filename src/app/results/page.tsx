@@ -1,5 +1,7 @@
 
+
 "use client"
+import { BackToTopButton } from "@/components/back-to-top-button";
 import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -230,6 +232,7 @@ export default function ResultsPage() {
                 </div>
             </main>
             <Footer content={footerContent} />
+            <BackToTopButton />
         </div>
     );
 }

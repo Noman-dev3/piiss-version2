@@ -1,4 +1,6 @@
 
+
+import { BackToTopButton } from "@/components/back-to-top-button";
 import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { db } from "@/lib/firebase";
@@ -68,6 +70,7 @@ export default async function AllEventsPage() {
         </div>
       </main>
       <Footer content={footerContent} />
+      <BackToTopButton />
     </div>
   );
 }

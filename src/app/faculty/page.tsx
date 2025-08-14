@@ -1,4 +1,6 @@
 
+
+import { BackToTopButton } from "@/components/back-to-top-button";
 import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { Teacher } from "@/app/admin/teachers/data/schema";
@@ -89,6 +91,7 @@ export default async function AllFacultyPage() {
         </div>
       </main>
       <Footer content={footerContent} />
+      <BackToTopButton />
     </div>
   );
 }

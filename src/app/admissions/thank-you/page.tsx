@@ -1,4 +1,6 @@
 
+
+import { BackToTopButton } from "@/components/back-to-top-button";
 import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
@@ -45,6 +47,7 @@ export default async function ThankYouPage() {
         </div>
       </main>
       <Footer content={footerContent} />
+      <BackToTopButton />
     </div>
   );
 }
