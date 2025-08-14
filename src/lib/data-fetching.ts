@@ -9,12 +9,13 @@ import {
   galleryItemSchema, GalleryItem,
   testimonialSchema, Testimonial,
   faqSchema, FAQ,
-  boardStudentSchema, BoardStudent
+  boardStudentSchema, BoardStudent,
+  resultSchema, Result,
 } from "@/app/admin/data-schemas";
 import { hero } from "./data";
 
 // A generic function to fetch data once from Firebase
-async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, any, any>>): Promise<T[]> {
+async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.AnyZodObject>): Promise<T[]> {
   try {
     const dataRef = ref(db, dbPath);
     const snapshot = await get(dataRef);
@@ -28,7 +29,7 @@ async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, 
       const parsedData = schema.safeParse(dataArray);
       
       if (parsedData.success) {
-        let sortedData = parsedData.data;
+        let sortedData = parsedData.data as T[];
         // Generic date sorting for schemas that have it
         if (sortedData.length > 0 && 'date' in sortedData[0]) {
            sortedData.sort((a, b) => new Date((b as any).date).getTime() - new Date((a as any).date).getTime());
