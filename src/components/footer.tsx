@@ -5,6 +5,7 @@ import Link from "next/link";
 import { GraduationCap, Facebook, Instagram, Linkedin, Twitter, ArrowUp } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { header } from "@/lib/data";
+import { Button } from "./ui/button";
 
 interface FooterProps {
   content: {
@@ -41,12 +42,27 @@ const Footer = ({ content }: FooterProps) => {
     !user ? { label: "Admin Portal", href: "/admin" } : { label: "Dashboard", href: "/admin" },
   ];
 
+  const handleScrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   return (
-    <footer className="bg-secondary text-secondary-foreground relative overflow-hidden">
+    <footer className="bg-secondary text-secondary-foreground relative overflow-hidden rounded-t-2xl">
       <div className="absolute inset-0 z-0">
           <div className="absolute -bottom-1/2 -right-1/4 w-full h-full border-t border-r border-border/10 transform -rotate-45 rounded-full"></div>
           <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 border-b border-l border-border/10 transform rotate-12 rounded-full"></div>
       </div>
+
+       <Button
+        variant="outline"
+        size="icon"
+        className="absolute -top-6 right-8 rounded-full h-12 w-12 bg-secondary hover:bg-muted/50 shadow-lg z-20"
+        onClick={handleScrollTop}
+        aria-label="Back to Top"
+      >
+        <ArrowUp className="h-6 w-6" />
+      </Button>
+
       <div className="container mx-auto px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           <div className="md:col-span-5 lg:col-span-4 space-y-6">
@@ -77,10 +93,6 @@ const Footer = ({ content }: FooterProps) => {
                 ) : null
               )}
             </div>
-            <a href="#home" className="inline-flex items-center gap-2 text-sm font-medium border border-border px-4 py-2 rounded-md hover:bg-muted/50 transition-colors">
-              <ArrowUp className="h-4 w-4" />
-              BACK TO TOP
-            </a>
           </div>
 
           <div className="md:col-span-3 lg:col-span-2 lg:col-start-8">
