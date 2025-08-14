@@ -36,7 +36,7 @@ export const BackToTopButton = () => {
                 size="icon"
                 onClick={scrollToTop}
                 className={cn(
-                    "h-12 w-12 rounded-full bg-secondary shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:bg-muted/50",
+                    "h-12 w-12 rounded-full bg-secondary shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:bg-muted/50 animate-float",
                     "transform",
                     isVisible ? "scale-100 opacity-100" : "scale-0 opacity-0"
                 )}
