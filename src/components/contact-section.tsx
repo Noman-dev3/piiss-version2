@@ -120,13 +120,15 @@ export default function ContactSection() {
              <h2 className="text-4xl font-bold mb-6 font-headline">{contactInfo.title}</h2>
               <div className="space-y-6">
                 {currentContactInfo.map((item, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="p-3 bg-background rounded-full">{item.icon}</div>
-                    <div>
-                      <h4 className="font-semibold">{item.title}</h4>
-                      <p className="text-muted-foreground whitespace-pre-line">{item.value}</p>
+                  item.value ? (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className="p-3 bg-background rounded-full">{item.icon}</div>
+                      <div>
+                        <h4 className="font-semibold">{item.title}</h4>
+                        <p className="text-muted-foreground whitespace-pre-line">{item.value}</p>
+                      </div>
                     </div>
-                  </div>
+                  ) : null
                 ))}
               </div>
              <Card className="overflow-hidden rounded-xl shadow-lg mt-8">

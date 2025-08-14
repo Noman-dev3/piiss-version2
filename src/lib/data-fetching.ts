@@ -40,11 +40,11 @@ function createDataSubscriber<T>(
         const parsedItems = schema.safeParse(itemsArray);
         if (parsedItems.success) {
           items = parsedItems.data;
-          if (order === 'desc' && items.length > 0 && 'date' in items[0]) {
+          if (items.length > 0 && 'date' in items[0] && typeof (items[0] as any).date === 'string') {
               // @ts-ignore
               items.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
           }
-           if (limit && order === 'desc') {
+           if (limit && order === 'desc' && !('date' in items[0])) {
              items = items.reverse();
            }
         } else {
