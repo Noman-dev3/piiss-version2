@@ -1,18 +1,15 @@
-
 "use client";
 
-import * as THREE from "three";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useTheme } from "next-themes";
 
 const colors = [
-  new THREE.Color("#87CEEB"), // primary
-  new THREE.Color("#FFDAB9"), // accent
-  new THREE.Color("#fde047"), // yellow-300
-  new THREE.Color("#f87171"), // red-400
-  new THREE.Color("#60a5fa"), // blue-400
-  new THREE.Color("#4ade80"), // green-400
+  "#87CEEB", // primary
+  "#FFDAB9", // accent
+  "#fde047", // yellow-300
+  "#f87171", // red-400
+  "#60a5fa", // blue-400
+  "#4ade80", // green-400
 ];
 
 function LittleCube({ position }: { position: [number, number, number] }) {
@@ -53,9 +50,11 @@ export function PuzzleCube() {
   }, []);
 
   useFrame((state, delta) => {
-    groupRef.current.rotation.x += delta * 0.2;
-    groupRef.current.rotation.y += delta * 0.2;
-    groupRef.current.rotation.z += delta * 0.2;
+    if (groupRef.current) {
+        groupRef.current.rotation.x += delta * 0.2;
+        groupRef.current.rotation.y += delta * 0.2;
+        groupRef.current.rotation.z += delta * 0.2;
+    }
   });
 
   return <group ref={groupRef}>{cubes}</group>;
