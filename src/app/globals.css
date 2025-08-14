@@ -220,75 +220,52 @@
   }
 }
 
-/* Hypnotic Loader */
-.hypnotic-loader {
-  --size: 80px;
-  width: var(--size);
-  height: var(--size);
-  position: relative;
+/* Hourglass Loader */
+.hourglass-loader {
+  --c1: hsl(var(--primary));
+  --c2: hsl(var(--accent));
+  width: 40px;
+  height: 80px;
+  border-top: 4px solid var(--c1);
+  border-bottom: 4px solid var(--c1);
+  background: linear-gradient(90deg, var(--c1) 2px, var(--c2) 0 5px, var(--c1) 0) 50%/7px 8px no-repeat;
+  display: grid;
+  overflow: hidden;
+  animation: l5-0 2s infinite linear;
 }
-.circle-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.circle-svg circle {
-  fill: none;
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke: hsl(var(--primary));
-}
-.circle-svg .bg {
-  stroke: hsl(var(--secondary));
-}
-.circle-svg .fg {
-  stroke-dasharray: 282.74; /* 2 * PI * 45 */
-  stroke-dashoffset: 282.74;
-  animation: circle-fill 2s ease-in-out infinite alternate,
-             circle-spin 2.5s linear infinite;
-  transform-origin: 50% 50%;
-}
-.hypnotic-loader::before,
-.hypnotic-loader::after {
+.hourglass-loader::before,
+.hourglass-loader::after {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 4px dashed hsl(var(--accent));
-  animation: spin 6s linear infinite;
+  grid-area: 1/1;
+  width: 75%;
+  height: calc(50% - 4px);
+  margin: 0 auto;
+  border: 2px solid var(--c1);
+  border-top: 0;
+  box-sizing: content-box;
+  border-radius: 0 0 40% 40%;
+  -webkit-mask: 
+    linear-gradient(#000 0 0) bottom/4px 2px no-repeat,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  background: 
+    linear-gradient(var(--d, 0deg), var(--c2) 50%, #0000 0) bottom /100% 205%,
+    linear-gradient(var(--c2) 0 0) center/0 100%;
+  background-repeat: no-repeat;
+  animation: inherit;
+  animation-name: l5-1;
 }
-.hypnotic-loader::after {
-  border-style: solid;
-  border-color: hsl(var(--primary) / 0.5);
-  animation: spin 3s linear infinite reverse;
+.hourglass-loader::after {
+  transform-origin: 50% calc(100% + 2px);
+  transform: scaleY(-1);
+  --d: 180deg;
 }
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes l5-0 {
+  80% { transform: rotate(0); }
+  100% { transform: rotate(0.5turn); }
 }
-
-@keyframes circle-fill {
-  0% {
-    stroke-dashoffset: 282.74;
-  }
-  100% {
-    stroke-dashoffset: 70;
-  }
+@keyframes l5-1 {
+  10%, 70% { background-size: 100% 205%, var(--s, 0) 100%; }
+  70%, 100% { background-position: top, center; }
 }
-@keyframes circle-spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
