@@ -48,7 +48,6 @@ export default async function Home() {
     phone: settings.contactPhone || "",
     email: settings.contactEmail || "",
     officeHours: settings.officeHours || "",
-    imageUrl: settings.contactImageUrl || "https://placehold.co/600x400.png",
   };
 
   const heroTaglines = Array.isArray(settings.heroTaglines) && settings.heroTaglines.length > 0 

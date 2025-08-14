@@ -15,8 +15,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Send, Clock, Mail, MapPin, Phone } from "lucide-react";
-import Image from "next/image";
-import { contactInfo, contactForm } from "@/lib/data";
+import { contactForm } from "@/lib/data";
 
 interface ContactSectionProps {
     content: {
@@ -24,7 +23,6 @@ interface ContactSectionProps {
         phone: string;
         email: string;
         officeHours: string;
-        imageUrl: string;
     };
 }
 
@@ -100,7 +98,7 @@ export default function ContactSection({ content }: ContactSectionProps) {
             </form>
           </div>
           <div className="flex flex-col">
-             <h2 className="text-4xl font-bold mb-6 font-headline">{contactInfo.title}</h2>
+             <h2 className="text-4xl font-bold mb-6 font-headline">Contact Information</h2>
               <div className="space-y-6">
                 {currentContactInfo.map((item, index) => (
                   item.value ? (
@@ -114,15 +112,17 @@ export default function ContactSection({ content }: ContactSectionProps) {
                   ) : null
                 ))}
               </div>
-             <Card className="overflow-hidden rounded-xl shadow-lg mt-8">
-              <Image
-                src={content.imageUrl || contactInfo.image.src}
-                alt={contactInfo.image.alt}
-                width={600}
-                height={400}
-                className="w-full h-auto object-cover"
-                data-ai-hint={contactInfo.image.hint}
-              />
+             <Card className="overflow-hidden rounded-xl shadow-lg mt-8 aspect-video">
+                <iframe
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=72.45%2C34.56%2C72.47%2C34.58&layer=mapnik&marker=34.57,72.46"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="School Location Map"
+                ></iframe>
             </Card>
           </div>
         </div>
