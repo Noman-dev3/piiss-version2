@@ -15,7 +15,7 @@ import {
 import { hero } from "./data";
 
 // A generic function to fetch data once from Firebase
-async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.AnyZodObject>): Promise<T[]> {
+async function fetchData<T extends { id: string }>(dbPath: string, schema: z.ZodArray<z.AnyZodObject>): Promise<T[]> {
   try {
     const dataRef = ref(db, dbPath);
     const snapshot = await get(dataRef);
@@ -45,7 +45,7 @@ async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.AnyZodObject>):
          const validItems = dataArray
           .map(item => {
             const result = schema.element.safeParse(item);
-            return result.success ? result.data : null;
+            return result.success ? result.data as T : null;
           })
           .filter((item): item is T => item !== null);
         return validItems;
