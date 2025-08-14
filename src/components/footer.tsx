@@ -40,6 +40,7 @@ const Footer = ({ content }: FooterProps) => {
     { label: "Privacy Policy", href: "#" },
     { label: "Terms of Service", href: "#" },
     !user ? { label: "Admin Portal", href: "/admin" } : { label: "Dashboard", href: "/admin" },
+    { label: "Sitemap", href: "/sitemap.xml" },
   ];
 
   return (
