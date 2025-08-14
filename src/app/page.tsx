@@ -12,6 +12,7 @@ import Footer from "@/components/footer";
 import GallerySection from "@/components/gallery-section";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
+import LazyLoad from "@/components/lazy-load";
 import TeachersSection from "@/components/teachers-section";
 import TestimonialsSection from "@/components/testimonials-section";
 import ToppersSection from "@/components/toppers-section";
@@ -67,20 +68,40 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1">
-        <Hero taglines={heroTaglines} />
-        <Features />
-        <AdBanner />
-        <AboutSection content={aboutContent} />
-        <ToppersSection toppers={toppers} />
-        <BoardResultsSection boardStudents={boardStudents} />
-        <TeachersSection teachers={teachers.slice(0, 3)} />
-        <EventsSection events={events.slice(0, 3)} />
-        <GallerySection galleryItems={galleryItems.slice(0, 4)} />
-        <TestimonialsSection testimonials={testimonials} />
-        <FaqSection faqs={faqs} />
-        <ContactSection content={contactContent} />
-      </main>
+      <div className="flex-grow">
+        <main className="flex-1">
+          <Hero taglines={heroTaglines} />
+          <Features />
+          <AdBanner />
+          <LazyLoad>
+            <AboutSection content={aboutContent} />
+          </LazyLoad>
+          <LazyLoad>
+            <ToppersSection toppers={toppers} />
+          </LazyLoad>
+          <LazyLoad>
+            <BoardResultsSection boardStudents={boardStudents} />
+          </LazyLoad>
+          <LazyLoad>
+            <TeachersSection teachers={teachers.slice(0, 3)} />
+          </LazyLoad>
+          <LazyLoad>
+            <EventsSection events={events.slice(0, 3)} />
+          </LazyLoad>
+          <LazyLoad>
+            <GallerySection galleryItems={galleryItems.slice(0, 4)} />
+          </LazyLoad>
+          <LazyLoad>
+            <TestimonialsSection testimonials={testimonials} />
+          </LazyLoad>
+          <LazyLoad>
+            <FaqSection faqs={faqs} />
+          </LazyLoad>
+          <LazyLoad>
+            <ContactSection content={contactContent} />
+          </LazyLoad>
+        </main>
+      </div>
       <Footer content={footerContent} />
       <BackToTopButton />
     </div>

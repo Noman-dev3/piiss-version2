@@ -12,7 +12,8 @@ import { Preloader } from "@/components/preloader";
 const ptSans = PT_Sans({ 
   subsets: ["latin"], 
   variable: "--font-sans",
-  weight: ['400', '700'] 
+  weight: ['400', '700'],
+  display: 'swap',
 });
 
 export default function RootLayout({
