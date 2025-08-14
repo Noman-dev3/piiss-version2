@@ -33,7 +33,7 @@ export default function ContactSection() {
 
   useEffect(() => {
     const settingsRef = ref(db, 'settings');
-    onValue(settingsRef, (snapshot) => {
+    const unsubscribe = onValue(settingsRef, (snapshot) => {
       if(snapshot.exists()) {
         const data = snapshot.val();
         setInfo({
@@ -45,6 +45,7 @@ export default function ContactSection() {
         });
       }
     });
+    return () => unsubscribe();
   }, []);
 
   const currentContactInfo = [
@@ -130,7 +131,7 @@ export default function ContactSection() {
               </div>
              <Card className="overflow-hidden rounded-xl shadow-lg mt-8">
               <Image
-                src={info.imageUrl || "https://placehold.co/600x400.png"}
+                src={info.imageUrl}
                 alt={contactInfo.image.alt}
                 width={600}
                 height={400}

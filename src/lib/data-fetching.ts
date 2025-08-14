@@ -39,7 +39,7 @@ function createDataSubscriber<T>(
         const parsedItems = schema.safeParse(itemsArray);
         if (parsedItems.success) {
           items = parsedItems.data;
-          if (order === 'desc' && 'date' in items[0]) {
+          if (order === 'desc' && items.length > 0 && 'date' in items[0]) {
               // @ts-ignore
               items.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
           }
