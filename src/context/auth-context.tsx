@@ -6,7 +6,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AdminSidebar } from '@/components/admin-sidebar';
 
 interface AuthContextType {
   user: User | null;

@@ -10,6 +10,7 @@ import { teachersSection } from "@/lib/data";
 import { Teacher } from "@/app/admin/data-schemas";
 import Link from "next/link";
 import React from "react";
+import { formatExperience } from "@/lib/utils";
 
 interface TeachersSectionProps {
   teachers: Teacher[];
@@ -31,7 +32,7 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
             />
           </div>
           <h3 className="text-xl font-bold font-headline">{teacher.name}</h3>
-          <p className="text-muted-foreground text-sm mb-3">{teacher.experience}</p>
+          <p className="text-muted-foreground text-sm mb-3">{formatExperience(teacher.experience)}</p>
           <Badge
             variant="outline"
             className="mb-6 bg-background/50"
@@ -42,15 +43,15 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
 
           <div className="w-full text-left space-y-2">
              <p className="text-sm truncate">
-              <span className="text-muted-foreground font-semibold">Bio:</span>
+              <span className="font-semibold text-muted-foreground">Bio:</span>
               <span className="font-medium ml-1">{teacher.bio || "N/A"}</span>
             </p>
              <p className="text-sm truncate">
-              <span className="text-muted-foreground font-semibold">Joined:</span>
+              <span className="font-semibold text-muted-foreground">Joined:</span>
               <span className="font-medium ml-1">{teacher.dateJoined}</span>
             </p>
              <p className="text-sm truncate">
-              <span className="text-muted-foreground font-semibold">Contact:</span>
+              <span className="font-semibold text-muted-foreground">Contact:</span>
               <span className="font-medium ml-1">{teacher.contact}</span>
             </p>
           </div>
