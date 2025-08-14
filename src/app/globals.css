@@ -224,11 +224,23 @@
   width: 120px;
   height: 20px;
   border-radius: 20px;
+  --c1: hsl(var(--primary));
+  --c2: hsl(var(--accent));
+  --c3: #4ade80; /* green-400 */
+  --c4: #f87171; /* red-400 */
+
   background:
-   repeating-linear-gradient(135deg, hsl(var(--primary)) 0 10px, hsl(var(--accent)) 0 20px) 0/0% no-repeat,
-   repeating-linear-gradient(135deg, hsl(var(--muted)) 0 10px, hsl(var(--secondary)) 0 20px) 0/100%;
-  animation: l3 2s infinite;
+   repeating-linear-gradient(135deg,var(--c1) 0 10px,var(--c2) 0 20px) 0/0%   no-repeat,
+   repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px) 0/100%;
+  animation: l3 8s infinite;
 }
 @keyframes l3 {
-    100% {background-size:100%}
+  0%   {background-size:0%   100%; background-image: repeating-linear-gradient(135deg,var(--c1) 0 10px,var(--c2) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  25%  {background-size:100% 100%; background-image: repeating-linear-gradient(135deg,var(--c1) 0 10px,var(--c2) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  25.1% {background-size:0%   100%; background-image: repeating-linear-gradient(135deg,var(--c2) 0 10px,var(--c3) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  50%  {background-size:100% 100%; background-image: repeating-linear-gradient(135deg,var(--c2) 0 10px,var(--c3) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  50.1% {background-size:0%   100%; background-image: repeating-linear-gradient(135deg,var(--c3) 0 10px,var(--c4) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  75%  {background-size:100% 100%; background-image: repeating-linear-gradient(135deg,var(--c3) 0 10px,var(--c4) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  75.1% {background-size:0%   100%; background-image: repeating-linear-gradient(135deg,var(--c4) 0 10px,var(--c1) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
+  100% {background-size:100% 100%; background-image: repeating-linear-gradient(135deg,var(--c4) 0 10px,var(--c1) 0 20px), repeating-linear-gradient(135deg,hsl(var(--muted)) 0 10px,hsl(var(--secondary)) 0 20px)}
 }
