@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -8,24 +9,6 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-  },
-  sitemap: async () => {
-    const baseUrl = 'https://piiss.vercel.app';
-    const staticRoutes = [
-      '/',
-      '/admissions',
-      '/results',
-      '/events',
-      '/faculty',
-      '/gallery',
-    ];
-
-    return staticRoutes.map((route) => ({
-      url: `${baseUrl}${route}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: route === '/' ? 1 : 0.8,
-    }));
   },
 };
 
