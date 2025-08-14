@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/header";
 import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
 import Image from "next/image";
@@ -32,18 +33,18 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
             {teacher.department}
           </Badge>
 
-          <div className="w-full text-left space-y-3">
-             <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
-              <span className="text-muted-foreground">Bio</span>
-              <span className="font-semibold truncate">{teacher.bio}</span>
+          <div className="w-full text-left space-y-4">
+             <div className="text-sm">
+              <p className="text-muted-foreground font-semibold">Bio</p>
+              <p className="font-medium truncate">{teacher.bio || "N/A"}</p>
             </div>
-            <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
-              <span className="text-muted-foreground">Joined</span>
-              <span className="font-semibold">{teacher.dateJoined}</span>
+             <div className="text-sm">
+              <p className="text-muted-foreground font-semibold">Joined</p>
+              <p className="font-medium">{teacher.dateJoined}</p>
             </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground">Contact</span>
-              <span className="font-semibold">{teacher.contact}</span>
+             <div className="text-sm">
+              <p className="text-muted-foreground font-semibold">Contact</p>
+              <p className="font-medium">{teacher.contact}</p>
             </div>
           </div>
         </CardContent>
