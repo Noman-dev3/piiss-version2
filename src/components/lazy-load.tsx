@@ -13,14 +13,15 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, height = "80vh" }) => {
   const placeholderRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const node = placeholderRef.current; // Capture the current ref value
+
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             setIsVisible(true);
-            // Use the current value of the ref inside the callback
-            if (placeholderRef.current) {
-              obs.unobserve(placeholderRef.current);
+            if (node) {
+              obs.unobserve(node);
             }
           }
         });
@@ -28,18 +29,16 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, height = "80vh" }) => {
       { rootMargin: "0px 0px 200px 0px" } // Load 200px before it enters viewport
     );
 
-    // Use the current value of the ref when starting to observe
-    if (placeholderRef.current) {
-      observer.observe(placeholderRef.current);
+    if (node) {
+      observer.observe(node);
     }
 
     return () => {
-      // Use the current value of the ref for cleanup
-      if (placeholderRef.current) {
-        observer.unobserve(placeholderRef.current);
+      if (node) {
+        observer.unobserve(node);
       }
     };
-  }, []);
+  }, []); // The effect only needs to run once
 
   if (isVisible) {
     return <>{children}</>;
