@@ -43,7 +43,7 @@ export default function BoardResultsSection({ boardStudents }: BoardResultsSecti
           <Carousel
             opts={{
               align: "start",
-              loop: true,
+              loop: boardStudents.length > 1,
             }}
             className="w-full max-w-5xl mx-auto"
           >

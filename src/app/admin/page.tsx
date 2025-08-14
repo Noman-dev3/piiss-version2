@@ -8,6 +8,7 @@ import { db } from "@/lib/firebase";
 import { ref, get, query, orderByChild, equalTo } from "firebase/database";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 async function getDashboardData() {
     try {
@@ -112,13 +113,17 @@ export default function AdminPage() {
             <CardDescription>Common administrative tasks</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button variant="outline" size="lg" className="h-24 flex flex-col items-center justify-center gap-2">
-              <GraduationCap className="h-8 w-8" />
-              <span>Manage Students</span>
+            <Button variant="outline" size="lg" className="h-24 flex flex-col items-center justify-center gap-2" asChild>
+              <Link href="/admin/students">
+                  <GraduationCap className="h-8 w-8" />
+                  <span>Manage Students</span>
+              </Link>
             </Button>
-            <Button variant="outline" size="lg" className="h-24 flex flex-col items-center justify-center gap-2">
-              <Users className="h-8 w-8" />
-              <span>Manage Teachers</span>
+            <Button variant="outline" size="lg" className="h-24 flex flex-col items-center justify-center gap-2" asChild>
+               <Link href="/admin/teachers">
+                  <Users className="h-8 w-8" />
+                  <span>Manage Teachers</span>
+               </Link>
             </Button>
           </CardContent>
         </Card>

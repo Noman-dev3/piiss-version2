@@ -41,7 +41,7 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
           <Carousel
             opts={{
               align: "start",
-              loop: true,
+              loop: testimonials.length > 1,
             }}
             className="w-full max-w-5xl mx-auto"
           >

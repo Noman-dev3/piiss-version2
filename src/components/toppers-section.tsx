@@ -42,7 +42,7 @@ export default function ToppersSection({ toppers }: ToppersSectionProps) {
           <Carousel
             opts={{
               align: "start",
-              loop: true,
+              loop: toppers.length > 1,
             }}
             className="w-full max-w-4xl mx-auto"
           >

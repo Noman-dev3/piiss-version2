@@ -11,6 +11,7 @@ import {
   faqSchema, FAQ,
   boardStudentSchema, BoardStudent
 } from "@/app/admin/data-schemas";
+import { hero } from "./data";
 
 // A generic function to fetch data once from Firebase
 async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, any, any>>): Promise<T[]> {
@@ -33,6 +34,8 @@ async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, 
            sortedData.sort((a, b) => new Date((b as any).date).getTime() - new Date((a as any).date).getTime());
         } else if (sortedData.length > 0 && 'submittedAt' in sortedData[0]) {
             sortedData.sort((a, b) => new Date((b as any).submittedAt).getTime() - new Date((a as any).submittedAt).getTime());
+        } else if (sortedData.length > 0 && 'date_created' in sortedData[0]) {
+            sortedData.sort((a, b) => new Date((b as any).date_created).getTime() - new Date((a as any).date_created).getTime());
         }
         return sortedData;
       } else {
@@ -61,28 +64,39 @@ export const getGalleryItems = () => fetchData<GalleryItem>('gallery', z.array(g
 export const getTestimonials = () => fetchData<Testimonial>('testimonials', z.array(testimonialSchema));
 export const getFaqs = () => fetchData<FAQ>('faqs', z.array(faqSchema));
 export const getBoardStudents = () => fetchData<BoardStudent>('boardStudents', z.array(boardStudentSchema));
+export const getResults = () => fetchData<Result>('results', z.array(resultSchema));
+
+
+// Default settings object to prevent errors on the calling page
+const defaultSettings = {
+    ourStory: "",
+    logoUrl: "",
+    contactPhone: "",
+    contactEmail: "",
+    contactAddress: "",
+    officeHours: "",
+    aboutImageUrl: "",
+    contactImageUrl: "",
+    schoolDataUrl: "",
+    heroTaglines: [hero.subtitle],
+};
 
 export async function getSettings() {
     try {
         const settingsRef = ref(db, 'settings');
         const snapshot = await get(settingsRef);
         if (snapshot.exists()) {
-            return snapshot.val();
+            const fetchedSettings = snapshot.val();
+             // Ensure heroTaglines is an array for backward compatibility
+             if (typeof fetchedSettings.heroTaglines === 'string') {
+                fetchedSettings.heroTaglines = fetchedSettings.heroTaglines.split('\n').filter((line: string) => line.trim() !== '');
+            } else if (!Array.isArray(fetchedSettings.heroTaglines) || fetchedSettings.heroTaglines.length === 0) {
+                fetchedSettings.heroTaglines = [hero.subtitle];
+            }
+            return { ...defaultSettings, ...fetchedSettings };
         }
     } catch (error) {
         console.error("Error fetching settings:", error);
     }
-    // Return a default object to prevent errors on the calling page
-    return {
-        ourStory: "",
-        logoUrl: "",
-        contactPhone: "",
-        contactEmail: "",
-        contactAddress: "",
-        officeHours: "",
-        aboutImageUrl: "",
-        contactImageUrl: "",
-        schoolDataUrl: "",
-        heroTaglines: "",
-    };
+    return defaultSettings;
 }

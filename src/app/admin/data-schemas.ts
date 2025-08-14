@@ -9,19 +9,19 @@ export const topperSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long."),
   class: z.string().min(1, "Class cannot be empty."),
   score: z.string().min(1, "Score cannot be empty."),
-  imageUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal("")),
+  imageUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal("")).nullable(),
 });
 export type Topper = z.infer<typeof topperSchema>;
 
 
 export const teacherSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().min(1, "Name is required"),
   bio: z.string().optional().nullable(),
-  contact: z.string(),
-  dateJoined: z.string(),
-  department: z.string(),
-  experience: z.string(),
+  contact: z.string().min(1, "Contact is required"),
+  dateJoined: z.string().min(1, "Date joined is required"),
+  department: z.string().min(1, "Department is required"),
+  experience: z.string().min(1, "Experience is required"),
   imageUrl: z.string().url().optional().or(z.literal("")).nullable(),
 });
 export type Teacher = z.infer<typeof teacherSchema>;
@@ -33,14 +33,14 @@ export const eventSchema = z.object({
   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date format",
   }),
-  imageUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal("")),
+  imageUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal("")).nullable(),
 });
 export type Event = z.infer<typeof eventSchema>;
 
 export const galleryItemSchema = z.object({
   id: z.string(),
   title: z.string().min(3, "Title must be at least 3 characters long."),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   imageUrl: z.string().url("Please enter a valid URL."),
 });
 export type GalleryItem = z.infer<typeof galleryItemSchema>;
@@ -69,6 +69,22 @@ export const boardStudentSchema = z.object({
   boardRollNo: z.string().min(1, "Board Roll No. cannot be empty."),
   obtainedMarks: z.coerce.number().min(0, "Obtained marks must be a positive number."),
   totalMarks: z.coerce.number().min(1, "Total marks must be greater than 0."),
-  imageUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal("")),
+  imageUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal("")).nullable(),
 });
 export type BoardStudent = z.infer<typeof boardStudentSchema>;
+
+export const resultSchema = z.object({
+    id: z.string(),
+    class: z.string(),
+    date_created: z.string(),
+    grade: z.string(),
+    max_marks: z.number(),
+    percentage: z.number(),
+    roll_number: z.string(),
+    session: z.string(),
+    student_id: z.string(),
+    student_name: z.string(),
+    subjects: z.record(z.number()),
+    total_marks: z.number(),
+});
+export type Result = z.infer<typeof resultSchema>;
