@@ -65,23 +65,22 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="relative">
-        <main className="flex-1">
-          <Hero taglines={heroTaglines} />
-          <Features />
-          <AdBanner />
-          <AboutSection content={aboutContent} />
-          <ToppersSection toppers={toppers} />
-          <BoardResultsSection boardStudents={boardStudents} />
-          <TeachersSection teachers={teachers.slice(0, 3)} />
-          <EventsSection events={events.slice(0, 3)} />
-          <GallerySection galleryItems={galleryItems.slice(0, 4)} />
-          <TestimonialsSection testimonials={testimonials} />
-          <FaqSection faqs={faqs} />
-          <ContactSection content={contactContent} />
-        </main>
-        <Footer content={footerContent} />
-      </div>
+      <main className="flex-1">
+        <Hero taglines={heroTaglines} />
+        <Features />
+        <AdBanner />
+        <AboutSection content={aboutContent} />
+        <ToppersSection toppers={toppers} />
+        <BoardResultsSection boardStudents={boardStudents} />
+        <TeachersSection teachers={teachers.slice(0, 3)} />
+        <EventsSection events={events.slice(0, 3)} />
+        <GallerySection galleryItems={galleryItems.slice(0, 4)} />
+        <TestimonialsSection testimonials={testimonials} />
+        <FaqSection faqs={faqs} />
+        <ContactSection content={contactContent} />
+      </main>
+      <Footer content={footerContent} />
     </div>
   );
 }
+

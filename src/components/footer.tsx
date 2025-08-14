@@ -47,7 +47,7 @@ const Footer = ({ content }: FooterProps) => {
   }
 
   return (
-    <footer className="bg-secondary text-secondary-foreground relative overflow-hidden rounded-t-2xl z-10">
+    <footer className="bg-secondary text-secondary-foreground relative overflow-hidden rounded-t-2xl">
       <div className="absolute inset-0 z-0">
           <div className="absolute -bottom-1/2 -right-1/4 w-full h-full border-t border-r border-border/10 transform -rotate-45 rounded-full"></div>
           <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 border-b border-l border-border/10 transform rotate-12 rounded-full"></div>
