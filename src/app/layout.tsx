@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Preloader } from "@/app/components/preloader";
 import { useState, useEffect } from "react";
+import Script from "next/script";
 
 const ptSans = PT_Sans({ 
   subsets: ["latin"], 
@@ -37,7 +38,7 @@ export default function RootLayout({
        <head>
         <title>PIISS - Pakistan Islamic International School System | Buner, Swari</title>
         <meta name="description" content="Pakistan Islamic International School System (PIISS) in Swari, Buner, offers excellence in education with a blend of academic rigor and Islamic values. Enquire about admissions today." />
-        <meta name="keywords" content="PIISS, Pakistan Islamic International School System, school in Buner, school in Swari, education in Buner, PIISS admissions, Islamic school, quality education, private school Buner" />
+        <meta name="keywords" content="PIISS, Pakistan Islamic International School System, school in Buner, school in Swari, education in Buner, PIISS admissions, Islamic school, quality education, private school Buner, Buner Swari school, admission open" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body
@@ -46,9 +47,21 @@ export default function RootLayout({
           ptSans.variable
         )}
       >
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-LCC5KL7P3Q"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-LCC5KL7P3Q');
+          `}
+        </Script>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
