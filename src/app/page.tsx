@@ -50,11 +50,13 @@ export default async function Home() {
     imageUrl: settings.contactImageUrl || "https://placehold.co/600x400.png",
   };
 
+  const heroTaglines = settings.heroTaglines ? settings.heroTaglines.split('\n').filter((line: string) => line.trim() !== '') : [];
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1">
-        <Hero />
+        <Hero taglines={heroTaglines} />
         <Features />
         <AdBanner />
         <AboutSection content={aboutContent} />

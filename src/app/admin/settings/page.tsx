@@ -26,6 +26,7 @@ export default function SettingsPage() {
         aboutImageUrl: "",
         contactImageUrl: "",
         schoolDataUrl: "",
+        heroTaglines: "Excellence in Education\nNurturing Future Leaders\nA Tradition of Success",
     });
 
     useEffect(() => {
@@ -95,9 +96,13 @@ export default function SettingsPage() {
              <Card>
                 <CardHeader>
                     <CardTitle>Website Content</CardTitle>
-                    <CardDescription>Update your website&apos;s main content and contact information.</CardDescription>
+                    <CardDescription>Update your website's main content and contact information.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                     <div className="space-y-2">
+                        <Label htmlFor="heroTaglines">Hero Taglines (one per line)</Label>
+                        <Textarea id="heroTaglines" value={settings.heroTaglines} onChange={handleInputChange} rows={3} />
+                    </div>
                     <div className="space-y-2">
                         <Label htmlFor="ourStory">Our Story</Label>
                         <Textarea id="ourStory" value={settings.ourStory} onChange={handleInputChange} rows={5} />

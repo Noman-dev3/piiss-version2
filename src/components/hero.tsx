@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { hero } from "@/lib/data";
+import TypingAnimation from "./typing-animation";
 
-export function Hero() {
+interface HeroProps {
+  taglines: string[];
+}
+
+export function Hero({ taglines }: HeroProps) {
   return (
     <section id="home" className="relative text-center py-20 lg:py-32 bg-background">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-transparent to-secondary/30"></div>
@@ -16,8 +21,8 @@ export function Hero() {
           <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-foreground tracking-tight font-headline">
             {hero.title}
           </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mt-4 mb-10 max-w-3xl mx-auto">
-            {hero.subtitle}
+          <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mt-4 mb-10 max-w-3xl mx-auto min-h-8">
+             <TypingAnimation titles={taglines.length > 0 ? taglines : [hero.subtitle]} />
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" asChild>

@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 type TypingAnimationProps = {
   titles: string[];
@@ -17,6 +18,8 @@ export default function TypingAnimation({ titles }: TypingAnimationProps) {
   const delay = 2000;
 
   useEffect(() => {
+    if (!titles || titles.length === 0) return;
+
     if (subIndex === titles[index].length + 1 && !isDeleting) {
       setTimeout(() => setIsDeleting(true), delay);
       return;
@@ -36,6 +39,7 @@ export default function TypingAnimation({ titles }: TypingAnimationProps) {
   }, [subIndex, index, isDeleting, titles, delay]);
   
   useEffect(() => {
+      if (!titles || titles.length === 0) return;
       setText(titles[index].substring(0, subIndex));
   }, [subIndex, index, titles]);
 

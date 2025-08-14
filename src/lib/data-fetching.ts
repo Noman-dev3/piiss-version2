@@ -29,15 +29,22 @@ async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, 
       if (parsedData.success) {
         let sortedData = parsedData.data;
         // Generic date sorting for schemas that have it
-        if (sortedData.length > 0 && sortedData[0].date) {
-           sortedData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        } else if (sortedData.length > 0 && sortedData[0].submittedAt) {
-            sortedData.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+        if (sortedData.length > 0 && 'date' in sortedData[0]) {
+           sortedData.sort((a, b) => new Date((b as any).date).getTime() - new Date((a as any).date).getTime());
+        } else if (sortedData.length > 0 && 'submittedAt' in sortedData[0]) {
+            sortedData.sort((a, b) => new Date((b as any).submittedAt).getTime() - new Date((a as any).submittedAt).getTime());
         }
         return sortedData;
       } else {
         console.error(`Zod validation error for ${dbPath}:`, parsedData.error.flatten());
-        return [];
+        // Return valid items even if some fail validation
+         const validItems = dataArray
+          .map(item => {
+            const result = schema.element.safeParse(item);
+            return result.success ? result.data : null;
+          })
+          .filter((item): item is T => item !== null);
+        return validItems;
       }
     }
     return [];
@@ -65,5 +72,17 @@ export async function getSettings() {
     } catch (error) {
         console.error("Error fetching settings:", error);
     }
-    return {};
+    // Return a default object to prevent errors on the calling page
+    return {
+        ourStory: "",
+        logoUrl: "",
+        contactPhone: "",
+        contactEmail: "",
+        contactAddress: "",
+        officeHours: "",
+        aboutImageUrl: "",
+        contactImageUrl: "",
+        schoolDataUrl: "",
+        heroTaglines: "",
+    };
 }
