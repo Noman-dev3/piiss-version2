@@ -24,6 +24,7 @@
     --border: 206 33% 90%;
     --input: 206 33% 90%;
     --ring: 197 71% 63%;
+    --radius: 0.5rem;
 
     --custom-primary: 197 71% 63%;
     --custom-accent: 28 100% 84%;
@@ -51,6 +52,7 @@
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 197 71% 63%;
+    --radius: 0.5rem;
   }
 
   body.gradient {
@@ -73,6 +75,7 @@
     --border: 275 89% 25%;
     --input: 275 89% 25%;
     --ring: 330 89% 65%;
+    --radius: 0.5rem;
   }
 
   body.custom {
@@ -95,6 +98,7 @@
     --border: 206 33% 90%;
     --input: 206 33% 90%;
     --ring: var(--custom-primary);
+    --radius: 0.5rem;
   }
 }
 
@@ -204,6 +208,10 @@
   .preloader.hidden {
     opacity: 0;
     pointer-events: none;
+  }
+
+  .group .group-hover\:scale-100 {
+    transform: scale(1);
   }
 }
 

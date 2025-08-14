@@ -51,7 +51,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {children}
+        <>
+          {children}
+          {variant !== "link" && (
+            <span className="absolute inset-0 block h-full w-full scale-0 rounded-full bg-primary/20 transition-all duration-300 ease-in-out group-hover:scale-150"></span>
+          )}
+        </>
       </Comp>
     )
   }
