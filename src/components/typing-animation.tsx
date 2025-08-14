@@ -39,7 +39,10 @@ export default function TypingAnimation({ titles }: TypingAnimationProps) {
   }, [subIndex, index, isDeleting, titles, delay]);
   
   useEffect(() => {
-      if (!titles || titles.length === 0) return;
+      if (!titles || titles.length === 0) {
+        setText('');
+        return;
+      };
       setText(titles[index].substring(0, subIndex));
   }, [subIndex, index, titles]);
 
