@@ -1,13 +1,13 @@
-
 "use client";
 
-import type { Metadata } from "next";
-import { Inter, PT_Sans } from "next/font/google";
+import { PT_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
+import { useState, useEffect } from "react";
+import { Preloader } from "@/components/preloader";
 
 const ptSans = PT_Sans({ 
   subsets: ["latin"], 
@@ -20,6 +20,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      const preloader = document.querySelector('.preloader');
+      if (preloader) {
+        preloader.classList.add('hidden');
+      }
+      setLoading(false);
+    }, 1500); // 1.5-second delay for initial load
+
+    return () => clearTimeout(timer);
+  }, []);
+
+
   return (
     <html lang="en" suppressHydrationWarning>
        <head>
@@ -53,7 +69,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          {loading && <Preloader />}
+          <div style={{ visibility: loading ? 'hidden' : 'visible' }}>
+            {children}
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>
