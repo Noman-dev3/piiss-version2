@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { 
-  LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut, Settings, Database
+  LayoutGrid, UserPlus, GraduationCap, Users, FileText, Calendar, GalleryVertical, Star, MessageSquare, Megaphone, HelpCircle, LogOut, Settings, Database, Award
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -18,9 +18,10 @@ const navItems = [
     { href: '/admin/students', icon: <GraduationCap className="h-5 w-5" />, label: 'Students' },
     { href: '/admin/teachers', icon: <Users className="h-5 w-5" />, label: 'Teachers' },
     { href: '/admin/results', icon: <FileText className="h-5 w-5" />, label: 'Results' },
+    { href: '/admin/toppers', icon: <Star className="h-5 w-5" />, label: 'Class Toppers' },
+    { href: '/admin/board-students', icon: <Award className="h-5 w-5" />, label: 'Board Students' },
     { href: '/admin/events', icon: <Calendar className="h-5 w-5" />, label: 'Events' },
     { href: '/admin/gallery', icon: <GalleryVertical className="h-5 w-5" />, label: 'Gallery' },
-    { href: '/admin/toppers', icon: <Star className="h-5 w-5" />, label: 'Toppers' },
     { href: '/admin/testimonials', icon: <MessageSquare className="h-5 w-5" />, label: 'Testimonials' },
     { href: '/admin/announcements', icon: <Megaphone className="h-5 w-5" />, label: 'Announcements' },
     { href: '/admin/faq', icon: <HelpCircle className="h-5 w-5" />, label: 'FAQ' },
@@ -35,7 +36,10 @@ export function AdminSidebar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/admin' && pathname !== '/admin') return false;
+    return pathname.startsWith(path);
+  }
 
   return (
     <aside className="fixed top-0 left-0 hidden h-full w-64 flex-col border-r bg-background sm:flex">

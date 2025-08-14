@@ -25,6 +25,10 @@
       ".read": true,
       ".write": "auth != null"
     },
+    "boardStudents": {
+      ".read": true,
+      ".write": "auth != null"
+    },
     "testimonials": {
       ".read": true,
       ".write": "auth != null"

@@ -10,7 +10,8 @@ import {
   eventSchema, Event,
   galleryItemSchema, GalleryItem,
   testimonialSchema, Testimonial,
-  faqSchema, FAQ
+  faqSchema, FAQ,
+  boardStudentSchema, BoardStudent
 } from "@/app/admin/data-schemas";
 
 function createDataSubscriber<T>(
@@ -66,6 +67,7 @@ export const subscribeToEvents = createDataSubscriber(z.array(eventSchema), 'eve
 export const subscribeToGallery = createDataSubscriber(z.array(galleryItemSchema), 'gallery', 4, 'desc');
 export const subscribeToTestimonials = createDataSubscriber(z.array(testimonialSchema), 'testimonials');
 export const subscribeToFaqs = createDataSubscriber(z.array(faqSchema), 'faqs');
+export const subscribeToBoardStudents = createDataSubscriber(z.array(boardStudentSchema), 'boardStudents');
 
 
 export async function getSettings() {

@@ -1,5 +1,6 @@
 import AboutSection from "@/components/about-section";
 import { AdBanner } from "@/components/ad-banner";
+import BoardResultsSection from "@/components/board-results-section";
 import ContactSection from "@/components/contact-section";
 import EventsSection from "@/components/events-section";
 import FaqSection from "@/components/faq-section";
@@ -22,6 +23,7 @@ export default function Home() {
         <AdBanner />
         <AboutSection />
         <ToppersSection />
+        <BoardResultsSection />
         <TeachersSection />
         <EventsSection />
         <GallerySection />
