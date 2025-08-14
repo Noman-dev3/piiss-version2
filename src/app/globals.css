@@ -219,90 +219,16 @@
   }
 }
 
-/* Hourglass Loader */
-.hourglass-loader {
-  --sand-color: hsl(var(--accent));
-  --glass-color: hsl(var(--primary));
-  --glass-border-width: 3px;
-  --hourglass-width: 40px;
-  --hourglass-height: 80px;
-
-  width: var(--hourglass-width);
-  height: var(--hourglass-height);
-  position: relative;
-  animation: hourglass-rotation 2s ease-in-out infinite;
+/* New Loader CSS */
+.loader {
+  width: 120px;
+  height: 20px;
+  border-radius: 20px;
+  background:
+   repeating-linear-gradient(135deg, hsl(var(--primary)) 0 10px, hsl(var(--accent)) 0 20px) 0/0% no-repeat,
+   repeating-linear-gradient(135deg, hsl(var(--muted)) 0 10px, hsl(var(--secondary)) 0 20px) 0/100%;
+  animation: l3 2s infinite;
 }
-
-.hourglass__top,
-.hourglass__bottom {
-  position: absolute;
-  width: 100%;
-  height: 50%;
-  border: var(--glass-border-width) solid var(--glass-color);
-  overflow: hidden;
-}
-
-.hourglass__top {
-  top: 0;
-  border-bottom: none;
-  border-radius: 50% 50% 0 0 / 25% 25% 0 0;
-}
-
-.hourglass__bottom {
-  bottom: 0;
-  border-top: none;
-  border-radius: 0 0 50% 50% / 0 0 25% 25%;
-}
-
-.hourglass__top::before,
-.hourglass__bottom::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  background: var(--sand-color);
-  background-image: linear-gradient(to top, rgba(255,255,255,0.2), transparent, rgba(0,0,0,0.2));
-}
-
-.hourglass__top::before {
-  bottom: 0;
-  height: 100%;
-  animation: sand-top 2s ease-in-out infinite;
-}
-
-.hourglass__bottom::before {
-  top: 0;
-  height: 0%;
-  animation: sand-bottom 2s ease-in-out infinite;
-}
-
-.hourglass__line {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1px;
-  height: 0;
-  background-color: var(--sand-color);
-  animation: sand-line 2s ease-in-out infinite;
-}
-
-@keyframes hourglass-rotation {
-  0%, 80% { transform: rotate(0); }
-  100% { transform: rotate(180deg); }
-}
-
-@keyframes sand-top {
-  0%, 10% { height: 100%; }
-  70%, 100% { height: 0%; }
-}
-
-@keyframes sand-bottom {
-  0%, 10% { height: 0%; }
-  70%, 100% { height: 100%; }
-}
-
-@keyframes sand-line {
-  0%, 10% { height: 0; }
-  10%, 70% { height: 40px; }
-  70%, 100% { height: 0; }
+@keyframes l3 {
+    100% {background-size:100%}
 }
