@@ -28,6 +28,10 @@ export default function SettingsPage() {
         contactImageUrl: "",
         schoolDataUrl: "",
         heroTaglines: ["Building the Foundation for a Bright Future", "Where Knowledge Meets Islamic Values", "Empowering Minds, Shaping the Future", "A Legacy of Excellence and Integrity"],
+        facebookUrl: "",
+        instagramUrl: "",
+        linkedinUrl: "",
+        twitterUrl: "",
     });
 
     useEffect(() => {
@@ -103,6 +107,7 @@ export default function SettingsPage() {
                 <div className="grid gap-8">
                     <Skeleton className="h-96 w-full" />
                     <Skeleton className="h-80 w-full" />
+                    <Skeleton className="h-64 w-full" />
                 </div>
             </div>
         )
@@ -174,14 +179,35 @@ export default function SettingsPage() {
                             <Label htmlFor="aboutImageUrl">About Section Image URL</Label>
                             <Input id="aboutImageUrl" value={settings.aboutImageUrl} onChange={handleInputChange} placeholder="https://placehold.co/600x450.png"/>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="contactImageUrl">Contact Section Image URL</Label>
-                            <Input id="contactImageUrl" value={settings.contactImageUrl} onChange={handleInputChange} placeholder="https://placehold.co/600x400.png"/>
-                        </div>
                          <div className="space-y-2">
                             <Label htmlFor="schoolDataUrl">School Data App URL</Label>
                             <Input id="schoolDataUrl" value={settings.schoolDataUrl} onChange={handleInputChange} placeholder="https://yourotherapp.com"/>
                         </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Social Media Links</CardTitle>
+                    <CardDescription>Enter the full URLs for your social media profiles.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="facebookUrl">Facebook URL</Label>
+                        <Input id="facebookUrl" value={settings.facebookUrl} onChange={handleInputChange} placeholder="https://facebook.com/your-page"/>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="instagramUrl">Instagram URL</Label>
+                        <Input id="instagramUrl" value={settings.instagramUrl} onChange={handleInputChange} placeholder="https://instagram.com/your-profile"/>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="linkedinUrl">LinkedIn URL</Label>
+                        <Input id="linkedinUrl" value={settings.linkedinUrl} onChange={handleInputChange} placeholder="https://linkedin.com/in/your-profile"/>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="twitterUrl">X (Twitter) URL</Label>
+                        <Input id="twitterUrl" value={settings.twitterUrl} onChange={handleInputChange} placeholder="https://x.com/your-handle"/>
                     </div>
                 </CardContent>
             </Card>

@@ -1,3 +1,5 @@
+
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { db } from "@/lib/firebase";
 import { ref, get, query } from "firebase/database";
@@ -5,11 +7,18 @@ import { GalleryItem, galleryItemSchema } from "@/app/admin/gallery/data/schema"
 import { z } from "zod";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { getGalleryItems } from "@/lib/data-fetching";
+import { getGalleryItems, getSettings } from "@/lib/data-fetching";
 
 
 export default async function AllGalleryPage() {
   const galleryItems = await getGalleryItems();
+  const settings = await getSettings();
+  const footerContent = {
+      facebookUrl: settings.facebookUrl,
+      instagramUrl: settings.instagramUrl,
+      linkedinUrl: settings.linkedinUrl,
+      twitterUrl: settings.twitterUrl,
+  }
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -52,6 +61,7 @@ export default async function AllGalleryPage() {
             )}
         </div>
       </main>
+      <Footer content={footerContent} />
     </div>
   );
 }

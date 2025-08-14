@@ -1,11 +1,12 @@
 
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { Teacher } from "@/app/admin/teachers/data/schema";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen } from "lucide-react";
-import { getTeachers } from "@/lib/data-fetching";
+import { getSettings, getTeachers } from "@/lib/data-fetching";
 import { formatExperience } from "@/lib/utils";
 
 
@@ -57,6 +58,13 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
 
 export default async function AllFacultyPage() {
   const teachers = await getTeachers();
+  const settings = await getSettings();
+  const footerContent = {
+      facebookUrl: settings.facebookUrl,
+      instagramUrl: settings.instagramUrl,
+      linkedinUrl: settings.linkedinUrl,
+      twitterUrl: settings.twitterUrl,
+  }
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -80,6 +88,7 @@ export default async function AllFacultyPage() {
             )}
         </div>
       </main>
+      <Footer content={footerContent} />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { db } from "@/lib/firebase";
 import { ref, get, query } from "firebase/database";
@@ -7,11 +9,18 @@ import Image from "next/image";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
-import { getEvents } from "@/lib/data-fetching";
+import { getEvents, getSettings } from "@/lib/data-fetching";
 
 
 export default async function AllEventsPage() {
   const events = await getEvents();
+  const settings = await getSettings();
+  const footerContent = {
+      facebookUrl: settings.facebookUrl,
+      instagramUrl: settings.instagramUrl,
+      linkedinUrl: settings.linkedinUrl,
+      twitterUrl: settings.twitterUrl,
+  }
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -58,6 +67,7 @@ export default async function AllEventsPage() {
             )}
         </div>
       </main>
+      <Footer content={footerContent} />
     </div>
   );
 }

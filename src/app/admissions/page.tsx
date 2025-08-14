@@ -1,7 +1,17 @@
-import { AdmissionForm } from "@/components/admission-form";
-import { Header } from "@/components/header";
 
-export default function AdmissionsPage() {
+import { AdmissionForm } from "@/components/admission-form";
+import Footer from "@/components/footer";
+import { Header } from "@/components/header";
+import { getSettings } from "@/lib/data-fetching";
+
+export default async function AdmissionsPage() {
+   const settings = await getSettings();
+   const footerContent = {
+      facebookUrl: settings.facebookUrl,
+      instagramUrl: settings.instagramUrl,
+      linkedinUrl: settings.linkedinUrl,
+      twitterUrl: settings.twitterUrl,
+  }
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -10,6 +20,7 @@ export default function AdmissionsPage() {
           <AdmissionForm />
         </div>
       </main>
+      <Footer content={footerContent} />
     </div>
   );
 }

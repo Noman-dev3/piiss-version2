@@ -6,6 +6,7 @@ import ContactSection from "@/components/contact-section";
 import EventsSection from "@/components/events-section";
 import FaqSection from "@/components/faq-section";
 import { Features } from "@/components/features";
+import Footer from "@/components/footer";
 import GallerySection from "@/components/gallery-section";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
@@ -50,6 +51,13 @@ export default async function Home() {
     officeHours: settings.officeHours || "",
   };
 
+  const footerContent = {
+      facebookUrl: settings.facebookUrl,
+      instagramUrl: settings.instagramUrl,
+      linkedinUrl: settings.linkedinUrl,
+      twitterUrl: settings.twitterUrl,
+  }
+
   const heroTaglines = Array.isArray(settings.heroTaglines) && settings.heroTaglines.length > 0 
     ? settings.heroTaglines 
     : [hero.subtitle];
@@ -71,6 +79,7 @@ export default async function Home() {
         <FaqSection faqs={faqs} />
         <ContactSection content={contactContent} />
       </main>
+      <Footer content={footerContent} />
     </div>
   );
 }

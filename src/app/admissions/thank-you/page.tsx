@@ -1,11 +1,20 @@
 
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSettings } from "@/lib/data-fetching";
 import { CheckCircle, Home } from "lucide-react";
 import Link from "next/link";
 
-export default function ThankYouPage() {
+export default async function ThankYouPage() {
+  const settings = await getSettings();
+   const footerContent = {
+      facebookUrl: settings.facebookUrl,
+      instagramUrl: settings.instagramUrl,
+      linkedinUrl: settings.linkedinUrl,
+      twitterUrl: settings.twitterUrl,
+  }
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -35,6 +44,7 @@ export default function ThankYouPage() {
             </Card>
         </div>
       </main>
+      <Footer content={footerContent} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 
 "use client"
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { getSettings } from "@/lib/data-fetching";
 
 async function getAllResults(): Promise<Result[]> {
     const dbRef = query(ref(db, 'results'));
@@ -51,10 +53,20 @@ export default function ResultsPage() {
     const [positionHolders, setPositionHolders] = useState<Result[]>([]);
     const [isFetchingPositions, setIsFetchingPositions] = useState(false);
 
+    const [footerContent, setFooterContent] = useState({});
+
     useEffect(() => {
         getAllResults().then(data => {
             setAllResults(data);
             setLoading(false);
+        });
+        getSettings().then(settings => {
+            setFooterContent({
+                facebookUrl: settings.facebookUrl,
+                instagramUrl: settings.instagramUrl,
+                linkedinUrl: settings.linkedinUrl,
+                twitterUrl: settings.twitterUrl,
+            });
         });
     }, []);
 
@@ -217,6 +229,7 @@ export default function ResultsPage() {
 
                 </div>
             </main>
+            <Footer content={footerContent} />
         </div>
     );
 }
