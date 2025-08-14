@@ -141,6 +141,11 @@
       --tw-ring-color: hsl(var(--ring) / 0.5);
   }
 
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 12px;

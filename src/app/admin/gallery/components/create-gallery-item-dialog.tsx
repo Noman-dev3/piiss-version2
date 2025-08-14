@@ -106,7 +106,7 @@ export function CreateGalleryItemDialog({ isOpen, onOpenChange }: CreateGalleryI
                                 <FormItem>
                                 <FormLabel>Description (Optional)</FormLabel>
                                 <FormControl>
-                                    <Textarea placeholder="A short description of the image." {...field} />
+                                    <Textarea placeholder="A short description of the image." {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>

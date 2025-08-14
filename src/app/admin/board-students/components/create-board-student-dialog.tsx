@@ -121,7 +121,7 @@ export function CreateBoardStudentDialog({ isOpen, onOpenChange }: CreateBoardSt
                                 <FormItem>
                                 <FormLabel>Image URL (Optional)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="https://example.com/image.png" {...field} />
+                                    <Input placeholder="https://example.com/image.png" {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>

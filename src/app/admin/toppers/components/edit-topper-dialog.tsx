@@ -115,7 +115,7 @@ export function EditTopperDialog({ topper, isOpen, onOpenChange }: EditTopperDia
                                 <FormItem>
                                 <FormLabel>Image URL (Optional)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="https://example.com/image.png" {...field} />
+                                    <Input placeholder="https://example.com/image.png" {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>

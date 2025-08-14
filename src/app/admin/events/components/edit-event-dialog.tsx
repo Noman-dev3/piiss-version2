@@ -103,7 +103,7 @@ export function EditEventDialog({ event, isOpen, onOpenChange }: EditEventDialog
                                 <FormItem>
                                 <FormLabel>Image URL</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="https://example.com/image.png" {...field} />
+                                    <Input placeholder="https://example.com/image.png" {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
