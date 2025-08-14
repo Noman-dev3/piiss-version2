@@ -116,7 +116,7 @@ export default function ContactSection({ content }: ContactSectionProps) {
               </div>
              <Card className="overflow-hidden rounded-xl shadow-lg mt-8">
               <Image
-                src={content.imageUrl}
+                src={content.imageUrl || contactInfo.image.src}
                 alt={contactInfo.image.alt}
                 width={600}
                 height={400}

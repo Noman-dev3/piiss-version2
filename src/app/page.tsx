@@ -1,3 +1,4 @@
+
 import AboutSection from "@/components/about-section";
 import { AdBanner } from "@/components/ad-banner";
 import BoardResultsSection from "@/components/board-results-section";
