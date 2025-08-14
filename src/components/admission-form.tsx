@@ -2,7 +2,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,22 +21,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { ref, push, set } from "firebase/database";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 const formSchema = z.object({
   applicantName: z.string().min(2, {
@@ -102,6 +94,13 @@ export function AdmissionForm() {
       });
     }
   }
+  
+    const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - 3 - i);
+    const months = Array.from({ length: 12 }, (_, i) => ({
+      value: String(i + 1),
+      label: new Date(0, i).toLocaleString('default', { month: 'long' })
+    }));
+    const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
 
   return (
     <Card className="max-w-4xl mx-auto bg-secondary/30 border-border/20">
@@ -143,40 +142,51 @@ export function AdmissionForm() {
                   control={form.control}
                   name="dob"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
+                    <FormItem>
                       <FormLabel>Date of Birth *</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full justify-start text-left font-normal bg-background",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
+                      <Controller
+                        control={form.control}
+                        name="dob"
+                        render={({ field: { onChange, value }, fieldState: { error } }) => {
+                          const dob = value ? new Date(value) : new Date();
+                          const day = dob.getDate();
+                          const month = dob.getMonth() + 1;
+                          const year = dob.getFullYear();
+
+                          const handleDateChange = (part: 'day' | 'month' | 'year', val: string) => {
+                            const newDay = part === 'day' ? parseInt(val, 10) : day;
+                            const newMonth = part === 'month' ? parseInt(val, 10) - 1 : month - 1;
+                            const newYear = part === 'year' ? parseInt(val, 10) : year;
+                            onChange(new Date(newYear, newMonth, newDay));
+                          };
+
+                          return (
+                            <div>
+                              <div className="grid grid-cols-3 gap-3">
+                                <Select onValueChange={(val) => handleDateChange('day', val)} defaultValue={String(day)}>
+                                  <SelectTrigger className="bg-background"><SelectValue placeholder="Day" /></SelectTrigger>
+                                  <SelectContent>
+                                    {days.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+                                  </SelectContent>
+                                </Select>
+                                <Select onValueChange={(val) => handleDateChange('month', val)} defaultValue={String(month)}>
+                                  <SelectTrigger className="bg-background"><SelectValue placeholder="Month" /></SelectTrigger>
+                                  <SelectContent>
+                                    {months.map(m => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
+                                  </SelectContent>
+                                </Select>
+                                <Select onValueChange={(val) => handleDateChange('year', val)} defaultValue={String(year)}>
+                                  <SelectTrigger className="bg-background"><SelectValue placeholder="Year" /></SelectTrigger>
+                                  <SelectContent>
+                                    {years.map(y => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              {error && <p className="text-sm font-medium text-destructive mt-2">{error.message}</p>}
+                            </div>
+                          );
+                        }}
+                      />
                     </FormItem>
                   )}
                 />
