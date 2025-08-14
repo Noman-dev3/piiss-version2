@@ -13,35 +13,19 @@ import {
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
 import { testimonialsSection } from "@/lib/data";
-import { db } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
-import { Testimonial, testimonialSchema } from "@/app/admin/testimonials/data/schema";
-import { z } from "zod";
+import { Testimonial } from "@/app/admin/data-schemas";
+import { subscribeToTestimonials } from "@/lib/data-fetching";
+import { Loader } from "./ui/loader";
 
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const dbRef = ref(db, 'testimonials');
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(testimonialSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                setTestimonials(parsedItems.data);
-            }
-        }
-        setLoading(false);
-    }, (error) => {
-        console.error("Error fetching testimonials:", error);
+    const unsubscribe = subscribeToTestimonials((data) => {
+        setTestimonials(data);
         setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -62,8 +46,10 @@ export default function TestimonialsSection() {
           {testimonialsSection.description}
         </p>
         {loading ? (
-             <div className="h-64 bg-muted rounded-xl animate-pulse max-w-5xl mx-auto" />
-        ) : testimonials.length > 0 && (
+             <div className="min-h-[300px] flex items-center justify-center">
+                <Loader />
+             </div>
+        ) : testimonials.length > 0 ? (
           <Carousel
             opts={{
               align: "start",
@@ -116,6 +102,8 @@ export default function TestimonialsSection() {
             <CarouselPrevious className="hidden sm:flex" />
             <CarouselNext className="hidden sm:flex" />
           </Carousel>
+        ): (
+          <p className="text-center text-muted-foreground">No testimonials yet. Be the first to share your experience!</p>
         )}
       </div>
     </section>

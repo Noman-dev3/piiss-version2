@@ -21,15 +21,16 @@ function ThemeBodyClassUpdater() {
 
 // Helper to convert hex to HSL string components (e.g., "224 71.4% 4.1%")
 function hexToHsl(hex: string): string {
+    if (!hex || typeof hex !== 'string') return "0 0% 0%";
     let r = 0, g = 0, b = 0;
-    if (hex.length === 4) {
-        r = parseInt(hex[1] + hex[1], 16);
-        g = parseInt(hex[2] + hex[2], 16);
-        b = parseInt(hex[3] + hex[3], 16);
-    } else if (hex.length === 7) {
-        r = parseInt(hex.substring(1, 3), 16);
-        g = parseInt(hex.substring(3, 5), 16);
-        b = parseInt(hex.substring(5, 7), 16);
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (result) {
+        r = parseInt(result[1], 16);
+        g = parseInt(result[2], 16);
+        b = parseInt(result[3], 16);
     }
 
     r /= 255;
@@ -65,13 +66,19 @@ function CustomThemeStyleUpdater() {
         primary: "#87ceeb",
         accent: "#ffdab9",
         background: "#e6e9ed",
+        secondary: "#fafafa"
     });
 
     React.useEffect(() => {
         const handleStorageChange = () => {
              const storedColors = localStorage.getItem('custom-theme-colors');
              if (storedColors) {
-                 setCustomColors(JSON.parse(storedColors));
+                try {
+                    const parsedColors = JSON.parse(storedColors);
+                    setCustomColors(prev => ({...prev, ...parsedColors}));
+                } catch (e) {
+                    console.error("Failed to parse custom colors from localStorage", e);
+                }
              }
         }
         window.addEventListener('storage', handleStorageChange);
@@ -85,6 +92,7 @@ function CustomThemeStyleUpdater() {
             document.documentElement.style.setProperty('--custom-primary', hexToHsl(customColors.primary));
             document.documentElement.style.setProperty('--custom-accent', hexToHsl(customColors.accent));
             document.documentElement.style.setProperty('--custom-background', hexToHsl(customColors.background));
+            document.documentElement.style.setProperty('--custom-secondary', hexToHsl(customColors.secondary));
         }
     }, [theme, customColors]);
 

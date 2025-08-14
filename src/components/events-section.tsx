@@ -6,41 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, ArrowRight, PartyPopper } from "lucide-react";
 import { eventsSection } from "@/lib/data";
-import { db } from "@/lib/firebase";
-import { ref, onValue, query, limitToLast } from "firebase/database";
-import { Event, eventSchema } from "@/app/admin/events/data/schema";
-import { z } from "zod";
+import { Event } from "@/app/admin/data-schemas";
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { subscribeToEvents } from "@/lib/data-fetching";
+import { Loader } from "./ui/loader";
 
 export default function EventsSection() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const dbRef = query(ref(db, 'events'), limitToLast(3));
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            })).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            
-            const parsedItems = z.array(eventSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                setEvents(parsedItems.data);
-            } else {
-                console.error("Zod validation error for events:", parsedItems.error.flatten());
-            }
-        }
-        setLoading(false);
-    }, (error) => {
-        console.error("Error fetching events:", error);
-        setLoading(false);
+    const unsubscribe = subscribeToEvents((data) => {
+      setEvents(data);
+      setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -60,10 +41,10 @@ export default function EventsSection() {
         </p>
 
         {loading ? (
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[...Array(3)].map((_, i) => <div key={i} className="h-48 bg-muted rounded-xl animate-pulse" />)}
+           <div className="min-h-[200px] flex items-center justify-center">
+             <Loader />
            </div>
-        ) : events.length > 0 && (
+        ) : events.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
             {events.map((event, index) => (
                 <div key={index} className="group perspective-1000">
@@ -82,6 +63,8 @@ export default function EventsSection() {
                 </div>
             ))}
             </div>
+        ) : (
+          <p className="text-muted-foreground">No upcoming events. Please check back soon!</p>
         )}
 
         <div className="mt-16 text-center">

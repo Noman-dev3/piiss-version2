@@ -6,9 +6,9 @@ import { GraduationCap } from "lucide-react";
 import Image from 'next/image';
 import { about } from "@/lib/data";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
-import { Skeleton } from "@/components/ui/skeleton";
+import { db } from "@/lib/firebase";
+import { Loader } from "./ui/loader";
 
 export default function AboutSection() {
   const [content, setContent] = useState({ description: "", imageUrl: about.image.src });
@@ -32,21 +32,8 @@ export default function AboutSection() {
 
   if(loading) {
     return (
-        <section id="about" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary">
-          <div className="container mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <Skeleton className="h-6 w-32 mb-4" />
-                <Skeleton className="h-12 w-3/4 mb-6" />
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-4/5" />
-              </div>
-              <div>
-                <Skeleton className="w-full h-[450px] rounded-xl" />
-              </div>
-            </div>
-          </div>
+        <section id="about" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary flex items-center justify-center min-h-[50vh]">
+            <Loader />
         </section>
     )
   }

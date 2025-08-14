@@ -80,7 +80,7 @@
     --popover-foreground: 224 71.4% 4.1%;
     --primary: var(--custom-primary);
     --primary-foreground: 224 71.4% 4.1%;
-    --secondary: 210 20% 98%;
+    --secondary: var(--custom-secondary);
     --secondary-foreground: 224 71.4% 4.1%;
     --muted: 210 20% 98%;
     --muted-foreground: 220 8.9% 46.1%;
@@ -182,6 +182,43 @@
     background-image: radial-gradient(circle, hsl(var(--foreground) / 0.1) 1px, transparent 1px);
     background-size: 1rem 1rem;
   }
+  .loader-container {
+    perspective: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+  }
+  .cube {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  }
+
+  .cube__face {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    border: 1px solid hsl(var(--background));
+  }
+  .cube__piece {
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.5s ease;
+  }
+  .cube__face--front  { transform: rotateY(  0deg) translateZ(25px); }
+  .cube__face--back   { transform: rotateY(180deg) translateZ(25px); }
+  .cube__face--right  { transform: rotateY( 90deg) translateZ(25px); }
+  .cube__face--left   { transform: rotateY(-90deg) translateZ(25px); }
+  .cube__face--top    { transform: rotateX( 90deg) translateZ(25px); }
+  .cube__face--bottom { transform: rotateX(-90deg) translateZ(25px); }
 }
 
 @keyframes gradientBG {

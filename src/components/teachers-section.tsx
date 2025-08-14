@@ -4,16 +4,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Users, BookOpen, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { teachersSection } from "@/lib/data";
-import { db } from "@/lib/firebase";
-import { ref, query, limitToFirst, onValue } from "firebase/database";
-import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
-import { z } from "zod";
+import { Teacher } from "@/app/admin/data-schemas";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { subscribeToTeachers } from "@/lib/data-fetching";
+import { Loader } from "./ui/loader";
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
@@ -43,7 +41,7 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
           <div className="w-full text-left space-y-3">
              <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
               <span className="text-muted-foreground">Bio</span>
-              <span className="font-semibold truncate">{teacher.bio}</span>
+              <span className="font-semibold truncate">{teacher.bio || "N/A"}</span>
             </div>
             <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
               <span className="text-muted-foreground">Joined</span>
@@ -66,27 +64,10 @@ export default function TeachersSection() {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const dbRef = query(ref(db, 'teachers'), limitToFirst(3));
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(teacherSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                setTeachers(parsedItems.data);
-            } else {
-                console.error("Zod validation error for teachers:", parsedItems.error.flatten());
-            }
-        }
-        setLoading(false);
-    }, (error) => {
-        console.error("Error fetching teachers:", error);
+    const unsubscribe = subscribeToTeachers((data) => {
+        setTeachers(data);
         setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
   
@@ -107,15 +88,17 @@ export default function TeachersSection() {
           {teachersSection.description}
         </p>
         {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[...Array(3)].map((_,i) => <Skeleton key={i} className="h-96 w-full" />)}
+            <div className="min-h-[400px] flex items-center justify-center">
+                <Loader />
             </div>
-        ) : teachers.length > 0 && (
+        ) : teachers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teachers.map((teacher, index) => (
                 <TeacherCard key={index} teacher={teacher} />
             ))}
             </div>
+        ): (
+             <p className="text-center text-muted-foreground">Faculty details will be available soon.</p>
         )}
         <div className="mt-16 text-center">
             <Button size="lg" asChild>

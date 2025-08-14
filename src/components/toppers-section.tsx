@@ -13,39 +13,20 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { toppersSection } from "@/lib/data";
-import { db } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
-import { Topper, topperSchema } from "@/app/admin/toppers/data/schema";
-import { z } from "zod";
+import { Topper } from "@/app/admin/data-schemas";
+import { subscribeToToppers } from "@/lib/data-fetching";
+import { Loader } from "./ui/loader";
 
 export default function ToppersSection() {
   const [toppers, setToppers] = React.useState<Topper[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const dbRef = ref(db, 'toppers');
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(topperSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                setToppers(parsedItems.data);
-            } else {
-                console.error("Zod validation error for toppers:", parsedItems.error.flatten());
-            }
-        }
-        setLoading(false);
-    }, (error) => {
-        console.error("Error fetching toppers:", error);
-        setLoading(false);
+    const unsubscribe = subscribeToToppers((data) => {
+      setToppers(data);
+      setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -67,8 +48,10 @@ export default function ToppersSection() {
           {toppersSection.description}
         </p>
         {loading ? (
-             <div className="h-80 bg-muted rounded-xl animate-pulse max-w-4xl mx-auto" />
-        ) : toppers.length > 0 && (
+             <div className="min-h-[350px] flex items-center justify-center">
+                <Loader />
+             </div>
+        ) : toppers.length > 0 ? (
           <Carousel
             opts={{
               align: "start",
@@ -114,6 +97,8 @@ export default function ToppersSection() {
             <CarouselPrevious className="hidden sm:flex" />
             <CarouselNext className="hidden sm:flex" />
           </Carousel>
+        ) : (
+            <p className="text-center text-muted-foreground">Our top performers will be announced soon!</p>
         )}
       </div>
     </section>

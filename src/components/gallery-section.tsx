@@ -4,43 +4,24 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Camera, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { gallerySection } from "@/lib/data";
-import { db } from "@/lib/firebase";
-import { ref, query, limitToLast, onValue } from "firebase/database";
-import { GalleryItem, galleryItemSchema } from "@/app/admin/gallery/data/schema";
-import { z } from "zod";
+import { GalleryItem } from "@/app/admin/data-schemas";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { subscribeToGallery } from "@/lib/data-fetching";
+import { Loader } from "./ui/loader";
 
 export default function GallerySection() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const dbRef = query(ref(db, 'gallery'), limitToLast(4));
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            const itemsArray = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key],
-            }));
-            const parsedItems = z.array(galleryItemSchema).safeParse(itemsArray);
-            if (parsedItems.success) {
-                setGalleryItems(parsedItems.data.reverse()); // To show latest first
-            } else {
-                console.error("Zod validation error for gallery:", parsedItems.error.flatten());
-            }
-        }
-        setLoading(false);
-    }, (error) => {
-        console.error("Error fetching gallery items:", error);
-        setLoading(false);
+    const unsubscribe = subscribeToGallery((data) => {
+      setGalleryItems(data);
+      setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -61,10 +42,10 @@ export default function GallerySection() {
           {gallerySection.description}
         </p>
         {loading ? (
-             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-64 w-full" />)}
-            </div>
-        ) : galleryItems.length > 0 && (
+             <div className="min-h-[250px] flex items-center justify-center">
+                <Loader />
+             </div>
+        ) : galleryItems.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {galleryItems.map((item, index) => (
                 <div key={index} className="group perspective-1000">
@@ -89,6 +70,8 @@ export default function GallerySection() {
                 </div>
             ))}
             </div>
+        ) : (
+             <p className="text-center text-muted-foreground">The gallery is empty for now. Come back soon!</p>
         )}
         <div className="mt-16 text-center">
             <Button size="lg" asChild>

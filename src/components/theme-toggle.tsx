@@ -12,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-  DropdownMenuLabel
 } from "@/components/ui/dropdown-menu"
 import { Label } from "./ui/label"
 
@@ -20,15 +19,20 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const [colors, setColors] = React.useState(() => {
       if (typeof window !== 'undefined') {
-        const savedColors = localStorage.getItem('custom-theme-colors');
-        if (savedColors) {
-            return JSON.parse(savedColors);
+        try {
+            const savedColors = localStorage.getItem('custom-theme-colors');
+            if (savedColors) {
+                return JSON.parse(savedColors);
+            }
+        } catch (error) {
+            console.error("Failed to parse custom theme colors from localStorage", error);
         }
       }
       return {
         primary: "#87ceeb", // Default soft sky blue
         accent: "#ffdab9", // Default gentle peach
         background: "#e6e9ed", // Default pale blue-gray
+        secondary: "#fafafa" // Default secondary
       };
   });
   
@@ -86,6 +90,10 @@ export function ThemeToggle() {
                 <div className="flex items-center justify-between">
                     <Label htmlFor="primary-color" className="text-xs">Primary</Label>
                     <input id="primary-color" type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} className="w-6 h-6 p-0 border-none rounded cursor-pointer bg-transparent"/>
+                </div>
+                 <div className="flex items-center justify-between">
+                    <Label htmlFor="secondary-color" className="text-xs">Secondary</Label>
+                    <input id="secondary-color" type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} className="w-6 h-6 p-0 border-none rounded cursor-pointer bg-transparent"/>
                 </div>
                  <div className="flex items-center justify-between">
                     <Label htmlFor="accent-color" className="text-xs">Accent</Label>
