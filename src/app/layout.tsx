@@ -35,7 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
        <head>
-        <title>PIISS - Excellence in Education</title>
+        <title>PIISS - Pakistan Islamic International School System | Buner, Swari</title>
+        <meta name="description" content="Pakistan Islamic International School System (PIISS) in Swari, Buner, offers excellence in education with a blend of academic rigor and Islamic values. Enquire about admissions today." />
+        <meta name="keywords" content="PIISS, Pakistan Islamic International School System, school in Buner, school in Swari, education in Buner, PIISS admissions, Islamic school, quality education, private school Buner" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body
