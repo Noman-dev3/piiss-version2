@@ -40,14 +40,8 @@ export default function RootLayout({
         <meta name="description" content="Pakistan Islamic International School System (PIISS) in Swari, Buner, offers excellence in education with a blend of academic rigor and Islamic values. Enquire about admissions today." />
         <meta name="keywords" content="PIISS, Pakistan Islamic International School System, school in Buner, school in Swari, education in Buner, PIISS admissions, Islamic school, quality education, private school Buner, Buner Swari school, admission open" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          ptSans.variable
-        )}
-      >
-        <Script
+         <Script
+          async
           src="https://www.googletagmanager.com/gtag/js?id=G-LCC5KL7P3Q"
           strategy="afterInteractive"
         />
@@ -59,6 +53,13 @@ export default function RootLayout({
             gtag('config', 'G-LCC5KL7P3Q');
           `}
         </Script>
+      </head>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          ptSans.variable
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
