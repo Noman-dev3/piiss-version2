@@ -7,7 +7,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Preloader } from "@/components/preloader";
+import { Preloader } from "@/app/components/preloader";
 import { useState, useEffect } from "react";
 
 const ptSans = PT_Sans({ 
@@ -15,17 +15,6 @@ const ptSans = PT_Sans({
   variable: "--font-sans",
   weight: ['400', '700'] 
 });
-
-// export const metadata: Metadata = {
-//   title: "PIISS - Excellence in Education",
-//   description: "Welcome to the Future of Education",
-//   icons: {
-//     icon: "/favicon.ico",
-//     shortcut: "/favicon.ico",
-//     apple: "/favicon.ico",
-//   },
-// };
-
 
 export default function RootLayout({
   children,
@@ -61,7 +50,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {loading ? <Preloader /> : children}
+          {loading && <Preloader />}
+          {!loading && children}
           <Toaster />
         </ThemeProvider>
       </body>
