@@ -1,5 +1,6 @@
+
 import { db } from "@/lib/firebase";
-import { get, query, ref } from "firebase/database";
+import { get, ref } from "firebase/database";
 import { z } from "zod";
 import {
   topperSchema, Topper,
@@ -12,7 +13,7 @@ import {
 } from "@/app/admin/data-schemas";
 
 // A generic function to fetch data once from Firebase
-async function fetchData<T>(dbPath: string, schema: z.ZodType<T[]>): Promise<T[]> {
+async function fetchData<T>(dbPath: string, schema: z.ZodArray<z.ZodObject<any, any, any>>): Promise<T[]> {
   try {
     const dataRef = ref(db, dbPath);
     const snapshot = await get(dataRef);
@@ -24,12 +25,19 @@ async function fetchData<T>(dbPath: string, schema: z.ZodType<T[]>): Promise<T[]
       }));
       
       const parsedData = schema.safeParse(dataArray);
+      
       if (parsedData.success) {
+        let sortedData = parsedData.data;
         // Generic date sorting for schemas that have it
-        if (parsedData.data.length > 0 && 'date' in parsedData.data[0]) {
-          return (parsedData.data as any[]).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        if (sortedData.length > 0 && sortedData[0].date) {
+           sortedData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        } else if (sortedData.length > 0 && sortedData[0].submittedAt) {
+            sortedData.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+        } else {
+          // Fallback to reverse chronological order for other data
+          sortedData.reverse();
         }
-        return parsedData.data.reverse(); // Show newest first by default
+        return sortedData;
       } else {
         console.error(`Zod validation error for ${dbPath}:`, parsedData.error.flatten());
         return [];
@@ -41,7 +49,6 @@ async function fetchData<T>(dbPath: string, schema: z.ZodType<T[]>): Promise<T[]
     return [];
   }
 }
-
 
 export const getToppers = () => fetchData<Topper>('toppers', z.array(topperSchema));
 export const getTeachers = () => fetchData<Teacher>('teachers', z.array(teacherSchema));
