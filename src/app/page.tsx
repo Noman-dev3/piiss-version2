@@ -13,6 +13,7 @@ import TeachersSection from "@/components/teachers-section";
 import TestimonialsSection from "@/components/testimonials-section";
 import ToppersSection from "@/components/toppers-section";
 import { getBoardStudents, getEvents, getFaqs, getGalleryItems, getSettings, getTeachers, getTestimonials, getToppers } from "@/lib/data-fetching";
+import { hero } from "@/lib/data";
 
 
 export default async function Home() {
@@ -56,7 +57,7 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1">
-        <Hero taglines={heroTaglines} />
+        <Hero taglines={heroTaglines.length > 0 ? heroTaglines : [hero.subtitle]} />
         <Features />
         <AdBanner />
         <AboutSection content={aboutContent} />

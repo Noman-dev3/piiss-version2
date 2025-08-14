@@ -22,7 +22,7 @@ export function Hero({ taglines }: HeroProps) {
             {hero.title}
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mt-4 mb-10 max-w-3xl mx-auto min-h-8">
-             <TypingAnimation titles={taglines.length > 0 ? taglines : [hero.subtitle]} />
+             <TypingAnimation titles={taglines} />
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" asChild>
