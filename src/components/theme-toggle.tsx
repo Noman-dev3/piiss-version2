@@ -29,10 +29,10 @@ export function ThemeToggle() {
         }
       }
       return {
-        primary: "#87ceeb", // Default soft sky blue
-        accent: "#ffdab9", // Default gentle peach
-        background: "#e6e9ed", // Default pale blue-gray
-        secondary: "#fafafa" // Default secondary
+        primary: "#4f46e5",    // Indigo 600
+        accent: "#f3f4f6",     // Gray 100
+        background: "#ffffff", // White
+        secondary: "#f9fafb"   // Gray 50
       };
   });
   
