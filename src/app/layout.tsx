@@ -51,7 +51,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {loading && <Preloader />}
-          {!loading && children}
+          <div className={cn(loading ? 'hidden' : 'block')}>
+            {children}
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>
