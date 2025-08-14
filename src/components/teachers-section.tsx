@@ -40,19 +40,19 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
             {teacher.department}
           </Badge>
 
-          <div className="w-full text-left space-y-4">
-             <div className="text-sm">
-              <p className="text-muted-foreground font-semibold">Bio</p>
-              <p className="font-medium truncate">{teacher.bio || "N/A"}</p>
-            </div>
-             <div className="text-sm">
-              <p className="text-muted-foreground font-semibold">Joined</p>
-              <p className="font-medium">{teacher.dateJoined}</p>
-            </div>
-             <div className="text-sm">
-              <p className="text-muted-foreground font-semibold">Contact</p>
-              <p className="font-medium">{teacher.contact}</p>
-            </div>
+          <div className="w-full text-left space-y-2">
+             <p className="text-sm truncate">
+              <span className="text-muted-foreground font-semibold">Bio:</span>
+              <span className="font-medium ml-1">{teacher.bio || "N/A"}</span>
+            </p>
+             <p className="text-sm truncate">
+              <span className="text-muted-foreground font-semibold">Joined:</span>
+              <span className="font-medium ml-1">{teacher.dateJoined}</span>
+            </p>
+             <p className="text-sm truncate">
+              <span className="text-muted-foreground font-semibold">Contact:</span>
+              <span className="font-medium ml-1">{teacher.contact}</span>
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -62,6 +62,33 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
 
 
 export default function TeachersSection({ teachers }: TeachersSectionProps) {
+  if (!teachers || teachers.length === 0) {
+    return (
+        <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
+            <div className="container mx-auto text-center">
+                <Badge variant="outline" className="mb-4 bg-secondary/80">
+                    <Users className="w-4 h-4 mr-2" />
+                    {teachersSection.badge}
+                </Badge>
+                <h2 className="text-4xl font-bold mb-4 font-headline">
+                    {teachersSection.title}
+                </h2>
+                <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
+                    {teachersSection.description}
+                </p>
+                <p className="text-center text-muted-foreground">Faculty details will be available soon.</p>
+                 <div className="mt-16 text-center">
+                    <Button size="lg" asChild>
+                        <Link href="/faculty">
+                            {teachersSection.viewAllButton} <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
+                    </Button>
+                </div>
+            </div>
+        </section>
+    )
+  }
+
   return (
     <section id="teachers" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
       <div className="container mx-auto text-center">
@@ -78,15 +105,11 @@ export default function TeachersSection({ teachers }: TeachersSectionProps) {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {teachersSection.description}
         </p>
-        {teachers && teachers.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teachers.map((teacher, index) => (
-                <TeacherCard key={index} teacher={teacher} />
-            ))}
-            </div>
-        ): (
-             <p className="text-center text-muted-foreground">Faculty details will be available soon.</p>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {teachers.map((teacher, index) => (
+            <TeacherCard key={index} teacher={teacher} />
+        ))}
+        </div>
         <div className="mt-16 text-center">
             <Button size="lg" asChild>
                 <Link href="/faculty">

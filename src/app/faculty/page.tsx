@@ -1,6 +1,6 @@
 
 import { Header } from "@/components/header";
-import { Teacher, teacherSchema } from "@/app/admin/teachers/data/schema";
+import { Teacher } from "@/app/admin/teachers/data/schema";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,19 +33,19 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
             {teacher.department}
           </Badge>
 
-          <div className="w-full text-left space-y-4">
-             <div className="text-sm">
-              <p className="text-muted-foreground font-semibold">Bio</p>
-              <p className="font-medium truncate">{teacher.bio || "N/A"}</p>
-            </div>
-             <div className="text-sm">
-              <p className="text-muted-foreground font-semibold">Joined</p>
-              <p className="font-medium">{teacher.dateJoined}</p>
-            </div>
-             <div className="text-sm">
-              <p className="text-muted-foreground font-semibold">Contact</p>
-              <p className="font-medium">{teacher.contact}</p>
-            </div>
+          <div className="w-full text-left space-y-2">
+             <p className="text-sm truncate">
+              <span className="text-muted-foreground font-semibold">Bio:</span>
+              <span className="font-medium ml-1">{teacher.bio || "N/A"}</span>
+            </p>
+             <p className="text-sm truncate">
+              <span className="text-muted-foreground font-semibold">Joined:</span>
+              <span className="font-medium ml-1">{teacher.dateJoined}</span>
+            </p>
+             <p className="text-sm truncate">
+              <span className="text-muted-foreground font-semibold">Contact:</span>
+              <span className="font-medium ml-1">{teacher.contact}</span>
+            </p>
           </div>
         </CardContent>
       </Card>
