@@ -15,16 +15,13 @@ import { Badge } from "@/components/ui/badge";
 import { testimonialsSection } from "@/lib/data";
 import { Testimonial } from "@/app/admin/data-schemas";
 import { subscribeToTestimonials } from "@/lib/data-fetching";
-import { Loader } from "./ui/loader";
 
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
-  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const unsubscribe = subscribeToTestimonials((data) => {
         setTestimonials(data);
-        setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -45,11 +42,7 @@ export default function TestimonialsSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {testimonialsSection.description}
         </p>
-        {loading ? (
-             <div className="min-h-[300px] flex items-center justify-center">
-                <Loader />
-             </div>
-        ) : testimonials.length > 0 ? (
+        {testimonials.length > 0 ? (
           <Carousel
             opts={{
               align: "start",

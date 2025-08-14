@@ -8,11 +8,9 @@ import { about } from "@/lib/data";
 import { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
 import { db } from "@/lib/firebase";
-import { Loader } from "./ui/loader";
 
 export default function AboutSection() {
   const [content, setContent] = useState({ description: "", imageUrl: about.image.src });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const settingsRef = ref(db, 'settings');
@@ -24,19 +22,9 @@ export default function AboutSection() {
           imageUrl: data.aboutImageUrl || about.image.src,
         });
       }
-      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
-
-
-  if(loading) {
-    return (
-        <section id="about" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary flex items-center justify-center min-h-[50vh]">
-            <Loader />
-        </section>
-    )
-  }
 
   return (
     <section id="about" className="py-20 lg:py-32 px-6 lg:px-12 bg-secondary">

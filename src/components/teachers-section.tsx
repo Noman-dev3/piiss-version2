@@ -11,7 +11,6 @@ import { Teacher } from "@/app/admin/data-schemas";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { subscribeToTeachers } from "@/lib/data-fetching";
-import { Loader } from "./ui/loader";
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
   return (
@@ -61,12 +60,10 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
 
 export default function TeachersSection() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     const unsubscribe = subscribeToTeachers((data) => {
         setTeachers(data);
-        setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -87,11 +84,7 @@ export default function TeachersSection() {
         <p className="text-muted-foreground mb-12 max-w-3xl mx-auto">
           {teachersSection.description}
         </p>
-        {loading ? (
-            <div className="min-h-[400px] flex items-center justify-center">
-                <Loader />
-            </div>
-        ) : teachers.length > 0 ? (
+        {teachers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teachers.map((teacher, index) => (
                 <TeacherCard key={index} teacher={teacher} />

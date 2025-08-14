@@ -13,18 +13,17 @@ import { faqSection } from "@/lib/data";
 import { FAQ } from "@/app/admin/data-schemas";
 import { useState, useEffect } from "react";
 import { subscribeToFaqs } from "@/lib/data-fetching";
-import { Loader } from "./ui/loader";
   
 export default function FaqSection() {
     const [faqs, setFaqs] = useState<FAQ[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = subscribeToFaqs((data) => {
             setFaqs(data);
-            setLoading(false);
         });
-        return () => unsubscribe();
+        if (unsubscribe) {
+          return () => unsubscribe();
+        }
     }, []);
 
     return (
@@ -43,11 +42,7 @@ export default function FaqSection() {
                         {faqSection.description}
                     </p>
                 </div>
-                {loading ? (
-                    <div className="min-h-[200px] flex items-center justify-center">
-                        <Loader />
-                    </div>
-                ) : faqs.length > 0 ? (
+                {faqs.length > 0 ? (
                     <div className="max-w-3xl mx-auto">
                         <Accordion type="single" collapsible className="w-full">
                             {faqs.map((faq, index) => (

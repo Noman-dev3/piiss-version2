@@ -11,16 +11,13 @@ import { GalleryItem } from "@/app/admin/data-schemas";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { subscribeToGallery } from "@/lib/data-fetching";
-import { Loader } from "./ui/loader";
 
 export default function GallerySection() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = subscribeToGallery((data) => {
       setGalleryItems(data);
-      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -41,11 +38,7 @@ export default function GallerySection() {
         <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
           {gallerySection.description}
         </p>
-        {loading ? (
-             <div className="min-h-[250px] flex items-center justify-center">
-                <Loader />
-             </div>
-        ) : galleryItems.length > 0 ? (
+        {galleryItems.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {galleryItems.map((item, index) => (
                 <div key={index} className="group perspective-1000">

@@ -11,16 +11,13 @@ import { format } from "date-fns";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { subscribeToEvents } from "@/lib/data-fetching";
-import { Loader } from "./ui/loader";
 
 export default function EventsSection() {
   const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = subscribeToEvents((data) => {
       setEvents(data);
-      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -40,11 +37,7 @@ export default function EventsSection() {
           {eventsSection.description}
         </p>
 
-        {loading ? (
-           <div className="min-h-[200px] flex items-center justify-center">
-             <Loader />
-           </div>
-        ) : events.length > 0 ? (
+        {events.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
             {events.map((event, index) => (
                 <div key={index} className="group perspective-1000">

@@ -25,6 +25,11 @@
     --input: 206 33% 90%;
     --ring: 197 71% 63%;
     --radius: 0.5rem;
+
+    --custom-primary: 197 71% 63%;
+    --custom-accent: 28 100% 84%;
+    --custom-background: 206 33% 97%;
+    --custom-secondary: 210 20% 98%;
   }
  
   .dark {
@@ -182,6 +187,25 @@
     background-image: radial-gradient(circle, hsl(var(--foreground) / 0.1) 1px, transparent 1px);
     background-size: 1rem 1rem;
   }
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: hsl(var(--background));
+    z-index: 9999;
+    flex-direction: column;
+    gap: 1rem;
+    transition: opacity 0.5s ease;
+  }
+  .preloader.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
   .loader-container {
     perspective: 800px;
     display: flex;
@@ -195,7 +219,7 @@
     height: 50px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 1s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    animation: spin 8s infinite linear;
   }
 
   .cube__face {
@@ -205,12 +229,15 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    gap: 2px;
-    border: 1px solid hsl(var(--background));
+    gap: 4px; /* Increased gap */
+    border: 1px solid transparent;
+    background-color: hsla(var(--primary), 0.2); /* Inner glow */
+    box-shadow: inset 0 0 10px hsl(var(--primary));
   }
   .cube__piece {
     width: 100%;
     height: 100%;
+    background-color: hsl(var(--primary));
     transition: background-color 0.5s ease;
   }
   .cube__face--front  { transform: rotateY(  0deg) translateZ(25px); }
@@ -220,6 +247,16 @@
   .cube__face--top    { transform: rotateX( 90deg) translateZ(25px); }
   .cube__face--bottom { transform: rotateX(-90deg) translateZ(25px); }
 }
+
+@keyframes spin {
+  from {
+    transform: rotateX(0) rotateY(0);
+  }
+  to {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
 
 @keyframes gradientBG {
   0% {
