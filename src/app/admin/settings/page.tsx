@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { ref, get, set } from "firebase/database";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PlusCircle, Trash2 } from "lucide-react";
 
 
 export default function SettingsPage() {
@@ -26,7 +27,7 @@ export default function SettingsPage() {
         aboutImageUrl: "",
         contactImageUrl: "",
         schoolDataUrl: "",
-        heroTaglines: "Building the Foundation for a Bright Future\nWhere Knowledge Meets Islamic Values\nEmpowering Minds, Shaping the Future\nA Legacy of Excellence and Integrity",
+        heroTaglines: ["Building the Foundation for a Bright Future", "Where Knowledge Meets Islamic Values", "Empowering Minds, Shaping the Future", "A Legacy of Excellence and Integrity"],
     });
 
     useEffect(() => {
@@ -34,8 +35,15 @@ export default function SettingsPage() {
             const settingsRef = ref(db, 'settings');
             const snapshot = await get(settingsRef);
             if(snapshot.exists()) {
-                // Merge fetched settings with default values to avoid breaking if new settings are added
-                setSettings(prev => ({...prev, ...snapshot.val()}));
+                const fetchedSettings = snapshot.val();
+                // Ensure heroTaglines is an array for backward compatibility
+                if (typeof fetchedSettings.heroTaglines === 'string') {
+                    fetchedSettings.heroTaglines = fetchedSettings.heroTaglines.split('\n').filter((line: string) => line.trim() !== '');
+                } else if (!Array.isArray(fetchedSettings.heroTaglines)) {
+                    fetchedSettings.heroTaglines = [];
+                }
+                
+                setSettings(prev => ({...prev, ...fetchedSettings}));
             }
             setLoading(false);
         }
@@ -46,11 +54,30 @@ export default function SettingsPage() {
         const { id, value } = e.target;
         setSettings(prev => ({...prev, [id]: value}));
     }
+    
+    const handleTaglineChange = (index: number, value: string) => {
+        const newTaglines = [...settings.heroTaglines];
+        newTaglines[index] = value;
+        setSettings(prev => ({...prev, heroTaglines: newTaglines}));
+    };
+    
+    const addTagline = () => {
+        setSettings(prev => ({...prev, heroTaglines: [...prev.heroTaglines, ""]}));
+    };
+
+    const removeTagline = (index: number) => {
+        const newTaglines = settings.heroTaglines.filter((_, i) => i !== index);
+        setSettings(prev => ({...prev, heroTaglines: newTaglines}));
+    };
 
     const handleSaveChanges = async () => {
         try {
+            const settingsToSave = {
+                ...settings,
+                heroTaglines: settings.heroTaglines.filter(line => line.trim() !== '')
+            };
             const settingsRef = ref(db, 'settings');
-            await set(settingsRef, settings);
+            await set(settingsRef, settingsToSave);
             toast({
                 title: "Settings Saved",
                 description: "Your changes have been successfully saved.",
@@ -99,10 +126,25 @@ export default function SettingsPage() {
                     <CardDescription>Update your website's main content and contact information.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                     <div className="space-y-2">
-                        <Label htmlFor="heroTaglines">Hero Taglines (one per line)</Label>
-                        <Textarea id="heroTaglines" value={settings.heroTaglines} onChange={handleInputChange} rows={4} />
+                    <div className="space-y-4">
+                        <Label>Hero Taglines</Label>
+                        {settings.heroTaglines.map((tagline, index) => (
+                           <div key={index} className="flex items-center gap-2">
+                                <Input
+                                    value={tagline}
+                                    onChange={(e) => handleTaglineChange(index, e.target.value)}
+                                    placeholder={`Tagline #${index + 1}`}
+                                />
+                                <Button variant="ghost" size="icon" onClick={() => removeTagline(index)}>
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                </Button>
+                           </div>
+                        ))}
+                         <Button variant="outline" size="sm" onClick={addTagline}>
+                           <PlusCircle className="mr-2 h-4 w-4" /> Add New Tagline
+                        </Button>
                     </div>
+
                     <div className="space-y-2">
                         <Label htmlFor="ourStory">Our Story</Label>
                         <Textarea id="ourStory" value={settings.ourStory} onChange={handleInputChange} rows={5} />

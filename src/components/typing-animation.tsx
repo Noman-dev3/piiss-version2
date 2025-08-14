@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 type TypingAnimationProps = {
   titles: string[];
@@ -16,18 +16,21 @@ export default function TypingAnimation({ titles }: TypingAnimationProps) {
   const typingSpeed = 100;
   const deletingSpeed = 50;
   const delay = 2000;
+  
+  const currentTitles = useMemo(() => {
+    return titles && titles.length > 0 ? titles : [""];
+  }, [titles]);
+
 
   useEffect(() => {
-    if (!titles || titles.length === 0) return;
-
-    if (subIndex === titles[index].length + 1 && !isDeleting) {
+    if (subIndex === currentTitles[index].length + 1 && !isDeleting) {
       setTimeout(() => setIsDeleting(true), delay);
       return;
     }
 
     if (subIndex === 0 && isDeleting) {
       setIsDeleting(false);
-      setIndex((prev) => (prev + 1) % titles.length);
+      setIndex((prev) => (prev + 1) % currentTitles.length);
       return;
     }
 
@@ -36,15 +39,11 @@ export default function TypingAnimation({ titles }: TypingAnimationProps) {
     }, isDeleting ? deletingSpeed : typingSpeed);
 
     return () => clearTimeout(timeout);
-  }, [subIndex, index, isDeleting, titles, delay]);
+  }, [subIndex, index, isDeleting, currentTitles, delay]);
   
   useEffect(() => {
-      if (!titles || titles.length === 0) {
-        setText('');
-        return;
-      };
-      setText(titles[index].substring(0, subIndex));
-  }, [subIndex, index, titles]);
+      setText(currentTitles[index].substring(0, subIndex));
+  }, [subIndex, index, currentTitles]);
 
 
   return (
