@@ -29,6 +29,8 @@ import { db } from "@/lib/firebase";
 import { ref, push, set } from "firebase/database";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   applicantName: z.string().min(2, {
@@ -55,6 +57,75 @@ const formSchema = z.object({
   previousSchool: z.string().optional(),
   comments: z.string().optional(),
 });
+
+interface DateInputProps {
+  value: Date | undefined;
+  onChange: (date: Date) => void;
+}
+
+const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
+  const [day, setDay] = useState(value ? String(value.getDate()) : "");
+  const [month, setMonth] = useState(value ? String(value.getMonth() + 1) : "");
+  const [year, setYear] = useState(value ? String(value.getFullYear()) : "");
+
+  const dayRef = React.useRef<HTMLInputElement>(null);
+  const monthRef = React.useRef<HTMLInputElement>(null);
+  const yearRef = React.useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const numDay = parseInt(day, 10);
+    const numMonth = parseInt(month, 10);
+    const numYear = parseInt(year, 10);
+
+    if (
+      !isNaN(numDay) && !isNaN(numMonth) && !isNaN(numYear) &&
+      String(numYear).length === 4 && numMonth >= 1 && numMonth <= 12 && numDay >= 1 && numDay <= 31
+    ) {
+      onChange(new Date(numYear, numMonth - 1, numDay));
+    }
+  }, [day, month, year, onChange]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: React.Dispatch<React.SetStateAction<string>>,
+    maxLength: number,
+    nextRef?: React.RefObject<HTMLInputElement>
+  ) => {
+    const { value } = e.target;
+    if (value.length <= maxLength) {
+      setter(value);
+      if (value.length === maxLength && nextRef?.current) {
+        nextRef.current.focus();
+      }
+    }
+  };
+
+  return (
+    <div className="flex space-x-2">
+      <Input
+        ref={dayRef}
+        placeholder="DD"
+        value={day}
+        onChange={(e) => handleInputChange(e, setDay, 2, monthRef)}
+        className="w-1/3 text-center bg-background"
+      />
+      <Input
+        ref={monthRef}
+        placeholder="MM"
+        value={month}
+        onChange={(e) => handleInputChange(e, setMonth, 2, yearRef)}
+        className="w-1/3 text-center bg-background"
+      />
+      <Input
+        ref={yearRef}
+        placeholder="YYYY"
+        value={year}
+        onChange={(e) => handleInputChange(e, setYear, 4)}
+        className="w-1/3 text-center bg-background"
+      />
+    </div>
+  );
+};
 
 export function AdmissionForm() {
   const { toast } = useToast();
@@ -94,13 +165,6 @@ export function AdmissionForm() {
       });
     }
   }
-  
-    const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - 3 - i);
-    const months = Array.from({ length: 12 }, (_, i) => ({
-      value: String(i + 1),
-      label: new Date(0, i).toLocaleString('default', { month: 'long' })
-    }));
-    const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
 
   return (
     <Card className="max-w-4xl mx-auto bg-secondary/30 border-border/20">
@@ -144,49 +208,13 @@ export function AdmissionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Date of Birth *</FormLabel>
-                      <Controller
-                        control={form.control}
-                        name="dob"
-                        render={({ field: { onChange, value }, fieldState: { error } }) => {
-                          const dob = value ? new Date(value) : new Date();
-                          const day = dob.getDate();
-                          const month = dob.getMonth() + 1;
-                          const year = dob.getFullYear();
-
-                          const handleDateChange = (part: 'day' | 'month' | 'year', val: string) => {
-                            const newDay = part === 'day' ? parseInt(val, 10) : day;
-                            const newMonth = part === 'month' ? parseInt(val, 10) - 1 : month - 1;
-                            const newYear = part === 'year' ? parseInt(val, 10) : year;
-                            onChange(new Date(newYear, newMonth, newDay));
-                          };
-
-                          return (
-                            <div>
-                              <div className="grid grid-cols-3 gap-3">
-                                <Select onValueChange={(val) => handleDateChange('day', val)} defaultValue={String(day)}>
-                                  <SelectTrigger className="bg-background"><SelectValue placeholder="Day" /></SelectTrigger>
-                                  <SelectContent>
-                                    {days.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
-                                  </SelectContent>
-                                </Select>
-                                <Select onValueChange={(val) => handleDateChange('month', val)} defaultValue={String(month)}>
-                                  <SelectTrigger className="bg-background"><SelectValue placeholder="Month" /></SelectTrigger>
-                                  <SelectContent>
-                                    {months.map(m => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
-                                  </SelectContent>
-                                </Select>
-                                <Select onValueChange={(val) => handleDateChange('year', val)} defaultValue={String(year)}>
-                                  <SelectTrigger className="bg-background"><SelectValue placeholder="Year" /></SelectTrigger>
-                                  <SelectContent>
-                                    {years.map(y => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              {error && <p className="text-sm font-medium text-destructive mt-2">{error.message}</p>}
-                            </div>
-                          );
-                        }}
-                      />
+                      <FormControl>
+                        <DateInput
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
