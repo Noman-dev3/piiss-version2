@@ -1,8 +1,8 @@
 
-"use server"
+"use client";
 
 import { db } from "@/lib/firebase";
-import { ref, onValue, query, limitToLast, limitToFirst, get } from "firebase/database";
+import { ref, onValue, query, limitToLast, limitToFirst, get, Unsubscribe } from "firebase/database";
 import { z } from "zod";
 import {
   topperSchema, Topper,
@@ -13,8 +13,13 @@ import {
   faqSchema, FAQ
 } from "@/app/admin/data-schemas";
 
-function createDataFetcher<T>(schema: z.ZodType<T[], any>, dbPath: string, limit?: number, order: 'asc' | 'desc' = 'desc') {
-  return (callback: (data: T[]) => void) => {
+function createDataSubscriber<T>(
+    schema: z.ZodType<T[], any>, 
+    dbPath: string, 
+    limit?: number, 
+    order: 'asc' | 'desc' = 'desc'
+): (callback: (data: T[]) => void) => Unsubscribe {
+  return (callback: (data: T[]) => void): Unsubscribe => {
     let dbQuery;
     if (limit) {
         dbQuery = query(ref(db, dbPath), order === 'desc' ? limitToLast(limit) : limitToFirst(limit));
@@ -22,7 +27,7 @@ function createDataFetcher<T>(schema: z.ZodType<T[], any>, dbPath: string, limit
         dbQuery = ref(db, dbPath);
     }
     
-    return onValue(dbQuery, (snapshot) => {
+    const unsubscribe = onValue(dbQuery, (snapshot) => {
       let items: T[] = [];
       if (snapshot.exists()) {
         const data = snapshot.val();
@@ -39,7 +44,7 @@ function createDataFetcher<T>(schema: z.ZodType<T[], any>, dbPath: string, limit
               items.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
           }
            if (limit && order === 'desc') {
-             items = items.reverse(); // onValue with limitToLast gives ascending order
+             items = items.reverse();
            }
         } else {
           console.error(`Zod validation error for ${dbPath}:`, parsedItems.error.flatten());
@@ -50,15 +55,17 @@ function createDataFetcher<T>(schema: z.ZodType<T[], any>, dbPath: string, limit
       console.error(`Error fetching ${dbPath}:`, error);
       callback([]);
     });
+
+    return unsubscribe;
   };
 }
 
-export const subscribeToToppers = createDataFetcher(z.array(topperSchema), 'toppers');
-export const subscribeToTeachers = createDataFetcher(z.array(teacherSchema), 'teachers', 3, 'asc');
-export const subscribeToEvents = createDataFetcher(z.array(eventSchema), 'events', 3, 'desc');
-export const subscribeToGallery = createDataFetcher(z.array(galleryItemSchema), 'gallery', 4, 'desc');
-export const subscribeToTestimonials = createDataFetcher(z.array(testimonialSchema), 'testimonials');
-export const subscribeToFaqs = createDataFetcher(z.array(faqSchema), 'faqs');
+export const subscribeToToppers = createDataSubscriber(z.array(topperSchema), 'toppers');
+export const subscribeToTeachers = createDataSubscriber(z.array(teacherSchema), 'teachers', 3, 'asc');
+export const subscribeToEvents = createDataSubscriber(z.array(eventSchema), 'events', 3, 'desc');
+export const subscribeToGallery = createDataSubscriber(z.array(galleryItemSchema), 'gallery', 4, 'desc');
+export const subscribeToTestimonials = createDataSubscriber(z.array(testimonialSchema), 'testimonials');
+export const subscribeToFaqs = createDataSubscriber(z.array(faqSchema), 'faqs');
 
 
 export async function getSettings() {
