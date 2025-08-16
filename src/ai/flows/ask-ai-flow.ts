@@ -24,7 +24,7 @@ export const AskAiInputSchema = z.object({
 export type AskAiInput = z.infer<typeof AskAiInputSchema>;
 
 export async function askAI(input: AskAiInput): Promise<string> {
-    const { output } = await askAiPrompt.generate({ input });
+    const { output } = await askAiPrompt(input);
     return output!;
 }
 
