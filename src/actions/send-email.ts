@@ -1,8 +1,11 @@
+
 "use server";
 
 import nodemailer from "nodemailer";
 
 interface EmailOptions {
+  fromName: string;
+  fromEmail: string;
   to: string;
   subject: string;
   html: string;
@@ -21,10 +24,11 @@ export async function sendEmail(options: EmailOptions) {
 
   try {
     const info = await transporter.sendMail({
-      from: '"PIISS Admissions" <noman.dev3@gmail.com>',
+      from: `"${options.fromName}" <${options.fromEmail}>`,
       to: options.to,
-      subject: options.subject,
+      subject: `New Contact Form Inquiry: ${options.subject}`,
       html: options.html,
+      replyTo: options.fromEmail,
     });
 
     console.log("Message sent: %s", info.messageId);

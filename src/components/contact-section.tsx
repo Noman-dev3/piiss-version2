@@ -1,6 +1,7 @@
 
 "use client";
 
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,8 +15,9 @@ import {
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Send, Clock, Mail, MapPin, Phone, Loader2 } from "lucide-react";
 import { contactForm } from "@/lib/data";
+import { sendEmail } from '@/actions/send-email';
 
 interface ContactSectionProps {
     content: {
@@ -28,6 +30,7 @@ interface ContactSectionProps {
 
 export default function ContactSection({ content }: ContactSectionProps) {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const currentContactInfo = [
       { icon: <MapPin className="w-6 h-6 text-primary" />, title: "Address", value: content.address },
@@ -38,15 +41,56 @@ export default function ContactSection({ content }: ContactSectionProps) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log("Form submitted:", data);
+    setLoading(true);
 
-    toast({
-      title: "Message Sent!",
-      description: "Thanks for reaching out. We'll get back to you soon.",
-    });
-    (event.target as HTMLFormElement).reset();
+    const formData = new FormData(event.currentTarget);
+    const data = {
+        firstName: formData.get('first-name') as string,
+        lastName: formData.get('last-name') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        subject: formData.get('subject') as string,
+        message: formData.get('message') as string,
+    };
+
+    const emailHtml = `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${data.firstName} ${data.lastName}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
+        <p><strong>Subject:</strong> ${data.subject}</p>
+        <hr>
+        <h3>Message:</h3>
+        <p>${data.message}</p>
+    `;
+
+    try {
+        const result = await sendEmail({
+            fromName: `${data.firstName} ${data.lastName}`,
+            fromEmail: data.email,
+            to: content.email,
+            subject: data.subject,
+            html: emailHtml,
+        });
+
+        if (result.success) {
+            toast({
+                title: "Message Sent!",
+                description: "Thanks for reaching out. We'll get back to you soon.",
+            });
+            (event.target as HTMLFormElement).reset();
+        } else {
+            throw new Error(result.error || "An unknown error occurred.");
+        }
+    } catch (error) {
+        toast({
+            title: "Submission Failed",
+            description: (error as Error).message,
+            variant: "destructive",
+        });
+    } finally {
+        setLoading(false);
+    }
   }
   
   return (
@@ -91,9 +135,13 @@ export default function ContactSection({ content }: ContactSectionProps) {
                 <Label htmlFor="message">{contactForm.fields.message.label} *</Label>
                 <Textarea id="message" name="message" placeholder={contactForm.fields.message.placeholder} rows={5} required className="bg-background" />
               </div>
-              <Button type="submit" size="lg" className="w-full">
-                <Send className="mr-2 h-4 w-4" />
-                {contactForm.submitButton}
+              <Button type="submit" size="lg" className="w-full" disabled={loading}>
+                 {loading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="mr-2 h-4 w-4" />
+                  )}
+                {loading ? "Sending..." : contactForm.submitButton}
               </Button>
             </form>
           </div>
