@@ -42,6 +42,11 @@ export default async function Home() {
     getFaqs()
   ]);
 
+  const aboutContent = {
+    description: settings.ourStory,
+    imageUrl: settings.aboutImageUrl,
+  };
+
   const contactContent = {
     address: settings.contactAddress || "",
     phone: settings.contactPhone || "",
@@ -69,7 +74,7 @@ export default async function Home() {
           <Features />
           <AdBanner />
           <LazyLoad>
-            <AboutSection />
+            <AboutSection content={aboutContent} />
           </LazyLoad>
           <LazyLoad>
             <ToppersSection toppers={toppers} />
