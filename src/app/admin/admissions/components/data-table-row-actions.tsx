@@ -46,7 +46,13 @@ export function DataTableRowActions<TData>({
         ? `<p>Dear ${admission.applicantName},</p><p>We are delighted to inform you that your admission to Pakistan Islamic International School System (PIISS) has been approved. Welcome to our community!</p><p>Further details regarding orientation and class commencement will be shared with you shortly.</p><p>Best regards,<br/>PIISS Admissions Office</p>`
         : `<p>Dear ${admission.applicantName},</p><p>Thank you for your interest in Pakistan Islamic International School System (PIISS). After careful consideration, we regret to inform you that we are unable to offer you a place at this time.</p><p>We wish you the best in your academic future.</p><p>Sincerely,<br/>PIISS Admissions Office</p>`;
 
-      await sendEmail({ to: admission.parentEmail, subject, html: body });
+      await sendEmail({ 
+        to: admission.parentEmail, 
+        subject, 
+        html: body, 
+        fromName: "PIISS Admissions Office", 
+        fromEmail: "noreply@piiss.edu.pk" 
+      });
 
       toast({ 
         title: `Admission ${status.charAt(0).toUpperCase() + status.slice(1)}`, 
