@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -13,7 +14,7 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, height = "80vh" }) => {
   const placeholderRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const node = placeholderRef.current; // Capture the current ref value
+    const node = placeholderRef.current; 
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
@@ -26,7 +27,7 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, height = "80vh" }) => {
           }
         });
       },
-      { rootMargin: "0px 0px 200px 0px" } // Load 200px before it enters viewport
+      { rootMargin: "0px 0px -100px 0px" } 
     );
 
     if (node) {
@@ -38,13 +39,13 @@ const LazyLoad: React.FC<LazyLoadProps> = ({ children, height = "80vh" }) => {
         observer.unobserve(node);
       }
     };
-  }, []); // The effect only needs to run once
+  }, []); 
 
   if (isVisible) {
-    return <>{children}</>;
+    return <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">{children}</div>;
   }
   
-  return <Skeleton ref={placeholderRef} className="w-full" style={{ height }} />;
+  return <div ref={placeholderRef} style={{ height }} className="w-full" />;
 };
 
 export default LazyLoad;
