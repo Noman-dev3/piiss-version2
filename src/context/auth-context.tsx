@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -63,6 +63,21 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
       router.push('/admin');
     }
   }, [user, loading, router, pathname]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const handleBeforeUnload = () => {
+        logout();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+}, [user, logout]);
+
 
   if (loading) {
      return (
