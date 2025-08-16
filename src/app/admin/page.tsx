@@ -12,6 +12,7 @@ import { Admission } from "./admissions/data/schema";
 import { Student } from "./students/data/schema";
 import { AdmissionsStatusChart } from "./components/admissions-status-chart";
 import { StudentsByClassChart } from "./components/students-by-class-chart";
+import { Event } from "./events/data/schema";
 
 async function getDashboardData() {
     try {
@@ -40,7 +41,7 @@ async function getDashboardData() {
         const pendingAdmissions = admissions.filter(a => a.status === 'pending').length;
         
         const upcomingEvents = eventsSnapshot.exists() 
-            ? Object.values(eventsSnapshot.val() as Event[]).filter(e => new Date(e.date) >= new Date()).length
+            ? Object.values(eventsSnapshot.val() as Record<string, Event>).filter(e => new Date(e.date) >= new Date()).length
             : 0;
         
         return { 
