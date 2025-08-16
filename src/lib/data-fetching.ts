@@ -15,7 +15,7 @@ import {
 import { hero } from "./data";
 
 // A generic function to fetch data once from Firebase
-async function fetchData<T extends { id: string }>(dbPath: string, schema: z.ZodArray<z.AnyZodObject>): Promise<T[]> {
+async function fetchData<T extends { id: string }>(dbPath: string, schema: z.ZodType<T, any, any>): Promise<T[]> {
   try {
     const dataRef = ref(db, dbPath);
     const snapshot = await get(dataRef);
@@ -26,30 +26,28 @@ async function fetchData<T extends { id: string }>(dbPath: string, schema: z.Zod
         ...data[key],
       }));
       
-      const parsedData = schema.safeParse(dataArray);
-      
-      if (parsedData.success) {
-        let sortedData = parsedData.data as T[];
-        // Generic date sorting for schemas that have it
-        if (sortedData.length > 0 && 'date' in sortedData[0]) {
-           sortedData.sort((a, b) => new Date((b as any).date).getTime() - new Date((a as any).date).getTime());
-        } else if (sortedData.length > 0 && 'submittedAt' in sortedData[0]) {
-            sortedData.sort((a, b) => new Date((b as any).submittedAt).getTime() - new Date((a as any).submittedAt).getTime());
-        } else if (sortedData.length > 0 && 'date_created' in sortedData[0]) {
-            sortedData.sort((a, b) => new Date((b as any).date_created).getTime() - new Date((a as any).date_created).getTime());
-        }
-        return sortedData;
-      } else {
-        console.error(`Zod validation error for ${dbPath}:`, parsedData.error.flatten());
-        // Return valid items even if some fail validation
-         const validItems = dataArray
-          .map(item => {
-            const result = schema.element.safeParse(item);
-            return result.success ? result.data as T : null;
-          })
-          .filter((item): item is T => item !== null);
-        return validItems;
+      const validItems = dataArray
+        .map(item => {
+          const result = schema.safeParse(item);
+          if (result.success) {
+            return result.data;
+          } else {
+            // console.warn(`Zod validation failed for item in ${dbPath} with id ${item.id}:`, result.error.flatten());
+            return null;
+          }
+        })
+        .filter((item): item is T => item !== null);
+
+      let sortedData = validItems;
+      // Generic date sorting for schemas that have it
+      if (sortedData.length > 0 && 'date' in sortedData[0]) {
+          sortedData.sort((a, b) => new Date((b as any).date).getTime() - new Date((a as any).date).getTime());
+      } else if (sortedData.length > 0 && 'submittedAt' in sortedData[0]) {
+          sortedData.sort((a, b) => new Date((b as any).submittedAt).getTime() - new Date((a as any).submittedAt).getTime());
+      } else if (sortedData.length > 0 && 'date_created' in sortedData[0]) {
+          sortedData.sort((a, b) => new Date((b as any).date_created).getTime() - new Date((a as any).date_created).getTime());
       }
+      return sortedData;
     }
     return [];
   } catch (error) {
@@ -58,14 +56,14 @@ async function fetchData<T extends { id: string }>(dbPath: string, schema: z.Zod
   }
 }
 
-export const getToppers = () => fetchData<Topper>('toppers', z.array(topperSchema));
-export const getTeachers = () => fetchData<Teacher>('teachers', z.array(teacherSchema));
-export const getEvents = () => fetchData<Event>('events', z.array(eventSchema));
-export const getGalleryItems = () => fetchData<GalleryItem>('gallery', z.array(galleryItemSchema));
-export const getTestimonials = () => fetchData<Testimonial>('testimonials', z.array(testimonialSchema));
-export const getFaqs = () => fetchData<FAQ>('faqs', z.array(faqSchema));
-export const getBoardStudents = () => fetchData<BoardStudent>('boardStudents', z.array(boardStudentSchema));
-export const getResults = () => fetchData<Result>('results', z.array(resultSchema));
+export const getToppers = () => fetchData<Topper>('toppers', topperSchema);
+export const getTeachers = () => fetchData<Teacher>('teachers', teacherSchema);
+export const getEvents = () => fetchData<Event>('events', eventSchema);
+export const getGalleryItems = () => fetchData<GalleryItem>('gallery', galleryItemSchema);
+export const getTestimonials = () => fetchData<Testimonial>('testimonials', testimonialSchema);
+export const getFaqs = () => fetchData<FAQ>('faqs', faqSchema);
+export const getBoardStudents = () => fetchData<BoardStudent>('boardStudents', boardStudentSchema);
+export const getResults = () => fetchData<Result>('results', resultSchema);
 
 
 // Default settings object to prevent errors on the calling page
