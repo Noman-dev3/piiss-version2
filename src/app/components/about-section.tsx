@@ -11,7 +11,7 @@ import { ref, onValue } from "firebase/database";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AboutSection() {
-  const [content, setContent] = useState({ description: "", imageUrl: about.image.src });
+  const [content, setContent] = useState({ description: "", imageUrl: "" });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,8 +20,13 @@ export default function AboutSection() {
       if (snapshot.exists()) {
         const data = snapshot.val();
         setContent({
-          description: data.ourStory || "",
+          description: data.ourStory || about.description,
           imageUrl: data.aboutImageUrl || about.image.src,
+        });
+      } else {
+         setContent({
+          description: about.description,
+          imageUrl: about.image.src,
         });
       }
       setLoading(false);

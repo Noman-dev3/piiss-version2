@@ -42,17 +42,11 @@ export default async function Home() {
     getFaqs()
   ]);
 
-  const aboutContent = {
-    description: settings.ourStory || "",
-    imageUrl: settings.aboutImageUrl || "https://placehold.co/600x450.png",
-  };
-
   const contactContent = {
     address: settings.contactAddress || "",
     phone: settings.contactPhone || "",
     email: settings.contactEmail || "",
     officeHours: settings.officeHours || "",
-    imageUrl: settings.contactImageUrl || "https://placehold.co/600x400.png",
   };
 
   const footerContent = {
@@ -75,7 +69,7 @@ export default async function Home() {
           <Features />
           <AdBanner />
           <LazyLoad>
-            <AboutSection content={aboutContent} />
+            <AboutSection />
           </LazyLoad>
           <LazyLoad>
             <ToppersSection toppers={toppers} />
