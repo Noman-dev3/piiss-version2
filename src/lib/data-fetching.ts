@@ -32,11 +32,11 @@ async function fetchData<T extends { id: string }>(dbPath: string, schema: z.Zod
         let sortedData = parsedData.data as T[];
         // Generic date sorting for schemas that have it
         if (sortedData.length > 0 && 'date' in sortedData[0]) {
-           sortedData.sort((a, b) => new Date((a as any).date).getTime() - new Date((b as any).date).getTime());
+           sortedData.sort((a, b) => new Date((b as any).date).getTime() - new Date((a as any).date).getTime());
         } else if (sortedData.length > 0 && 'submittedAt' in sortedData[0]) {
-            sortedData.sort((a, b) => new Date((a as any).submittedAt).getTime() - new Date((b as any).submittedAt).getTime());
+            sortedData.sort((a, b) => new Date((b as any).submittedAt).getTime() - new Date((a as any).submittedAt).getTime());
         } else if (sortedData.length > 0 && 'date_created' in sortedData[0]) {
-            sortedData.sort((a, b) => new Date((a as any).date_created).getTime() - new Date((b as any).date_created).getTime());
+            sortedData.sort((a, b) => new Date((b as any).date_created).getTime() - new Date((a as any).date_created).getTime());
         }
         return sortedData;
       } else {
@@ -70,12 +70,12 @@ export const getResults = () => fetchData<Result>('results', z.array(resultSchem
 
 // Default settings object to prevent errors on the calling page
 const defaultSettings = {
-    ourStory: "",
+    ourStory: "Our school's story has not been set up yet.",
     logoUrl: "",
-    contactPhone: "",
-    contactEmail: "",
-    contactAddress: "",
-    officeHours: "",
+    contactPhone: "Not available",
+    contactEmail: "Not available",
+    contactAddress: "Not available",
+    officeHours: "Not available",
     aboutImageUrl: "",
     contactImageUrl: "",
     schoolDataUrl: "",

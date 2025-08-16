@@ -13,37 +13,55 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
 import Image from "next/image";
+import { AISearchDialog } from "./ai-search-dialog";
+import { FAQ, Teacher, Event, Topper, BoardStudent } from "@/app/admin/data-schemas";
 
 export function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState("");
+  const [isSearchOpen, setSearchOpen] = useState(false);
+  
+  const [siteData, setSiteData] = useState({
+    settings: {},
+    faqs: [] as FAQ[],
+    teachers: [] as Teacher[],
+    events: [] as Event[],
+    toppers: [] as Topper[],
+    boardStudents: [] as BoardStudent[],
+  });
 
   useEffect(() => {
-    const settingsRef = ref(db, 'settings/logoUrl');
-    onValue(settingsRef, (snapshot) => {
-      if(snapshot.exists()) {
-        setLogoUrl(snapshot.val());
-      }
+    const settingsRef = ref(db, 'settings');
+    const faqsRef = ref(db, 'faqs');
+    const teachersRef = ref(db, 'teachers');
+    const eventsRef = ref(db, 'events');
+    const toppersRef = ref(db, 'toppers');
+    const boardStudentsRef = ref(db, 'boardStudents');
+
+    const onSettingsValue = onValue(settingsRef, (snapshot) => {
+        const data = snapshot.val();
+        setLogoUrl(data?.logoUrl || "");
+        setSiteData(prev => ({ ...prev, settings: data || {} }));
     });
+    const onFaqsValue = onValue(faqsRef, (snapshot) => setSiteData(prev => ({ ...prev, faqs: Object.values(snapshot.val() || {}) })));
+    const onTeachersValue = onValue(teachersRef, (snapshot) => setSiteData(prev => ({ ...prev, teachers: Object.values(snapshot.val() || {}) })));
+    const onEventsValue = onValue(eventsRef, (snapshot) => setSiteData(prev => ({ ...prev, events: Object.values(snapshot.val() || {}) })));
+    const onToppersValue = onValue(toppersRef, (snapshot) => setSiteData(prev => ({ ...prev, toppers: Object.values(snapshot.val() || {}) })));
+    const onBoardStudentsValue = onValue(boardStudentsRef, (snapshot) => setSiteData(prev => ({ ...prev, boardStudents: Object.values(snapshot.val() || {}) })));
+
+
+    return () => {
+      onSettingsValue();
+      onFaqsValue();
+      onTeachersValue();
+      onEventsValue();
+      onToppersValue();
+      onBoardStudentsValue();
+    };
   }, []);
 
-  const NavLinkItems = ({ isMobile, onLinkClick }: { isMobile: boolean, onLinkClick?: () => void }) => (
-    <>
-      {navLinks.map((link) => (
-        <Link
-          key={link.label}
-          href={link.href}
-          onClick={onLinkClick}
-          className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-4 py-3 px-4 rounded-lg hover:bg-accent"
-        >
-          {isMobile && link.icon}
-          <span>{link.label}</span>
-        </Link>
-      ))}
-    </>
-  );
-
   return (
+    <>
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
@@ -74,14 +92,11 @@ export function Header() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-            <div className="hidden lg:flex relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder={header.searchPlaceholder}
-                className="pl-9 bg-secondary border-border rounded-full text-foreground placeholder:text-muted-foreground focus:bg-background w-48 xl:w-64"
-              />
-            </div>
+            <Button variant="ghost" size="icon" onClick={() => setSearchOpen(true)}>
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
+            </Button>
+
             <ThemeToggle />
             <div className="lg:hidden">
               <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
@@ -106,7 +121,17 @@ export function Header() {
                       </div>
                   </SheetHeader>
                   <nav className="flex-1 p-4 space-y-2">
-                    <NavLinkItems isMobile={true} onLinkClick={() => setSheetOpen(false)} />
+                    {navLinks.map((link) => (
+                        <Link
+                        key={link.label}
+                        href={link.href}
+                        onClick={() => setSheetOpen(false)}
+                        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-4 py-3 px-4 rounded-lg hover:bg-accent"
+                        >
+                        {link.icon}
+                        <span>{link.label}</span>
+                        </Link>
+                    ))}
                   </nav>
                 </SheetContent>
               </Sheet>
@@ -115,5 +140,11 @@ export function Header() {
         </div>
       </div>
     </header>
+    <AISearchDialog 
+      isOpen={isSearchOpen} 
+      onOpenChange={setSearchOpen}
+      siteData={siteData}
+    />
+    </>
   );
 }

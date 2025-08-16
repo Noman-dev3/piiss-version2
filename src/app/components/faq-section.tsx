@@ -1,31 +1,37 @@
 
 "use client";
 
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { HelpCircle, Send, Sparkles } from "lucide-react";
-import { faqSection } from "@/lib/data";
-import { FAQ } from "@/app/admin/data-schemas";
-import React from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { askAI } from "@/ai/flows/ask-ai-flow";
-import { useToast } from "@/hooks/use-toast";
-import { Card } from "../ui/card";
-import { Skeleton } from "../ui/skeleton";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { HelpCircle, Send, Sparkles } from "lucide-react";
+import { faqSection } from "@/lib/data";
+import { FAQ, Teacher, Event, Topper, BoardStudent } from "@/app/admin/data-schemas";
+import React, { useState } from "react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Card } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
+import { askAI } from "@/ai/flows/ask-ai-flow";
   
 interface FaqSectionProps {
   faqs: FAQ[];
-  settings: Record<string, any>;
+  siteData: {
+    settings: Record<string, any>;
+    faqs: FAQ[];
+    teachers: Teacher[];
+    events: Event[];
+    toppers: Topper[];
+    boardStudents: BoardStudent[];
+  };
 }
 
-export default function FaqSection({ faqs, settings }: FaqSectionProps) {
+export default function FaqSection({ faqs, siteData }: FaqSectionProps) {
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,8 +47,7 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
         try {
             const aiResponse = await askAI({
                 question,
-                faqs,
-                settings,
+                ...siteData,
             });
             setAnswer(aiResponse);
         } catch (error) {
@@ -55,8 +60,8 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
         } finally {
             setLoading(false);
         }
-
     }
+
 
     return (
         <section id="faq" className="py-20 lg:py-32 px-6 lg:px-12 bg-background">
@@ -76,7 +81,7 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
                 </div>
                 
                 <div className="max-w-3xl mx-auto">
-                    {faqs && faqs.length > 0 ? (
+                    {faqs && faqs.length > 0 && (
                         <Accordion type="single" collapsible className="w-full mb-12">
                             {faqs.map((faq, index) => (
                             <AccordionItem value={`item-${index}`} key={index}>
@@ -89,8 +94,6 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
                             </AccordionItem>
                             ))}
                         </Accordion>
-                    ) : (
-                        <p className="text-center text-muted-foreground mb-12">No FAQs available at the moment.</p>
                     )}
 
 
@@ -108,7 +111,7 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
                             className="bg-background flex-1 h-12 text-base"
                             disabled={loading}
                         />
-                        <Button type="submit" size="lg" disabled={loading}>
+                        <Button type="submit" size="lg" disabled={loading || !question.trim()}>
                            <Send className="w-4 h-4 mr-2" />
                            {loading ? "Thinking..." : "Ask"}
                         </Button>

@@ -8,15 +8,16 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { FAQ } from '@/app/admin/data-schemas';
+import { faqSchema, teacherSchema, eventSchema, topperSchema, boardStudentSchema } from '@/app/admin/data-schemas';
 
 export const AskAiInputSchema = z.object({
     question: z.string().describe("The user's question about the school."),
-    faqs: z.array(z.object({
-        question: z.string(),
-        answer: z.string(),
-    })).describe("A list of frequently asked questions and their answers."),
+    faqs: z.array(faqSchema).describe("A list of frequently asked questions and their answers."),
     settings: z.any().describe("General settings and content for the website, like 'about us' and contact info."),
+    teachers: z.array(teacherSchema).describe("A list of the school's teachers."),
+    events: z.array(eventSchema).describe("A list of school events."),
+    toppers: z.array(topperSchema).describe("A list of class toppers."),
+    boardStudents: z.array(boardStudentSchema).describe("A list of students with board results."),
 });
 
 export type AskAiInput = z.infer<typeof AskAiInputSchema>;
@@ -31,7 +32,7 @@ const askAiPrompt = ai.definePrompt(
     name: 'askAiPrompt',
     input: { schema: AskAiInputSchema },
     output: { format: 'text' },
-    prompt: `You are a friendly and helpful assistant for the Pakistan Islamic International School System (PIISS). Your goal is to answer the user's question based on the context provided below.
+    prompt: `You are a friendly, expert assistant for the Pakistan Islamic International School System (PIISS). Your goal is to answer the user's question based ONLY on the context provided below.
 
 Be concise and helpful. If the answer isn't in the context, say "I'm sorry, I don't have that information. Please contact the school directly for more details." Do not make up information.
 
@@ -43,7 +44,7 @@ Be concise and helpful. If the answer isn't in the context, say "I'm sorry, I do
 **Available Information (Context):**
 
 **1. General Information & About Us:**
-- **Our Story:** {{{settings.ourStory}}}
+- **Our Story/About Us:** {{{settings.ourStory}}}
 - **Contact Phone:** {{{settings.contactPhone}}}
 - **Contact Email:** {{{settings.contactEmail}}}
 - **Address:** {{{settings.contactAddress}}}
@@ -55,9 +56,28 @@ Be concise and helpful. If the answer isn't in the context, say "I'm sorry, I do
   **A:** {{answer}}
 {{/each}}
 
+**3. Faculty/Teachers:**
+{{#each teachers}}
+- Teacher **{{name}}** is in the **{{department}}** department, has **{{experience}}** of experience, and can be contacted via **{{contact}}**.
+{{/each}}
+
+**4. School Events:**
+{{#each events}}
+- The event **"{{title}}"** is scheduled for **{{date}}**. Description: {{description}}
+{{/each}}
+
+**5. Class Toppers (High Achievers):**
+{{#each toppers}}
+- **{{name}}** from Class **{{class}}** is a top performer with a score/grade of **{{score}}**.
+{{/each}}
+
+**6. Board Students Results:**
+{{#each boardStudents}}
+- **{{name}}** (Roll No: {{boardRollNo}}) from Class **{{class}}** scored **{{obtainedMarks}}** out of **{{totalMarks}}** marks.
+{{/each}}
 ---
 
-Based on the information above, please provide the best possible answer to the user's question.
+Based SOLELY on the information above, please provide the best possible answer to the user's question. Do not mention that you are an AI. Just answer the question directly.
 `,
   },
 );
