@@ -64,15 +64,6 @@ export default async function Home() {
   const heroTaglines = Array.isArray(settings.heroTaglines) && settings.heroTaglines.length > 0 
     ? settings.heroTaglines 
     : [hero.subtitle];
-    
-  const allSiteData = {
-    settings,
-    faqs,
-    teachers,
-    events,
-    toppers,
-    boardStudents,
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -104,7 +95,7 @@ export default async function Home() {
             <TestimonialsSection testimonials={testimonials} />
           </LazyLoad>
           <LazyLoad>
-            <FaqSection faqs={faqs} siteData={allSiteData} />
+            <FaqSection faqs={faqs} />
           </LazyLoad>
           <LazyLoad>
             <ContactSection content={contactContent} />
