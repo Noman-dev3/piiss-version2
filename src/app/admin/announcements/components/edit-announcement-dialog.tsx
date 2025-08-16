@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface EditAnnouncementDialogProps {
   announcement: Announcement;
@@ -43,6 +44,7 @@ export function EditAnnouncementDialog({ announcement, isOpen, onOpenChange }: E
        try {
             const itemRef = ref(db, `announcements/${announcement.id}`);
             await update(itemRef, values);
+            revalidatePath('/admin/announcements');
             toast({
                 title: "Announcement Updated",
                 description: "The announcement has been successfully updated.",

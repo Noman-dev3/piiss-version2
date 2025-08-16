@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface CreateAnnouncementDialogProps {
   isOpen: boolean;
@@ -47,6 +48,7 @@ export function CreateAnnouncementDialog({ isOpen, onOpenChange }: CreateAnnounc
                ...values,
                date: new Date().toISOString()
            });
+           revalidatePath('/admin/announcements');
            toast({
                title: "Announcement Created",
                description: "The new announcement has been successfully posted.",

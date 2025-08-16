@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface CreateBoardStudentDialogProps {
   isOpen: boolean;
@@ -47,6 +48,8 @@ export function CreateBoardStudentDialog({ isOpen, onOpenChange }: CreateBoardSt
            const boardStudentsRef = ref(db, 'boardStudents');
            const newBoardStudentRef = push(boardStudentsRef);
            await set(newBoardStudentRef, values);
+           revalidatePath('/');
+           revalidatePath('/admin/board-students');
            toast({
                title: "Board Student Added",
                description: "The new board student has been successfully added.",

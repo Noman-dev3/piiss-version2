@@ -22,6 +22,7 @@ import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Star } from "lucide-react"
+import { revalidatePath } from "next/cache"
 
 interface CreateTestimonialDialogProps {
   isOpen: boolean;
@@ -48,6 +49,8 @@ export function CreateTestimonialDialog({ isOpen, onOpenChange }: CreateTestimon
            const testimonialsRef = ref(db, 'testimonials');
            const newTestimonialRef = push(testimonialsRef);
            await set(newTestimonialRef, values);
+           revalidatePath('/');
+           revalidatePath('/admin/testimonials');
            toast({
                title: "Testimonial Added",
                description: "The new testimonial has been successfully added.",

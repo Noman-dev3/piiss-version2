@@ -22,6 +22,7 @@ import { format } from "date-fns";
 import { EditAnnouncementDialog } from "./edit-announcement-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
+import { revalidatePath } from "next/cache";
 
 interface AnnouncementCardProps {
   announcement: Announcement;
@@ -35,6 +36,7 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
     try {
         const announcementRef = ref(db, `announcements/${announcement.id}`);
         await remove(announcementRef);
+        revalidatePath('/admin/announcements');
         toast({
             title: "Announcement Deleted",
             description: `The announcement "${announcement.title}" has been removed.`,

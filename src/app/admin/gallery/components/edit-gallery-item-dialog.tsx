@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface EditGalleryItemDialogProps {
   item: GalleryItem;
@@ -43,6 +44,9 @@ export function EditGalleryItemDialog({ item, isOpen, onOpenChange }: EditGaller
        try {
             const itemRef = ref(db, `gallery/${item.id}`);
             await update(itemRef, values);
+            revalidatePath('/');
+            revalidatePath('/gallery');
+            revalidatePath('/admin/gallery');
             toast({
                 title: "Image Updated",
                 description: "The image details have been successfully updated.",

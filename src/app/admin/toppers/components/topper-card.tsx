@@ -23,6 +23,7 @@ import { EditTopperDialog } from "./edit-topper-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
 import { Badge } from "@/components/ui/badge";
+import { revalidatePath } from "next/cache";
 
 interface TopperCardProps {
   topper: Topper;
@@ -36,6 +37,8 @@ export function TopperCard({ topper }: TopperCardProps) {
     try {
         const itemRef = ref(db, `toppers/${topper.id}`);
         await remove(itemRef);
+        revalidatePath('/');
+        revalidatePath('/admin/toppers');
         toast({
             title: "Topper Removed",
             description: `The student "${topper.name}" has been removed from the toppers list.`,

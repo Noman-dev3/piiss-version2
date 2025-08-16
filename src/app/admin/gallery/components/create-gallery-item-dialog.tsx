@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface CreateGalleryItemDialogProps {
   isOpen: boolean;
@@ -45,6 +46,9 @@ export function CreateGalleryItemDialog({ isOpen, onOpenChange }: CreateGalleryI
            const galleryRef = ref(db, 'gallery');
            const newGalleryItemRef = push(galleryRef);
            await set(newGalleryItemRef, values);
+           revalidatePath('/');
+           revalidatePath('/gallery');
+           revalidatePath('/admin/gallery');
            toast({
                title: "Image Added",
                description: "The new image has been successfully added to the gallery.",

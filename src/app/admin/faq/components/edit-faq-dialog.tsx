@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface EditFaqDialogProps {
   faq: FAQ;
@@ -42,6 +43,8 @@ export function EditFaqDialog({ faq, isOpen, onOpenChange }: EditFaqDialogProps)
        try {
             const itemRef = ref(db, `faqs/${faq.id}`);
             await update(itemRef, values);
+            revalidatePath('/');
+            revalidatePath('/admin/faq');
             toast({
                 title: "FAQ Updated",
                 description: "The FAQ has been successfully updated.",

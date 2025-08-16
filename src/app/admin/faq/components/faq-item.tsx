@@ -26,6 +26,7 @@ import {
 import { EditFaqDialog } from "./edit-faq-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
+import { revalidatePath } from "next/cache";
 
 interface FaqItemProps {
   faq: FAQ;
@@ -39,6 +40,8 @@ export function FaqItem({ faq }: FaqItemProps) {
     try {
         const faqRef = ref(db, `faqs/${faq.id}`);
         await remove(faqRef);
+        revalidatePath('/');
+        revalidatePath('/admin/faq');
         toast({
             title: "FAQ Deleted",
             description: `The FAQ has been removed.`,

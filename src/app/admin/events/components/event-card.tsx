@@ -23,6 +23,7 @@ import { format } from "date-fns";
 import { EditEventDialog } from "./edit-event-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
+import { revalidatePath } from "next/cache";
 
 interface EventCardProps {
   event: Event;
@@ -36,6 +37,9 @@ export function EventCard({ event }: EventCardProps) {
     try {
         const eventRef = ref(db, `events/${event.id}`);
         await remove(eventRef);
+        revalidatePath('/');
+        revalidatePath('/events');
+        revalidatePath('/admin/events');
         toast({
             title: "Event Deleted",
             description: `The event "${event.title}" has been removed.`,

@@ -22,6 +22,7 @@ import {
 import { EditGalleryItemDialog } from "./edit-gallery-item-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
+import { revalidatePath } from "next/cache";
 
 interface GalleryCardProps {
   item: GalleryItem;
@@ -35,6 +36,9 @@ export function GalleryCard({ item }: GalleryCardProps) {
     try {
         const itemRef = ref(db, `gallery/${item.id}`);
         await remove(itemRef);
+        revalidatePath('/');
+        revalidatePath('/gallery');
+        revalidatePath('/admin/gallery');
         toast({
             title: "Image Deleted",
             description: `The image "${item.title}" has been removed from the gallery.`,

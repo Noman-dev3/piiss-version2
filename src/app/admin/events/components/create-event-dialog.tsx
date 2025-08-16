@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface CreateEventDialogProps {
   isOpen: boolean;
@@ -46,6 +47,9 @@ export function CreateEventDialog({ isOpen, onOpenChange }: CreateEventDialogPro
            const eventsRef = ref(db, 'events');
            const newEventRef = push(eventsRef);
            await set(newEventRef, values);
+           revalidatePath('/');
+           revalidatePath('/events');
+           revalidatePath('/admin/events');
            toast({
                title: "Event Created",
                description: "The new event has been successfully added.",

@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface EditBoardStudentDialogProps {
   student: BoardStudent;
@@ -42,6 +43,8 @@ export function EditBoardStudentDialog({ student, isOpen, onOpenChange }: EditBo
        try {
             const itemRef = ref(db, `boardStudents/${student.id}`);
             await update(itemRef, values);
+            revalidatePath('/');
+            revalidatePath('/admin/board-students');
             toast({
                 title: "Board Student Updated",
                 description: "The student's details have been successfully updated.",

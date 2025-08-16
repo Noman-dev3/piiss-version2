@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface CreateTopperDialogProps {
   isOpen: boolean;
@@ -45,6 +46,8 @@ export function CreateTopperDialog({ isOpen, onOpenChange }: CreateTopperDialogP
            const toppersRef = ref(db, 'toppers');
            const newTopperRef = push(toppersRef);
            await set(newTopperRef, values);
+           revalidatePath('/');
+           revalidatePath('/admin/toppers');
            toast({
                title: "Topper Added",
                description: "The new topper has been successfully added.",

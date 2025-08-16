@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface EditTopperDialogProps {
   topper: Topper;
@@ -42,6 +43,8 @@ export function EditTopperDialog({ topper, isOpen, onOpenChange }: EditTopperDia
        try {
             const itemRef = ref(db, `toppers/${topper.id}`);
             await update(itemRef, values);
+            revalidatePath('/');
+            revalidatePath('/admin/toppers');
             toast({
                 title: "Topper Updated",
                 description: "The topper's details have been successfully updated.",

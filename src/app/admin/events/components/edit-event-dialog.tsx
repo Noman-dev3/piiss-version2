@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface EditEventDialogProps {
   event: Event;
@@ -43,6 +44,9 @@ export function EditEventDialog({ event, isOpen, onOpenChange }: EditEventDialog
        try {
             const eventRef = ref(db, `events/${event.id}`);
             await update(eventRef, values);
+            revalidatePath('/');
+            revalidatePath('/events');
+            revalidatePath('/admin/events');
             toast({
                 title: "Event Updated",
                 description: "The event has been successfully updated.",

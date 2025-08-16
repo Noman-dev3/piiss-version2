@@ -23,6 +23,7 @@ import { EditBoardStudentDialog } from "./edit-board-student-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
 import { Badge } from "@/components/ui/badge";
+import { revalidatePath } from "next/cache";
 
 interface BoardStudentCardProps {
   student: BoardStudent;
@@ -36,6 +37,8 @@ export function BoardStudentCard({ student }: BoardStudentCardProps) {
     try {
       const itemRef = ref(db, `boardStudents/${student.id}`);
       await remove(itemRef);
+      revalidatePath('/');
+      revalidatePath('/admin/board-students');
       toast({
         title: "Board Student Removed",
         description: `The student "${student.name}" has been removed from the board results list.`,

@@ -21,6 +21,7 @@ import {
 import { EditTestimonialDialog } from "./edit-testimonial-dialog";
 import { db } from "@/lib/firebase";
 import { ref, remove } from "firebase/database";
+import { revalidatePath } from "next/cache";
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
@@ -34,6 +35,8 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
     try {
         const testimonialRef = ref(db, `testimonials/${testimonial.id}`);
         await remove(testimonialRef);
+        revalidatePath('/');
+        revalidatePath('/admin/testimonials');
         toast({
             title: "Testimonial Deleted",
             description: `The testimonial from "${testimonial.name}" has been removed.`,

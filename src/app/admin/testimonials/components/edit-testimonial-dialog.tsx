@@ -22,6 +22,7 @@ import { db } from "@/lib/firebase"
 import { ref, update } from "firebase/database"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Star } from "lucide-react"
+import { revalidatePath } from "next/cache"
 
 interface EditTestimonialDialogProps {
   testimonial: Testimonial;
@@ -45,6 +46,8 @@ export function EditTestimonialDialog({ testimonial, isOpen, onOpenChange }: Edi
        try {
             const testimonialRef = ref(db, `testimonials/${testimonial.id}`);
             await update(testimonialRef, values);
+            revalidatePath('/');
+            revalidatePath('/admin/testimonials');
             toast({
                 title: "Testimonial Updated",
                 description: "The testimonial has been successfully updated.",

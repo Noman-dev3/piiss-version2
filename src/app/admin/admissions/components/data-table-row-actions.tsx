@@ -1,3 +1,4 @@
+
 "use client"
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
@@ -13,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { admissionSchema } from "../data/schema"
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast"
 import { AdmissionDetailsDialog } from "./admission-details-dialog";
 import { db } from "@/lib/firebase";
 import { ref, update, remove } from "firebase/database";
@@ -35,6 +36,7 @@ export function DataTableRowActions<TData>({
     try {
       const admissionRef = ref(db, `admissionSubmissions/${admission.id}`);
       await update(admissionRef, { status });
+      revalidatePath('/admin/admissions');
 
       const subject = status === 'approved' 
         ? "Congratulations! Your Admission to PIISS is Approved" 
@@ -62,6 +64,7 @@ export function DataTableRowActions<TData>({
     try {
         const admissionRef = ref(db, `admissionSubmissions/${admission.id}`);
         await remove(admissionRef);
+        revalidatePath('/admin/admissions');
         toast({ title: "Admission Deleted", description: "The application has been removed." });
     } catch (error) {
         toast({ title: "Error", description: (error as Error).message, variant: "destructive" });

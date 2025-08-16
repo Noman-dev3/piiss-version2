@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { db } from "@/lib/firebase"
 import { ref, set, push } from "firebase/database"
+import { revalidatePath } from "next/cache"
 
 interface CreateFaqDialogProps {
   isOpen: boolean;
@@ -43,6 +44,8 @@ export function CreateFaqDialog({ isOpen, onOpenChange }: CreateFaqDialogProps) 
            const faqRef = ref(db, 'faqs');
            const newFaqRef = push(faqRef);
            await set(newFaqRef, values);
+           revalidatePath('/');
+           revalidatePath('/admin/faq');
            toast({
                title: "FAQ Added",
                description: "The new FAQ has been successfully added.",
