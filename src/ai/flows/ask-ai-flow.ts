@@ -29,7 +29,7 @@ export async function askAI(input: AskAiInput): Promise<string> {
 const askAiPrompt = ai.definePrompt(
   {
     name: 'askAiPrompt',
-    input: { schema: AskAiTplInputSchema },
+    input: { schema: AskAiInputSchema },
     output: { format: 'text' },
     prompt: `You are a friendly and helpful assistant for the Pakistan Islamic International School System (PIISS). Your goal is to answer the user's question based on the context provided below.
 
