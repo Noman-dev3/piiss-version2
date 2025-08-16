@@ -11,8 +11,14 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { askAI } from "@/ai/flows/ask-ai-flow";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent } from "../ui/card";
+import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
   
 interface FaqSectionProps {
   faqs: FAQ[];
@@ -70,6 +76,28 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
                 </div>
                 
                 <div className="max-w-3xl mx-auto">
+                    {faqs && faqs.length > 0 ? (
+                        <Accordion type="single" collapsible className="w-full mb-12">
+                            {faqs.map((faq, index) => (
+                            <AccordionItem value={`item-${index}`} key={index}>
+                                <AccordionTrigger className="text-lg font-semibold hover:no-underline text-left">
+                                {faq.question}
+                                </AccordionTrigger>
+                                <AccordionContent className="text-muted-foreground text-base text-left">
+                                {faq.answer}
+                                </AccordionContent>
+                            </AccordionItem>
+                            ))}
+                        </Accordion>
+                    ) : (
+                        <p className="text-center text-muted-foreground mb-12">No FAQs available at the moment.</p>
+                    )}
+
+
+                   <div className="text-center mb-6">
+                        <h3 className="text-2xl font-bold font-headline">Have More Questions?</h3>
+                        <p className="text-muted-foreground mt-2">Ask our AI assistant for instant answers.</p>
+                   </div>
                    <Card className="bg-secondary/50 p-6 rounded-lg">
                     <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
                         <Input
@@ -116,7 +144,6 @@ export default function FaqSection({ faqs, settings }: FaqSectionProps) {
                         </div>
                     </Card>
                    )}
-
                 </div>
             </div>
         </section>
