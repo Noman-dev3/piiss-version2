@@ -126,7 +126,7 @@ export function Header() {
                         key={link.label}
                         href={link.href}
                         onClick={() => setSheetOpen(false)}
-                        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-4 py-3 px-4 rounded-lg hover:bg-accent"
+                        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-4 py-3 px-4 rounded-lg hover:bg-muted"
                         >
                         {link.icon}
                         <span>{link.label}</span>
