@@ -52,6 +52,7 @@ export default async function Home() {
     phone: settings.contactPhone || "",
     email: settings.contactEmail || "",
     officeHours: settings.officeHours || "",
+    imageUrl: settings.contactImageUrl || "https://placehold.co/600x400.png",
   };
 
   const footerContent = {
@@ -95,7 +96,7 @@ export default async function Home() {
             <TestimonialsSection testimonials={testimonials} />
           </LazyLoad>
           <LazyLoad>
-            <FaqSection faqs={faqs} />
+            <FaqSection faqs={faqs} settings={settings} />
           </LazyLoad>
           <LazyLoad>
             <ContactSection content={contactContent} />
